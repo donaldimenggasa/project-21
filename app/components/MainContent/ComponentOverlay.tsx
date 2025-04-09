@@ -1,17 +1,13 @@
-import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import  { useEffect, useState, useCallback, useMemo, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { useStore, useSelectionState } from '~/store/zustand/store';
+import { useStore } from '~/store/zustand/store';
 import { Plus, LayoutGrid, Box, Search } from 'lucide-react';
 import * as Popover from '@radix-ui/react-popover';
 import * as Tabs from '@radix-ui/react-tabs';
 import { cn } from '~/lib/utils';
 import { widgetConfigs } from '~/components/widgets';
-import { shallow } from 'zustand/shallow';
 import { useThrottle } from '~/lib/performance';
-import { Logger } from '~/lib/logger';
-import { ComponentRegistry } from '~/lib/registry';
 
-// Import all widget configs
 
 interface Position {
   top: number;
@@ -22,27 +18,18 @@ interface Position {
 
 // Custom hooks untuk memisahkan selectors
 const useComponentOverlayState = () => {
-  // Gunakan selector terpisah untuk setiap state yang dibutuhkan
-  const { hoveredComponent, selectedComponent } = useSelectionState();
-  
   const selectedPage = useStore(state => state.selectedPage);
   const showLeftPanel = useStore(state => state.showLeftPanel);
   const showRightPanel = useStore(state => state.showRightPanel);
   const showBottomPanel = useStore(state => state.showBottomPanel);
   
-  // Gunakan selector terpisah untuk component untuk menghindari re-render
   const component = useStore(state => state.component);
-  
-  // Gunakan selector terpisah untuk actions
-  const actions = useStore(
-    state => ({
-      setComponent: state.setComponent,
-      setSelectedComponent: state.setSelectedComponent,
-      setHoveredComponent: state.setHoveredComponent
-    }),
-    shallow
-  );
-  
+  const setComponent = useStore(state => state.setComponent);
+  const setSelectedComponent = useStore(state => state.setSelectedComponent);
+  const setHoveredComponent = useStore(state => state.setHoveredComponent);
+  const hoveredComponent = useStore(state => state.hoveredComponent);
+  const selectedComponent = useStore(state => state.selectedComponent);
+
   // Compute derived state
   const selectedComponentType = useMemo(() => {
     if (!selectedComponent) return null;
@@ -57,21 +44,21 @@ const useComponentOverlayState = () => {
     showLeftPanel,
     showRightPanel,
     showBottomPanel,
-    ...actions,
-    selectedComponentType
+    selectedComponentType,
+    setComponent,
+    setSelectedComponent,
+    setHoveredComponent
   };
 };
 
+
+
 export const ComponentOverlay = memo(() => {
-  // Gunakan custom hook untuk state
   const {
     hoveredComponent,
     selectedComponent,
     selectedPage,
     component,
-    showLeftPanel,
-    showRightPanel,
-    showBottomPanel,
     setComponent,
     setSelectedComponent,
     setHoveredComponent,
@@ -83,8 +70,6 @@ export const ComponentOverlay = memo(() => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
-  const logger = useMemo(() => Logger.getInstance(), []);
-  const registry = useMemo(() => ComponentRegistry.getInstance(), []);
 
   // Determine if we should show the plus button
   const shouldShowPlusButton = useMemo(() => {
@@ -148,16 +133,12 @@ export const ComponentOverlay = memo(() => {
   // Handle adding new component
   const handleAddComponent = useCallback((type: string, config: any) => {
     if (!selectedPage || !selectedComponent) {
-      logger.warn('Cannot add component: no page or parent selected');
       return;
     }
     
-    const siblings = Object.values(component)
-      .filter(c => c.parentId === selectedComponent && c.pageId === selectedPage);
-    
+    const siblings = Object.values(component).filter(c => c.parentId === selectedComponent && c.pageId === selectedPage);
     const maxOrder = siblings.reduce((max, c) => Math.max(max, c.order || 0), -1);
     const newComponentId = `${type}-${Date.now()}`;
-    
     const newComponent = {
       id: newComponentId,
       type,
@@ -172,50 +153,39 @@ export const ComponentOverlay = memo(() => {
     setHoveredComponent(null);
     setIsPopoverOpen(false);
     
-    logger.info('Component added', { type, id: newComponentId, parentId: selectedComponent });
-  }, [selectedComponent, selectedPage, component, setComponent, setSelectedComponent, setHoveredComponent, logger]);
+  }, [selectedComponent, selectedPage, component, setComponent, setSelectedComponent, setHoveredComponent]);
 
-  // Update positions when components change
-  useEffect(() => {
-    updatePosition(hoveredComponent, setHoverPosition);
-  }, [hoveredComponent, updatePosition]);
 
-  useEffect(() => {
-    updatePosition(selectedComponent, setSelectPosition);
-  }, [selectedComponent, updatePosition]);
 
-  // Update positions when panels visibility changes
-  useEffect(() => {
-    updatePosition(hoveredComponent, setHoverPosition);
-    updatePosition(selectedComponent, setSelectPosition);
-  }, [showLeftPanel, showRightPanel, showBottomPanel, updatePosition, hoveredComponent, selectedComponent]);
+
 
   // Update positions on scroll and resize
   useEffect(() => {
     const mainContent = document.getElementById('main-content-container');
     if (!mainContent) return;
-
     const handleScroll = () => {
-      updatePosition(hoveredComponent, setHoverPosition);
-      updatePosition(selectedComponent, setSelectPosition);
+      if (hoveredComponent || selectedComponent) {
+        updatePosition(hoveredComponent, setHoverPosition);
+        updatePosition(selectedComponent, setSelectPosition);
+      }
     };
-
     const handleResize = () => {
-      updatePosition(hoveredComponent, setHoverPosition);
-      updatePosition(selectedComponent, setSelectPosition);
+      if (hoveredComponent || selectedComponent) {
+        updatePosition(hoveredComponent, setHoverPosition);
+        updatePosition(selectedComponent, setSelectPosition);
+      }
     };
-
     // Create ResizeObserver to watch for container size changes
     const resizeObserver = new ResizeObserver(() => {
-      updatePosition(hoveredComponent, setHoverPosition);
-      updatePosition(selectedComponent, setSelectPosition);
+      if (hoveredComponent || selectedComponent) {
+        updatePosition(hoveredComponent, setHoverPosition);
+        updatePosition(selectedComponent, setSelectPosition);
+      }
     });
-
     // Add event listeners
     mainContent.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
     resizeObserver.observe(mainContent);
-
     return () => {
       mainContent.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
@@ -223,11 +193,14 @@ export const ComponentOverlay = memo(() => {
     };
   }, [hoveredComponent, selectedComponent, updatePosition]);
 
+
+
   // Find the main content container for the portal
   const mainContent = document.getElementById('main-content-container');
   if (!mainContent) return null;
 
-  // Don't show hover overlay if component is selected
+
+
   const shouldShowHover = hoveredComponent && hoveredComponent !== selectedComponent;
 
   return createPortal(
@@ -375,6 +348,4 @@ export const ComponentOverlay = memo(() => {
 });
 
 ComponentOverlay.displayName = 'ComponentOverlay';
-
-// Export as default for lazy loading
 export default ComponentOverlay;

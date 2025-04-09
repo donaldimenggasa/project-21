@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo, useMemo } from 'react';
+import React from 'react';
 import { Component } from './types';
 import { cn } from '~/lib/utils';
 import { ComponentBuilder } from '~/components/Builder';
@@ -6,9 +6,7 @@ import { PropertyEditor } from '~/components/Builder/PropertyEditor';
 import { BindingProperties } from '~/components/Builder/BindingProperties';
 import { useBoundValue } from '~/hooks/useBoundValue';
 import { commonProperties } from './types';
-import { Logger } from '~/lib/logger';
-import { useRenderTimer } from '~/lib/performance';
-import { Cache } from '~/lib/cache';
+
 
 interface EditorProps {
   'data-component-id': string;
@@ -73,92 +71,26 @@ export const textConfig = {
   }
 };
 
-// Gunakan memo untuk mencegah render ulang yang tidak perlu
-const TextRenderer = memo(({ content, className, editorProps }: { 
-  content: any; 
-  className: string; 
-  editorProps: EditorProps;
-}) => {
-  // Measure render time
-  useRenderTimer('TextRenderer');
-  
+
+
+const componentRenderer: React.FC<WidgetProps> = ({ component, editorProps={} }) => {
+  const boundContent = useBoundValue(component.id, 'content');
+  const boundClassName = useBoundValue(component.id, 'className');
   return (
     <span className={cn(
       "font-sans", // Ensure consistent font
-      className
+      boundClassName
     )} {...editorProps}>
-      {typeof content === 'string' ? content : JSON.stringify(content)}
+      {typeof boundContent === 'string' ? boundContent : JSON.stringify(boundContent)}
     </span>
   );
-});
-
-TextRenderer.displayName = 'TextRenderer';
-
-const componentRenderer: React.FC<WidgetProps> = ({ component, editorProps={} }) => {
-  // Measure render time
-  useRenderTimer(`TextWidget(${component.id})`);
-  
-  // Get cache instance
-  const cache = useMemo(() => Cache.getInstance(), []);
-  
-  // Try to get from cache first for non-bindable content
-  const cacheKey = `text-widget-${component.id}`;
-  const cachedProps = cache.get(cacheKey);
-  
-  // If we have cached props and content is not bindable, use them
-  if (cachedProps && !component.props.content?.bindable) {
-    return (
-      <TextRenderer 
-        content={cachedProps.content} 
-        className={cachedProps.className} 
-        editorProps={editorProps} 
-      />
-    );
-  }
-  
-  // Always call hooks at the top level, before any conditional logic
-  const boundContent = useBoundValue(component.props.content);
-  const boundClassName = useBoundValue(component.props.className);
-  const logger = useRef(Logger.getInstance()).current;
-  
-  // Memoize values to prevent unnecessary re-renders
-  const content = useMemo(() => 
-    boundContent ?? textConfig.props.content.defaultValue, 
-    [boundContent]
-  );
-  
-  const className = useMemo(() => 
-    boundClassName ?? textConfig.props.className.defaultValue,
-    [boundClassName]
-  );
-  
-  // Cache the props for future renders if content is not bindable
-  useEffect(() => {
-    if (!component.props.content?.bindable) {
-      cache.set(cacheKey, { content, className }, 10000); // Cache for 10 seconds
-    }
-    
-    // Untuk debugging
-    logger.debug('TextWidget values updated', { 
-      componentId: component.id, 
-      content: typeof content === 'string' ? content.substring(0, 50) : typeof content,
-      className,
-      hasBindableContent: component.props.content?.bindable,
-      isCached: !!cachedProps
-    });
-  }, [component.id, content, className, component.props.content?.bindable, logger, cache, cacheKey, cachedProps]);
-  
-  // Gunakan komponen yang di-memo untuk mencegah render ulang yang tidak perlu
-  return (
-    <TextRenderer 
-      content={content} 
-      className={className} 
-      editorProps={editorProps} 
-    />
-  );
 };
-
 componentRenderer.displayName = 'TextWidget';
+
+
+
+
+
 
 export const textWidget = new ComponentBuilder()
   .setType(textConfig.type)

@@ -1,0 +1,1 @@
+ALTER TABLE "x_project_groups" ADD COLUMN "x_name" char;

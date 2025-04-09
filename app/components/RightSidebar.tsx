@@ -16,7 +16,7 @@ export const RightSidebar: React.FC = React.memo(() => {
 
   if (!config || !builder) {
     return (
-      <div className="flex flex-col h-full bg-card border-l border-border">
+      <div className="w-80 h-screen bg-gray-900 text-gray-100 border-l border-gray-800 flex flex-col overflow-y-auto scrollbar-hide">
         <div className="flex items-center justify-center h-full text-secondary">
           <div className="text-center p-6">
             <Settings className="h-12 w-12 mx-auto mb-4 opacity-20" />
@@ -34,7 +34,7 @@ export const RightSidebar: React.FC = React.memo(() => {
 
   if (!PropertyView) {
     return (
-      <div className="flex flex-col h-full bg-card border-l border-border">
+      <div className="w-80 h-screen bg-gray-900 text-gray-100 border-l border-gray-800 flex flex-col overflow-y-auto scrollbar-hide">
         <div className="flex items-center justify-center h-full text-secondary">
           <div className="text-center p-6">
             <Settings className="h-12 w-12 mx-auto mb-4 opacity-20" />
@@ -67,7 +67,7 @@ export const RightSidebar: React.FC = React.memo(() => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-card border-l border-border">
+    <div className="w-80 h-screen bg-gray-900 text-gray-100 border-l border-gray-800 flex flex-col overflow-y-auto scrollbar-hide ">
       {/* Component Type Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <div className="flex items-center">

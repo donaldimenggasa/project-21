@@ -1,5 +1,10 @@
 node_modules
-
+build
+yori-tools
+whatsapp-auth
+temp-upload
+/.well-known
 /.cache
-/build
 .env
+.env.production
+.env.development

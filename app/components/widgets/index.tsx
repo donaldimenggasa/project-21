@@ -24,7 +24,7 @@ export const COMPONENT_CATEGORIES = {
 
 // Konfigurasi komponen dengan metadata tambahan
 const componentConfigs = {
-  /*barchart: { 
+  barchart: { 
     icon: BarChart4, 
     config: barchartConfig, 
     builder: barchartWidget,
@@ -107,7 +107,7 @@ const componentConfigs = {
     builder: tableWidget,
     category: COMPONENT_CATEGORIES.DATA,
     description: 'Table for displaying structured data'
-  }*/
+  }
 };
 
 

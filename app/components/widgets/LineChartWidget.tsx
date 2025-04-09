@@ -226,22 +226,24 @@ const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editor
   const { props } = component;
   
   // Use useBoundValue for all props
-  const chartType = useBoundValue(props.chartType) || linechartConfig.props.chartType.defaultValue;
-  const dataSource = useBoundValue(props.dataSource);
-  const xAxisKey = useBoundValue(props.xAxisKey);
-  const lines = useBoundValue(props.lines);
-  const chartTitle = useBoundValue(props.chartTitle);
-  const xAxisLabel = useBoundValue(props.xAxisLabel);
-  const yAxisLabel = useBoundValue(props.yAxisLabel);
-  const showGrid = useBoundValue(props.showGrid);
-  const showLegend = useBoundValue(props.showLegend);
-  const showTooltip = useBoundValue(props.showTooltip);
-  const showArea = useBoundValue(props.showArea);
-  const connectNulls = useBoundValue(props.connectNulls);
-  const margin = useBoundValue(props.margin);
-  const height = useBoundValue(props.height);
-  const className = useBoundValue(props.className);
-  const style = useBoundValue(props.style);
+  const chartType = useBoundValue(component.id, 'chartType');
+  const dataSource = useBoundValue(component.id, 'dataSource');
+  const xAxisKey = useBoundValue(component.id, 'xAxisKey');
+  const lines = useBoundValue(component.id, 'lines');
+  const chartTitle = useBoundValue(component.id, 'chartTitle');
+  const xAxisLabel = useBoundValue(component.id, 'xAxisLabel');
+  const yAxisLabel = useBoundValue(component.id, 'yAxisLabel');
+  const showGrid = useBoundValue(component.id, 'showGrid');
+  const showLegend = useBoundValue(component.id, 'showLegend');
+  const showTooltip = useBoundValue(component.id, 'showTooltip');
+  const showArea = useBoundValue(component.id, 'showArea');
+  const connectNulls = useBoundValue(component.id, 'connectNulls');
+  const margin = useBoundValue(component.id, 'margin');
+  const height = useBoundValue(component.id, 'height');
+  const className = useBoundValue(component.id, 'className');
+  const style = useBoundValue(component.id, 'style');
+
+
 
   // Determine line type based on chart type
   const getLineType = useMemo(() => {

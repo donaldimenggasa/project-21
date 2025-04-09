@@ -45,7 +45,7 @@ export function LeftSidebar() {
   }, [activeTab]);
 
   return (
-    <div className="h-full flex flex-col bg-card border-r border-border">
+    <div className={`w-[280px]  bg-gray-900 text-gray-100 flex flex-col h-full border-r border-gray-800`}>
       {/* Tabs */}
       <div className="flex justify-between border-b border-border px-1">
         <div className="flex-1 flex justify-between">

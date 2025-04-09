@@ -14,6 +14,7 @@ import {
 import { useBoundValue } from '~/hooks/useBoundValue';
 import { ComponentBuilder } from '~/components/Builder';
 import { PropertyEditor } from '~/components/Builder/PropertyEditor';
+import { c } from 'node_modules/vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P';
 
 interface EditorProps {
   'data-component-id': string;
@@ -238,26 +239,27 @@ export const radarchartConfig = {
 
 const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editorProps = {} }) => {
   const { props } = component;
-  
-  // Use useBoundValue for all props
-  const chartType = useBoundValue(props.chartType) || radarchartConfig.props.chartType.defaultValue;
-  const dataSource = useBoundValue(props.dataSource);
-  const angleAxisKey = useBoundValue(props.angleAxisKey);
-  const series = useBoundValue(props.series);
-  const chartTitle = useBoundValue(props.chartTitle);
-  const showGrid = useBoundValue(props.showGrid);
-  const showPolarAxis = useBoundValue(props.showPolarAxis);
-  const showRadiusAxis = useBoundValue(props.showRadiusAxis);
-  const showLegend = useBoundValue(props.showLegend);
-  const showTooltip = useBoundValue(props.showTooltip);
-  const gridConcentric = useBoundValue(props.gridConcentric);
-  const gridRadial = useBoundValue(props.gridRadial);
-  const outerRadius = useBoundValue(props.outerRadius);
-  const margin = useBoundValue(props.margin);
-  const height = useBoundValue(props.height);
-  const className = useBoundValue(props.className);
-  const style = useBoundValue(props.style);
 
+  const chartType = useBoundValue(component.id, 'chartType');
+  const dataSource = useBoundValue(component.id, 'dataSource');
+  const angleAxisKey = useBoundValue(component.id, 'angleAxisKey');
+  const series = useBoundValue(component.id, 'series');
+  const chartTitle = useBoundValue(component.id, 'chartTitle');
+  const showGrid = useBoundValue(component.id, 'showGrid');
+  const showPolarAxis = useBoundValue(component.id, 'showPolarAxis');
+  const showRadiusAxis = useBoundValue(component.id, 'showRadiusAxis');
+  const showLegend = useBoundValue(component.id, 'showLegend');
+  const showTooltip = useBoundValue(component.id, 'showTooltip');
+  const gridConcentric = useBoundValue(component.id, 'gridConcentric');
+  const gridRadial = useBoundValue(component.id, 'gridRadial');
+  const outerRadius = useBoundValue(component.id, 'outerRadius');
+  const margin = useBoundValue(component.id, 'margin');
+  const height = useBoundValue(component.id, 'height');
+  const className = useBoundValue(component.id, 'className');
+  const style = useBoundValue(component.id, 'style');
+
+
+  
   // Determine if we should fill the radar based on chart type
   const shouldFill = useMemo(() => {
     return chartType === 'FilledRadarChart' || chartType === 'MultiRadarChart';

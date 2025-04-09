@@ -209,24 +209,27 @@ export const barchartConfig = {
 };
 
 const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editorProps = {} }) => {
-  const { props } = component;
+ 
+
+  const chartType = useBoundValue(component.id, 'chartType');
+  const dataSource = useBoundValue(component.id, 'dataSource');
+  const xAxisKey = useBoundValue(component.id, 'xAxisKey');
+  const bars = useBoundValue(component.id, 'bars');
+  const chartTitle = useBoundValue(component.id, 'chartTitle');
+  const xAxisLabel = useBoundValue(component.id, 'xAxisLabel');
+  const yAxisLabel = useBoundValue(component.id, 'yAxisLabel');
+  const showGrid = useBoundValue(component.id, 'showGrid');
+  const showLegend = useBoundValue(component.id, 'showLegend');
+  const showTooltip = useBoundValue(component.id, 'showTooltip');
+  const stacked = useBoundValue(component.id, 'stacked');
+  const margin = useBoundValue(component.id, 'margin');
+  const height = useBoundValue(component.id, 'height');
+  const className = useBoundValue(component.id, 'className'); 
+  const style = useBoundValue(component.id, 'style');
+
   
-  // Use useBoundValue for all props
-  const chartType = useBoundValue(props.chartType) || barchartConfig.props.chartType.defaultValue;
-  const dataSource = useBoundValue(props.dataSource);
-  const xAxisKey = useBoundValue(props.xAxisKey);
-  const bars = useBoundValue(props.bars);
-  const chartTitle = useBoundValue(props.chartTitle);
-  const xAxisLabel = useBoundValue(props.xAxisLabel);
-  const yAxisLabel = useBoundValue(props.yAxisLabel);
-  const showGrid = useBoundValue(props.showGrid);
-  const showLegend = useBoundValue(props.showLegend);
-  const showTooltip = useBoundValue(props.showTooltip);
-  const stacked = useBoundValue(props.stacked);
-  const margin = useBoundValue(props.margin);
-  const height = useBoundValue(props.height);
-  const className = useBoundValue(props.className);
-  const style = useBoundValue(props.style);
+
+
 
   // Determine if we should use stacked mode based on chart type
   const useStackedMode = useMemo(() => {

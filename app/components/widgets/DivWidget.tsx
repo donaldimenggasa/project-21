@@ -63,9 +63,10 @@ export const divConfig = {
 };
 
 const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, children, editorProps={} }) => {
-  const { props } = component;
-  const { style, hidden, loading } = props;
-  const className = useBoundValue(props.className);
+  //const { props } = component;
+  //const { hidden, loading } = props;
+  const className = useBoundValue(component.id, 'className');
+  const style = useBoundValue(component.id, 'style');
 
   return (
     <div className={cn(className )}  {...editorProps}>

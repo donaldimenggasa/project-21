@@ -1,0 +1,1 @@
+ALTER TABLE "x_projects" ALTER COLUMN "x_name" SET DATA TYPE jsonb;

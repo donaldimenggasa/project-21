@@ -27,7 +27,7 @@ export function RunTab() {
 
   return (
     <div className="h-full flex text-gray-300">
-      <div className="w-1/4 border-r border-gray-800 flex flex-col">
+      <div className="w-[280px] border-r border-gray-800 flex flex-col">
         {/* Tabs */}
         <div className="flex border-b border-gray-800">
           <button

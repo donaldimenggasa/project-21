@@ -124,9 +124,9 @@ export function BottomPanel() {
   };
 
   return (
-    <div className="h-full bg-card flex flex-col">
+    <div className="h-full bg-gray-900 flex flex-col  border-t border-gray-800">
       {/* Tabs Header */}
-      <div className="border-b border-border flex justify-between bg-card/80 backdrop-blur-sm">
+      <div className="border-b border-gray-800 flex justify-between ">
         {/* Left Tabs */}
         <div className="flex">
           {leftTabs.map((tab) => (

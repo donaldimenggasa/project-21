@@ -156,6 +156,7 @@ const initialComponentSlice: ComponentSlice = {
   component: sampleComponents,
 };
 
+
 const initialWorkflowSlice: WorkflowSlice = {
   workflow: {},
   selectedWorkflow: null,
@@ -189,12 +190,6 @@ const initialStorageSlice: StorageSlice = {
   pageAppState: {},
   localStorage: {},
 };
-
-
-
-
-
-
 
 const initialState: UIState = {
   ...initialUISlice,
@@ -355,13 +350,11 @@ export const useStore = create<UIState & AllActions>()(
         logger.info('Component deleted', { id, childrenCount: childrenIds.length });
       }),
 
-
       // Workflow Actions
       setWorkflow: (workflow) => set(state => {
         state.workflow[workflow.id] = workflow;
       }),
 
-      
       updateWorkflow: (payload) => set(state => {
         if (state.workflow[payload.id]) {
           if ('nodes' in payload && typeof payload.nodes === 'function') {
@@ -686,26 +679,15 @@ export const useRootComponent = () => useStore(
   (a, b) => a?.id === b?.id
 );
 
-export const useComponentChildren = (parentId: string) => useStore(
-  state => Object.values(state.component)
-    .filter(c => c.parentId === parentId)
-    .sort((a, b) => a.order - b.order),
-  shallow
-);
-
-export const useComponentActions = () => useStore(
-  state => ({
-    setSelectedComponent: state.setSelectedComponent,
-    setHoveredComponent: state.setHoveredComponent,
-    deleteComponent: state.deleteComponent
-  }),
-  shallow
-);
-
-export const useSelectionState = () => useStore(
-  state => ({
-    selectedComponent: state.selectedComponent,
-    hoveredComponent: state.hoveredComponent
-  }),
-  shallow
-);
+export const useComponentChildren = (parentId: string) => {
+  // Create a memoized selector function to avoid recreating it on each render
+  const selector = React.useMemo(
+    () => (state: UIState) => 
+      Object.values(state.component)
+        .filter(c => c.parentId === parentId)
+        .sort((a, b) => a.order - b.order),
+    [parentId]
+  );
+  
+  return useStore(selector, shallow);
+};

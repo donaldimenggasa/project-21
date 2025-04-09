@@ -57,7 +57,7 @@ export const TopNavbar: React.FC<any> = React.memo(() => {
   };
 
   return (
-    <div className="h-12 bg-card border-b border-border px-4 flex items-center justify-between">
+    <div className="h-10 bg-card border-b border-gray-800 px-4 flex items-center justify-between bg-gray-900">
       {/* Left Section */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center">
@@ -68,7 +68,7 @@ export const TopNavbar: React.FC<any> = React.memo(() => {
 
       {/* Center Section */}
       <div className="flex justify-center">
-        <div className="flex items-center space-x-1 bg-background/50 px-1.5 py-1 rounded-lg border border-border">
+        <div className="flex items-center space-x-1 bg-gray-900 px-1.5 py-1 rounded-lg border border-gray-800">
           <button 
             onClick={toggleLeftPanel}
             className={cn(
@@ -81,7 +81,7 @@ export const TopNavbar: React.FC<any> = React.memo(() => {
           >
             <PanelLeft className="h-4 w-4" />
           </button>
-          <div className="w-px h-4 bg-border"></div>
+          <div className="w-px h-full bg-gray-800"></div>
           <button 
             onClick={toggleBottomPanel}
             className={cn(
@@ -94,7 +94,7 @@ export const TopNavbar: React.FC<any> = React.memo(() => {
           >
             <PanelBottom className="h-4 w-4" />
           </button>
-          <div className="w-px h-4 bg-border"></div>
+          <div className="w-px h-full bg-gray-800"></div>
           <button 
             onClick={toggleRightPanel}
             className={cn(

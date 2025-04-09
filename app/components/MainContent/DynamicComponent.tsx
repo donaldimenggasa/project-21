@@ -2,8 +2,14 @@ import React, { Fragment, memo } from 'react';
 import { Component } from '~/lib/types';
 import { useStore } from '~/store/zustand/store';
 import { componentConfigs } from '~/components/widgets';
-import pkg from 'lodash';
-const {isEqual} = pkg;
+import { useShallow } from 'zustand/react/shallow';
+
+
+
+
+
+
+type ComponentRenderProps = { component: Component; children?: React.ReactNode; editorProps?: EditorProps };
 
 
 interface DynamicComponentProps {
@@ -26,17 +32,37 @@ const getChildren = (components: Record<string, Component>, parentId: string) =>
 
 
 export const DynamicComponent: React.FC<DynamicComponentProps> = memo(({ component }) => {
-  const { component: allComponents, setSelectedComponent, setHoveredComponent } = useStore();
-  
-  // Get children components
+  // only rereder if parentId changes
+  //const selectedComponent = useStore(state => state.selectedComponent);
+  const parentMap = useStore(
+    useShallow((state) =>
+      Object.fromEntries(
+        Object.entries(state.component).map(([key, val]) => [key, val.parentId])
+      )
+    )
+  );
+  const orderMap = useStore(
+    useShallow((state) =>
+      Object.fromEntries(
+        Object.entries(state.component).map(([key, val]) => [key, val.order])
+      )
+    )
+  );
+
+  const allComponents = useStore.getState().component;
+  const setHoveredComponent = useStore(state => state.setHoveredComponent);
+  const setSelectedComponent = useStore(state => state.setSelectedComponent);
   const children = getChildren(allComponents, component.id);
-  
+
+
+
+  console.log('RERENDER DINAMIC COMPONENT')
+
+
   // Get component config
   const config = componentConfigs[component.type as keyof typeof componentConfigs];
   const { builder } = config || {};
   
-  type ComponentRenderProps = { component: Component; children?: React.ReactNode; editorProps?: EditorProps };
-
   const editorProps: EditorProps = {
     'data-component-id': component.id,
     onClick: (e: React.MouseEvent<HTMLDivElement>) => {
@@ -46,11 +72,10 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = memo(({ compone
     onMouseEnter: () => setHoveredComponent(component.id),
     onMouseLeave: () => setHoveredComponent(null),
   };
-
+  
   if (!builder) {
     return <Fragment />;
   }
-  
 
   const ComponentRender = builder.render as React.ComponentType<ComponentRenderProps>;
 
@@ -63,31 +88,6 @@ export const DynamicComponent: React.FC<DynamicComponentProps> = memo(({ compone
         return <DynamicComponent key={child.id} component={child} />;
       })}
     </ComponentRender>
-  );
-}, (prevProps, nextProps) => {
-  // Custom comparison function for memo
-  const prev = prevProps.component;
-  const next = nextProps.component;
-
-  // Check if component has bindings in its props
-  const hasBindings = (component: Component) => {
-    if (!component.props) return false;
-    
-    return Object.values(component.props).some(
-      prop => typeof prop === 'object' && prop && 'bindable' in prop && prop.bindable
-    );
-  };
-
-  // Always re-render if the component has bindings
-  if (hasBindings(prev) || hasBindings(next)) {
-    return false;
-  }
-
-  return (
-    prev.id === next.id &&
-    prev.type === next.type &&
-    isEqual(prev.props, next.props) &&
-    prev.value === next.value
   );
 });
 

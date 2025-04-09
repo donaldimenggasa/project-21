@@ -237,25 +237,26 @@ const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editor
   const { props } = component;
   
   // Use useBoundValue for all props
-  const label = useBoundValue(props.label);
-  const placeholder = useBoundValue(props.placeholder);
-  const value = useBoundValue(props.value);
-  const type = useBoundValue(props.type);
-  const required = useBoundValue(props.required);
-  const disabled = useBoundValue(props.disabled);
-  const readOnly = useBoundValue(props.readOnly);
-  const helperText = useBoundValue(props.helperText);
-  const errorMessage = useBoundValue(props.errorMessage);
-  const hasError = useBoundValue(props.hasError);
-  const size = useBoundValue(props.size);
-  const variant = useBoundValue(props.variant);
-  const fullWidth = useBoundValue(props.fullWidth);
-  const labelPosition = useBoundValue(props.labelPosition);
-  const showPasswordToggle = useBoundValue(props.showPasswordToggle);
-  const className = useBoundValue(props.className);
-  const style = useBoundValue(props.style);
-  const hidden = useBoundValue(props.hidden);
-  const loading = useBoundValue(props.loading);
+  const label = useBoundValue(component.id, 'label');
+  const placeholder = useBoundValue(component.id, 'placeholder');
+  const value = useBoundValue(component.id, 'value');
+  const type = useBoundValue(component.id, 'type');
+  const required = useBoundValue(component.id, 'required');
+  const disabled = useBoundValue(component.id, 'disabled');
+  const readOnly = useBoundValue(component.id, 'readOnly');
+  const helperText = useBoundValue(component.id, 'helperText');
+  const errorMessage = useBoundValue(component.id, 'errorMessage');
+  const hasError = useBoundValue(component.id, 'hasError');
+  const size = useBoundValue(component.id, 'size');
+  const variant = useBoundValue(component.id, 'variant');
+  const fullWidth = useBoundValue(component.id, 'fullWidth');
+  const labelPosition = useBoundValue(component.id, 'labelPosition');
+  const showPasswordToggle = useBoundValue(component.id, 'showPasswordToggle');
+  const className = useBoundValue(component.id, 'className');
+  const style = useBoundValue(component.id, 'style');
+  const hidden = useBoundValue(component.id, 'hidden');
+  const loading = useBoundValue(component.id, 'loading');
+
 
   // For password toggle functionality
   const [showPassword, setShowPassword] = useState(false);
