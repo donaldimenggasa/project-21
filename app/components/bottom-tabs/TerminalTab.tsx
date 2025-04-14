@@ -12,11 +12,7 @@ interface CommandHistoryItem {
 export function TerminalTab() {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<CommandHistoryItem[]>([
-    {
-      command: 'npm install @project/core --save',
-      output: 'Installing dependencies...\n✓ Packages installed successfully',
-      timestamp: new Date(Date.now() - 60000)
-    }
+   
   ]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [commandHistory, setCommandHistory] = useState<string[]>([]);

@@ -9,6 +9,8 @@ interface CreateWorkflowFormProps {
   onClose: () => void;
 }
 
+
+
 export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
   const { selectedPage, workflow, setWorkflow } = useStore();
   const logger = Logger.getInstance();
@@ -47,19 +49,14 @@ export function CreateWorkflowForm({ onClose }: CreateWorkflowFormProps) {
     ],
   ];
 
+
   const handleSubmit = (data: any) => {
-    if (!selectedPage) {
-      logger.error('No page selected');
-      return;
-    }
-    
     try {
       // Create unique IDs for nodes and edge
       const startNodeId = "start_node";
       const endNodeId = "end_node";
       const edgeId = `edge_${uuidv4().substring(0, 8)}`;
       
-      // Create initial nodes with proper positions for horizontal layout
       const initialNodes = [
         // Start node
         {

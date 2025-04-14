@@ -16,6 +16,12 @@ interface CustomEdgeProps extends EdgeProps {
 // Node types available for insertion
 const NODE_TYPES = [
   { 
+    id: 'odooGetListDataNode', 
+    label: 'ODOO - GET DATA',
+    description: 'ODOO GET DATA TABLE',
+    color: 'yellow'
+  },
+  { 
     id: 'javascriptNode', 
     label: 'JavaScript Code',
     description: 'Execute JavaScript code',
@@ -80,7 +86,6 @@ export function CustomEdge({
   data,
 }: CustomEdgeProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [showNodeSelector, setShowNodeSelector] = useState(false);
   const { selectedWorkflow, workflow, updateWorkflow } = useStore();
   const logger = Logger.getInstance();
@@ -171,13 +176,6 @@ export function CustomEdge({
       // Close the node selector
       setShowNodeSelector(false);
 
-      logger.info('Node added to edge with auto layout', { 
-        edgeId: id, 
-        nodeType,
-        newNodeId, 
-        source, 
-        target 
-      });
     } catch (error) {
       logger.error('Error adding node to edge', error as Error);
     }
@@ -188,6 +186,7 @@ export function CustomEdge({
     e.stopPropagation();
     setShowNodeSelector(prev => !prev);
   }, []);
+
 
   return (
     <>
@@ -200,8 +199,8 @@ export function CustomEdge({
           strokeWidth: isHovered || showNodeSelector ? 2 : 1,
           transition: 'stroke 0.2s, stroke-width 0.2s',
         }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+       // onMouseEnter={() => setIsHovered(true)}
+       // onMouseLeave={() => setIsHovered(false)}
       />
 
       {/* Edge label if provided */}
@@ -229,25 +228,21 @@ export function CustomEdge({
             pointerEvents: 'all',
             zIndex: 10,
           }}
-          onMouseEnter={() => setIsButtonHovered(true)}
-          onMouseLeave={() => setIsButtonHovered(false)}
+          //onMouseEnter={() => setIsButtonHovered(true)}
+          //onMouseLeave={() => setIsButtonHovered(false)}
         >
           <button
             className={cn(
-              "p-1.5 rounded-full transition-all duration-200",
-              "shadow-lg border border-gray-700",
-              showNodeSelector 
-                ? "bg-blue-500 text-white scale-110" 
-                : isButtonHovered 
-                  ? "bg-blue-500 text-white scale-110" 
-                  : (isHovered ? "bg-gray-800 text-gray-200 scale-100" : "bg-gray-800/80 text-gray-400 scale-90 opacity-0"),
-              isHovered && !isButtonHovered && !showNodeSelector && "opacity-70",
-              (isHovered || showNodeSelector) && "opacity-100"
+              "p-1.5 rounded-lg transition-all duration-200",
+              "shadow-lg border border-gray-700 bg-gray-800/80 text-gray-400 scale-110"
+             
+             
+            
             )}
             onClick={handleButtonClick}
             title={showNodeSelector ? "Close" : "Add node"}
           >
-            {showNodeSelector ? <X className="h-3 w-3" /> : <Plus className="h-3 w-3" />}
+            {showNodeSelector ? <X className="h-2 w-2" /> : <Plus className="h-2 w-2" />}
           </button>
         </div>
       </EdgeLabelRenderer>
@@ -262,7 +257,7 @@ export function CustomEdge({
               pointerEvents: 'all',
               zIndex: 20,
             }}
-            className="bg-gray-900 rounded-lg border border-gray-700 shadow-xl p-2 w-64 animate-in fade-in zoom-in-95"
+            className=" nodrag nowheel bg-gray-900 rounded-lg border border-gray-700 shadow-xl p-2 w-64 animate-in fade-in zoom-in-95"
           >
             <div className="text-xs font-medium text-gray-300 mb-2 px-2">
               Select Node Type

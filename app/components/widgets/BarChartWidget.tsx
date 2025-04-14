@@ -25,7 +25,7 @@ export const barchartConfig = {
   props: {
     chartType: {
       order: 0,
-      section: 'appearance',
+      section: 'basic',
       type: 'string',
       displayName: 'Chart Type',
       bindable: false,
@@ -36,7 +36,7 @@ export const barchartConfig = {
     },
     dataSource: {
       order: 1,
-      section: 'appearance',
+      section: 'basic',
       type: 'chartDatasourceEditor',
       displayName: 'Data Source',
       bindable: false,
@@ -50,11 +50,11 @@ export const barchartConfig = {
         { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
       ],
       value: null,
-      bindValue: "[]",
+      bindValue: "{{ [] }}",
     },
     xAxisKey: {
       order: 2,
-      section: 'appearance',
+      section: 'basic',
       type: 'string',
       displayName: 'X-Axis Key',
       bindable: false,
@@ -64,7 +64,7 @@ export const barchartConfig = {
     },
     bars: {
       order: 3,
-      section: 'appearance',
+      section: 'basic',
       type: 'chartSeriesEditor',
       displayName: 'Bar Configuration',
       bindable: false,
@@ -91,7 +91,7 @@ export const barchartConfig = {
     },
     chartTitle: {
       order: 4,
-      section: 'appearance',
+      section: 'basic',
       type: 'string',
       displayName: 'Chart Title',
       bindable: false,
@@ -101,7 +101,7 @@ export const barchartConfig = {
     },
     xAxisLabel: {
       order: 5,
-      section: 'appearance',
+      section: 'basic',
       type: 'string',
       displayName: 'X-Axis Label',
       bindable: false,
@@ -111,7 +111,7 @@ export const barchartConfig = {
     },
     yAxisLabel: {
       order: 6,
-      section: 'appearance',
+      section: 'basic',
       type: 'string',
       displayName: 'Y-Axis Label',
       bindable: false,
@@ -121,7 +121,7 @@ export const barchartConfig = {
     },
     showGrid: {
       order: 7,
-      section: 'appearance',
+      section: 'basic',
       type: 'boolean',
       displayName: 'Show Grid',
       bindable: false,
@@ -131,7 +131,7 @@ export const barchartConfig = {
     },
     showLegend: {
       order: 8,
-      section: 'appearance',
+      section: 'basic',
       type: 'boolean',
       displayName: 'Show Legend',
       bindable: false,
@@ -141,7 +141,7 @@ export const barchartConfig = {
     },
     showTooltip: {
       order: 9,
-      section: 'appearance',
+      section: 'basic',
       type: 'boolean',
       displayName: 'Show Tooltip',
       bindable: false,
@@ -151,7 +151,7 @@ export const barchartConfig = {
     },
     stacked: {
       order: 10,
-      section: 'appearance',
+      section: 'basic',
       type: 'boolean',
       displayName: 'Stacked Bars',
       bindable: false,
@@ -161,7 +161,7 @@ export const barchartConfig = {
     },
     margin: {
       order: 11,
-      section: 'appearance',
+      section: 'basic',
       type: 'object',
       displayName: 'Chart Margins',
       bindable: false,
@@ -171,7 +171,7 @@ export const barchartConfig = {
     },
     height: {
       order: 12,
-      section: 'appearance',
+      section: 'basic',
       type: 'number',
       displayName: 'Chart Height',
       bindable: false,
@@ -183,7 +183,7 @@ export const barchartConfig = {
       type: 'string',
       defaultValue: '',
       displayName: 'CSS Classes',
-      section: 'style',
+      section: 'basic',
       bindable: false,
       order: 13,
     },
@@ -191,19 +191,15 @@ export const barchartConfig = {
       type: 'object',
       defaultValue: {},
       displayName: 'Inline Styles',
-      section: 'style',
+      section: 'basic',
       bindable: false,
       order: 14,
     }
   },
   sections: {
-    appearance: {
-      name: 'Appearance',
+    basic: {
+      name: 'basic',
       order: 1
-    },
-    style: {
-      name: 'Style',
-      order: 2
     }
   }
 };
@@ -245,14 +241,15 @@ const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editor
       style={{ height: `${height || barchartConfig.props.height.defaultValue}px`, ...style }} 
       {...editorProps}
     >
-      {chartTitle && (
+      {/*chartTitle && (
         <h3 className="text-center font-semibold mb-4 text-gray-700 dark:text-gray-300">
           {chartTitle}
         </h3>
-      )}
+      )*/}
+      
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={Array.isArray(dataSource) ? dataSource : barchartConfig.props.dataSource.defaultValue}
+          data={Array.isArray(dataSource) ? dataSource : []}
           margin={margin || barchartConfig.props.margin.defaultValue}
         >
           {(showGrid ?? barchartConfig.props.showGrid.defaultValue) && <CartesianGrid strokeDasharray="3 3" />}
@@ -302,11 +299,7 @@ export const barchartWidget = new ComponentBuilder()
     }), {})
   )
   .addPropertySection({
-    name: barchartConfig.sections.appearance.name,
-    view: (props) => <PropertyEditor {...props} config={barchartConfig} />
-  })
-  .addPropertySection({
-    name: barchartConfig.sections.style.name,
+    name: barchartConfig.sections.basic.name,
     view: (props) => <PropertyEditor {...props} config={barchartConfig} />
   })
   .setRender(componentRenderer)

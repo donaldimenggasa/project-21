@@ -1,7 +1,8 @@
 import { Logger } from './logger';
-import { executeCode } from './evaluate';
 import { v4 as uuidv4 } from 'uuid';
-import { useStore } from '../store/zustand/store';
+import { useStore } from '~/store/zustand/store';
+import { executeCode } from '~/lib/evaluate';
+
 
 // Types for workflow execution
 export interface WorkflowExecutionContext {
@@ -25,18 +26,16 @@ export interface NodeExecutionResult {
   nextNodes: string[];
 }
 
-/**
- * Class for executing workflows
- */
+
+
 export class WorkflowExecutor {
   private static instance: WorkflowExecutor;
   private logger = Logger.getInstance();
   private executionContexts: Record<string, WorkflowExecutionContext> = {};
-  private MAX_EXECUTION_DEPTH = 10; // Prevent infinite recursion
+  private MAX_EXECUTION_DEPTH = 10; 
   
-  /**
-   * Get the singleton instance
-   */
+ 
+
   public static getInstance(): WorkflowExecutor {
     if (!WorkflowExecutor.instance) {
       WorkflowExecutor.instance = new WorkflowExecutor();
@@ -44,18 +43,8 @@ export class WorkflowExecutor {
     return WorkflowExecutor.instance;
   }
   
-  /**
-   * Private constructor to ensure singleton
-   */
   private constructor() {}
-  
-  /**
-   * Execute a workflow starting from a specific node
-   * @param workflow - The workflow to execute
-   * @param startNodeId - The ID of the node to start from
-   * @param initialData - Initial data for the workflow
-   * @returns The execution context
-   */
+ 
   public async executeWorkflow(
     workflow: any,
     startNodeId: string,
@@ -63,6 +52,7 @@ export class WorkflowExecutor {
   ): Promise<WorkflowExecutionContext> {
     const executionId = uuidv4();
     
+
     // Create execution context
     const context: WorkflowExecutionContext = {
       workflowId: workflow.id,
@@ -77,57 +67,28 @@ export class WorkflowExecutor {
       executionPath: initialData.executionPath || []
     };
     
-    // Add current workflow to execution path
     context.executionPath.push(workflow.id);
-    
     this.executionContexts[executionId] = context;
     
-    this.logger.info('Starting workflow execution', { 
-      workflowId: workflow.id, 
-      executionId,
-      startNodeId,
-      parentWorkflowId: context.parentWorkflowId,
-      executionPath: context.executionPath
-    });
-    
     try {
-      // Find the start node
       const startNode = workflow.nodes.find((node: any) => node.id === startNodeId);
       if (!startNode) {
         throw new Error(`Start node ${startNodeId} not found`);
       }
-      
       // Start execution from the start node
       await this.executeNode(workflow, startNode, context);
-      
-      this.logger.info('Workflow execution completed', { 
-        workflowId: workflow.id, 
-        executionId,
-        executedNodes: context.executedNodes.length,
-        duration: Date.now() - context.startTime
-      });
-      
       return context;
     } catch (error) {
       this.logger.error('Error executing workflow', error as Error, { 
         workflowId: workflow.id, 
         executionId 
       });
-      
-      // Add error to context
       context.errors['workflow'] = error as Error;
-      
       return context;
     }
   }
   
-  /**
-   * Execute a single node in the workflow
-   * @param workflow - The workflow containing the node
-   * @param node - The node to execute
-   * @param context - The execution context
-   * @returns The result of the node execution
-   */
+  
   private async executeNode(
     workflow: any,
     node: any,
@@ -135,17 +96,9 @@ export class WorkflowExecutor {
   ): Promise<NodeExecutionResult> {
     // Update context with current node
     context.currentNode = node.id;
-    
-    this.logger.debug('Executing node', { 
-      nodeId: node.id, 
-      nodeType: node.type,
-      executionId: context.executionId
-    });
-    
     try {
       // Execute the node based on its type
       let result: NodeExecutionResult;
-      
       switch (node.type) {
         case 'startNode':
           result = await this.executeStartNode(node, context);
@@ -178,30 +131,18 @@ export class WorkflowExecutor {
           throw new Error(`Unsupported node type: ${node.type}`);
       }
       
-      // Store the result in the context
       context.nodeResults[node.id] = result.data;
-      
-      // Add node to executed nodes
       context.executedNodes.push(node.id);
-      
       // Find and execute next nodes
       const nextNodes = this.findNextNodes(workflow, node.id, result.nextNodes);
-      
       for (const nextNode of nextNodes) {
         await this.executeNode(workflow, nextNode, context);
       }
       
       return result;
     } catch (error) {
-      this.logger.error('Error executing node', error as Error, { 
-        nodeId: node.id, 
-        nodeType: node.type,
-        executionId: context.executionId
-      });
-      
       // Add error to context
       context.errors[node.id] = error as Error;
-      
       return {
         success: false,
         data: null,
@@ -211,37 +152,23 @@ export class WorkflowExecutor {
     }
   }
   
-  /**
-   * Find the next nodes to execute based on the current node and execution result
-   * @param workflow - The workflow
-   * @param currentNodeId - The ID of the current node
-   * @param specificTargets - Specific target node IDs (for conditional nodes)
-   * @returns Array of next nodes
-   */
+
   private findNextNodes(workflow: any, currentNodeId: string, specificTargets: string[] = []): any[] {
-    // If specific targets are provided, use those
     if (specificTargets.length > 0) {
       return specificTargets.map(targetId => 
         workflow.nodes.find((node: any) => node.id === targetId)
       ).filter(Boolean);
     }
-    
     // Otherwise, find nodes connected by edges
     const outgoingEdges = workflow.edges.filter((edge: any) => edge.source === currentNodeId);
-    
     return outgoingEdges.map((edge: any) => 
       workflow.nodes.find((node: any) => node.id === edge.target)
     ).filter(Boolean);
   }
   
-  /**
-   * Execute a start node
-   * @param node - The start node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
   private async executeStartNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
-    // Start nodes don't do much, they just pass control to the next node
     return {
       success: true,
       data: {
@@ -252,23 +179,16 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Execute a JavaScript node
-   * @param node - The JavaScript node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
   private async executeJavaScriptNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
     const code = node.data.code || 'return null;';
-    
-    // Execute the code with the current context data
+
     const result = await executeCode(code, {
       workflow: { id: context.workflowId },
       data: context.data,
       results: context.nodeResults,
-      // Add helper functions or libraries here
     });
-    
     if (result.success) {
       // Update the context data with the result
       if (result.data && typeof result.data === 'object') {
@@ -278,7 +198,6 @@ export class WorkflowExecutor {
         };
       }
     }
-    
     return {
       success: result.success,
       data: result.data,
@@ -287,19 +206,13 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Execute an HTTP node
-   * @param node - The HTTP node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
   private async executeHttpNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
     const { url, method, headers, body } = node.data;
-    
     if (!url) {
       throw new Error('URL is required for HTTP node');
     }
-    
     try {
       // Prepare request options
       const options: RequestInit = {
@@ -355,12 +268,9 @@ export class WorkflowExecutor {
     }
   }
   
-  /**
-   * Execute a condition node
-   * @param node - The condition node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
+
   private async executeConditionNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
     const condition = node.data.condition || 'return true;';
     
@@ -392,12 +302,10 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Execute a loop node
-   * @param node - The loop node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
+
+
   private async executeLoopNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
     const { items, iterationCount } = node.data;
     
@@ -452,12 +360,9 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Execute an interval node
-   * @param node - The interval node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
+
   private async executeIntervalNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
     // For workflow execution, we just simulate a single execution of the interval
     // In a real implementation, this would set up an actual interval
@@ -472,12 +377,10 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Execute a notification node
-   * @param node - The notification node
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
+
+
   private async executeNotificationNode(node: any, context: WorkflowExecutionContext): Promise<NodeExecutionResult> {
     const { title, message, type } = node.data;
     
@@ -527,13 +430,10 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Execute a workflow node (runs another workflow)
-   * @param node - The workflow node
-   * @param parentWorkflow - The parent workflow
-   * @param context - The execution context
-   * @returns The execution result
-   */
+
+
+
+
   private async executeWorkflowNode(
     node: any, 
     parentWorkflow: any, 
@@ -613,30 +513,29 @@ export class WorkflowExecutor {
     };
   }
   
-  /**
-   * Get an execution context by ID
-   * @param executionId - The execution ID
-   * @returns The execution context or undefined if not found
-   */
+
+
+
+
   public getExecutionContext(executionId: string): WorkflowExecutionContext | undefined {
     return this.executionContexts[executionId];
   }
   
-  /**
-   * Get all execution contexts
-   * @returns Record of all execution contexts
-   */
+
+
+
   public getAllExecutionContexts(): Record<string, WorkflowExecutionContext> {
     return { ...this.executionContexts };
   }
   
-  /**
-   * Clear all execution contexts
-   */
+
+
+
   public clearExecutionContexts(): void {
     this.executionContexts = {};
   }
 }
 
-// Export a singleton instance
+
+
 export const workflowExecutor = WorkflowExecutor.getInstance();

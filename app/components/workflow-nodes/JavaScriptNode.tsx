@@ -232,9 +232,9 @@ export const JavaScriptNode = memo(({ data, id }: JavaScriptNodeProps) => {
         data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',
         data.isSuccess && 'border-green-500/30 from-green-500/5 to-green-500/10'
       )}>
-        {/* Delete button */}
+       
         <DeleteButton nodeId={id} isLocked={data.isLocked} />
-        
+       
         <Handle 
           type="target" 
           position={Position.Left} 
@@ -336,7 +336,7 @@ export const JavaScriptNode = memo(({ data, id }: JavaScriptNodeProps) => {
 
           {/* Code editor */}
           <div ref={codeEditorRef} className={cn(
-            "transition-all duration-200 ease-in-out",
+            "transition-all duration-200 ease-in-out nodrag nowheel",
             isExpanded ? "h-[200px]" : "h-[100px]"
           )}>
             <CodeEditor

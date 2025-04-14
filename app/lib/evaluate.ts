@@ -3,14 +3,14 @@ import * as Papa from "papaparse";
 import moment from "moment";
 import * as uuid from "uuid";
 import numbro from "numbro";
+import _ from "lodash";
 import * as estraverse from 'estraverse';
 import { MemberExpression, Node as ESTreeNode, Comment, Program } from 'estree';
 import lodash from 'lodash';
-import { Logger } from '~/lib/logger';
 const {last} = lodash;
 
-// Inisialisasi logger
-const logger = Logger.getInstance();
+
+
 
 export const ds = (id: string): string[] => id.split('.');
 export const JSON_LIKE_REGEX = /^{[^{]([\s\S]+?}?)}$/g
@@ -26,9 +26,7 @@ export const SEMVER_REGEX = /^(\d+)\.(\d+)\.(\d+)$/g
 export const URL_REGEX = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/
 export const VALID_JS_IDENTIFIER_OR_PERIODS_OR_BRACKETS_OR_STRING_OR_BASIC_OP_REGEX = /^\{\{[0-9A-Z_$'" \/\*\-\+\!\:\>\<\&\|\?\.\[\]]*\}\}$/i
 
-// Cache untuk menyimpan hasil evaluasi
-const evaluationCache = new Map<string, { result: any, timestamp: number }>();
-const CACHE_TTL = 5000; // 5 detik
+
 
 export default class CachedGetUndeclaredContext {
   #cachedNodeIsNumberIndex = new Map()
@@ -111,6 +109,11 @@ export default class CachedGetUndeclaredContext {
   }
 }
 
+
+
+
+
+
 export const isSingleObjectString = (v: string): boolean => {
   const templateMatches: RegExpMatchArray | null = v.match(ANY_TEMPLATE_REGEX)
   if (templateMatches) {
@@ -121,6 +124,10 @@ export const isSingleObjectString = (v: string): boolean => {
   return !!v.match(OBJECT_REGEX)
 }
 
+
+
+
+
 function removeAllOccurrences(list: string[], id: string): string[] {
   // #removeAllOccurrences
   // NOTE: the usage of this function is somewhat questionable. E.g. it results in a.b + a.b.c only outputting
@@ -128,6 +135,9 @@ function removeAllOccurrences(list: string[], id: string): string[] {
   // TODO: remove this function
   return list.filter((v: string) => v !== id);
 }
+
+
+
 
 function removeLastOccurence(list: string[], id: string): string[] {
   for (let i = list.length - 1; i >= 0; i--) {
@@ -139,6 +149,8 @@ function removeLastOccurence(list: string[], id: string): string[] {
   return list;
 }
 
+
+
 function notProperty(node: { type: string }): boolean {
   return (
     node.type !== 'MethodDefinition' &&
@@ -148,9 +160,14 @@ function notProperty(node: { type: string }): boolean {
   );
 }
 
+
+
 function isNumberIndex(id: string | undefined): boolean {
   return id === 'i' || id === '__RETOOL_NUMBER_INDEX__' || (id && !isNaN(parseInt(id, 10)));
 }
+
+
+
 
 interface ASTNode {
   type: string;
@@ -361,9 +378,11 @@ const getUndeclaredIdentifiers = (
   return undeclared;
 };
 
+
+
 export const helperFuncs = {
     moment: moment,
-    _: lodash,
+    _,
     // necessary to get tsc to compile
     uuid: uuid,
     Papa,
@@ -421,7 +440,11 @@ const jsBuiltInFunctions = [
     'console',
 ];
 
+
 const globalScopeFuncs = new Set(Object.keys({ ...helperFuncs, ...testingFunctions }).concat(jsBuiltInFunctions));
+
+
+
 
 /**
  * Return the AST of the provided expression
@@ -431,6 +454,8 @@ const globalScopeFuncs = new Set(Object.keys({ ...helperFuncs, ...testingFunctio
 function parseJSExpression(expression: string, options: espree.Options): Program {
   return espree.parse(expression, { ecmaVersion: 11, ...options }) as unknown as Program;
 }
+
+
 
 interface SelectorOptions {
   code: string;
@@ -470,6 +495,15 @@ export function getSelectorsInCode(
   return varArr;
 }
 
+
+
+
+
+
+
+//=======================================================
+
+
 function isCallExpression(node: ASTNode): node is CallExpressionNode {
   return node.type === 'CallExpression';
 }
@@ -506,6 +540,7 @@ function isIdentifier(node: ASTNode): node is IdentifierNode {
   return node.type === 'Identifier';
 }
 
+
 export function triggerPredicate(node: ASTNode, pluginId?: string): boolean {
   if (isCallExpression(node)) {
     if (
@@ -522,11 +557,15 @@ export function triggerPredicate(node: ASTNode, pluginId?: string): boolean {
   return false;
 }
 
-export function computeJavascriptDependencies(code) {
+
+export function computeJavascriptDependencies(code : any) {
   // wrap code in function so we can parse `return` correctly
   const wrappedInFunction = `async () => { \n${code}\n }`
   return getSelectorsInCode(wrappedInFunction, false, globalScopeFuncs)
 }
+
+
+
 
 export function parseTriggeredQueries(code: string): Set<string> {
   let parsed: Program | undefined;
@@ -554,10 +593,19 @@ export function parseTriggeredQueries(code: string): Set<string> {
   return triggeredQueries;
 }
 
+
+
+
+
+
+
+
+
+
+
 export function evaluateFunctionTemplate(
   code: string, 
-  scope: Record<string, any>, 
-  dataSourceId: string
+  scope: Record<string, any>
 ): any {
   let escapedCode: string = code;
   try {
@@ -566,38 +614,21 @@ export function evaluateFunctionTemplate(
     // otherwise, it will hit the catch clause and we will execute the code as provided
     escapedCode = JSON.parse(`{ "v": "${code}" }`).v;
   } catch (e) {}
-  
-  // Cek apakah hasil sudah ada di cache
-  const cacheKey = `${escapedCode}-${JSON.stringify(scope)}`;
-  const cachedResult = evaluationCache.get(cacheKey);
-  
-  if (cachedResult && (Date.now() - cachedResult.timestamp < CACHE_TTL)) {
-    logger.debug('Using cached evaluation result', { cacheKey: cacheKey.substring(0, 50) });
-    return cachedResult.result;
-  }
-  
-  try {
-    // Process dependencies if necessary...
-    // You may want to check if the dependencies exist in the scope or do something else
-    const compiled = new Function(
-      'scope', 
-      `with(scope||{}){ return (${escapedCode}) }`
-    );
-    
-    const result = compiled(scope);
-    
-    // Simpan hasil ke cache
-    evaluationCache.set(cacheKey, { 
-      result, 
-      timestamp: Date.now() 
-    });
-    
-    return result;
-  } catch (error) {
-    logger.error('Error evaluating function template', error as Error, { code: escapedCode.substring(0, 100) });
-    throw error;
-  }
+  // Extract dependencies
+  // const dependencies = getSelectorsInCode(escapedCode);
+  // return dependencies;
+  // Process dependencies if necessary...
+  // You may want to check if the dependencies exist in the scope or do something else
+  const compiled = new Function(
+    'scope', 
+    `with(scope||{}){ return (${escapedCode}) }`
+  );
+  return compiled(scope);
 }
+
+
+
+
 
 interface ExecuteCodeResult {
   success: boolean;
@@ -605,35 +636,17 @@ interface ExecuteCodeResult {
   message?: string;
 }
 
+
 export const executeCode = async (code: string, scope: Record<string, any>): Promise<ExecuteCodeResult> => {
-  // Cek apakah hasil sudah ada di cache
-  const cacheKey = `execute-${code}-${JSON.stringify(scope)}`;
-  const cachedResult = evaluationCache.get(cacheKey);
-  
-  if (cachedResult && (Date.now() - cachedResult.timestamp < CACHE_TTL)) {
-    logger.debug('Using cached execution result', { cacheKey: cacheKey.substring(0, 50) });
-    return cachedResult.result;
-  }
-  
   let wrappedCode = `with (scope) {${code}}`;
   try {
     const compiled = new Function('scope', wrappedCode);
     const run = await compiled(scope);
-    
-    const result = {
+    return {
       success: true,
       data: run,
     };
-    
-    // Simpan hasil ke cache
-    evaluationCache.set(cacheKey, { 
-      result, 
-      timestamp: Date.now() 
-    });
-    
-    return result;
   } catch (error: any) {
-    logger.error('Error executing code', error as Error, { code: code.substring(0, 100) });
     return {
       success: false,
       data: null,
@@ -641,6 +654,11 @@ export const executeCode = async (code: string, scope: Record<string, any>): Pro
     };
   }
 };
+
+
+
+
+
 
 interface TemplateEvaluatorOptions {
   escape?: boolean;
@@ -655,64 +673,31 @@ interface TemplateEvaluator {
 
 export const createTemplateEvaluator = (options: TemplateEvaluatorOptions): TemplateEvaluator => {
   const evaluator: TemplateEvaluator = (text, scope, strategy) => {
-    // Cek apakah hasil sudah ada di cache
-    const cacheKey = `${strategy}-${text}-${JSON.stringify(scope)}`;
-    const cachedResult = evaluationCache.get(cacheKey);
-    
-    if (cachedResult && (Date.now() - cachedResult.timestamp < CACHE_TTL)) {
-      logger.debug('Using cached template result', { strategy, cacheKey: cacheKey.substring(0, 50) });
-      return cachedResult.result;
-    }
-    
-    let result;
-    
     switch (strategy) {
       case 'LodashTemplate': {
         const lodashTemplateOptions = {
           escape: options?.escape || true ? ANY_TEMPLATE_REGEX : undefined,
           interpolate: ANY_TEMPLATE_REGEX,
         };
-        try {
-          result = lodash.template(text, lodashTemplateOptions)(scope);
-          
-          // Simpan hasil ke cache
-          evaluationCache.set(cacheKey, { 
-            result, 
-            timestamp: Date.now() 
-          });
-          
-          return result;
-        } catch (error) {
-          logger.error('Error in LodashTemplate evaluation', error as Error, { text: text.substring(0, 100) });
-          return text;
-        }
+        const sdas = _.template(text, lodashTemplateOptions)(scope);
+        return sdas;
       }
       case 'FunctionTemplate': {
-        try {
-          result = evaluateFunctionTemplate(text, scope, options.dataSourceId);
+        const result = evaluateFunctionTemplate(text, scope, options.dataSourceId);
 
-          if (options.escape) {
-            if (typeof result === 'string') {
-              result = result.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            }
+        if (options.escape) {
+          if (typeof result === 'string') {
+            return result.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
           }
-          
-          // Simpan hasil ke cache
-          evaluationCache.set(cacheKey, { 
-            result, 
-            timestamp: Date.now() 
-          });
-          
-          return result;
-        } catch (error) {
-          logger.error('Error in FunctionTemplate evaluation', error as Error, { text: text.substring(0, 100) });
-          return text;
         }
+        return result;
       }
     }
   };
   return evaluator;
 };
+
+
 
 export const covertPureJavaScript = (code: string): string => {
   return code.replace(/{{(.*?)}}/g, (match: string, p1: string): string => {
@@ -721,98 +706,39 @@ export const covertPureJavaScript = (code: string): string => {
   });
 };
 
+
+
+
+
 export const interpolateCode = (code: string, scope: Record<string, any>): string => {
-  // Cek apakah hasil sudah ada di cache
-  const cacheKey = `interpolate-${code}-${JSON.stringify(scope)}`;
-  const cachedResult = evaluationCache.get(cacheKey);
-  
-  if (cachedResult && (Date.now() - cachedResult.timestamp < CACHE_TTL)) {
-    logger.debug('Using cached interpolation result', { cacheKey: cacheKey.substring(0, 50) });
-    return cachedResult.result;
-  }
-  
-  try {
-    // Deteksi apakah ini adalah template string dengan backticks
-    const isTemplateString = code.includes('`') && code.includes('${');
-    
-    // Jika ini adalah template string dengan backticks, evaluasi secara langsung
-    if (isTemplateString) {
-      try {
-        // Ekstrak konten di dalam {{...}}
-        const match = code.match(ONLY_TEMPLATE_REGEX);
-        if (match && match[1]) {
-          const templateContent = match[1].trim();
-          
-          // Jika konten dimulai dengan backtick, ini adalah template string
-          if (templateContent.startsWith('`') && templateContent.endsWith('`')) {
-            // Evaluasi template string langsung
-            const templateStringCode = `with(scope) { return ${templateContent} }`;
-            const fn = new Function('scope', templateStringCode);
-            const result = fn(scope);
-            
-            // Simpan hasil ke cache
-            evaluationCache.set(cacheKey, { 
-              result, 
-              timestamp: Date.now() 
-            });
-            
-            return result;
-          }
-        }
-      } catch (error) {
-        logger.error('Error evaluating template string', error as Error, { code });
-      }
+  console.log('interpolateCode', code, scope);
+  return code.replace(/{{(.*?)}}/g, (match: string, p1: string): string => {
+    const keys: string[] = p1.trim().split('.');
+
+    // FIX ERROR JSON RESULTS [Object, Object]
+    const check_is_object: any = lodash.get(scope, keys.join('.'));
+    if (check_is_object && typeof check_is_object === 'object') {
+      return JSON.stringify(check_is_object);
     }
-    
-    // Untuk kode non-template string, evaluasi dengan metode biasa
-    const result = code.replace(/{{([\s\S]*?)}}/g, (match: string, p1: string): string => {
-      try {
-        // Jika ini adalah template string dengan backticks, evaluasi secara langsung
-        if (p1.trim().startsWith('`') && p1.trim().endsWith('`')) {
-          const templateStringCode = `with(scope) { return ${p1.trim()} }`;
-          const fn = new Function('scope', templateStringCode);
-          return fn(scope);
-        }
-        
-        // Jika bukan template string, gunakan evaluasi biasa
-        const keys: string[] = p1.trim().split('.');
-
-        // Cek apakah ini adalah fungsi yang menghasilkan nilai acak
-        const isRandomFunction = p1.includes('uuid.v4()') || 
-                                p1.includes('Date.now()') || 
-                                p1.includes('Math.random()');
-
-        // FIX ERROR JSON RESULTS [Object, Object]
-        const check_is_object: any = lodash.get(scope, keys.join('.'));
-        if (check_is_object && typeof check_is_object === 'object' && !isRandomFunction) {
-          return JSON.stringify(check_is_object);
-        }
-        
-        const evaluator: TemplateEvaluator = createTemplateEvaluator({ escape: true });
-        const convertValue: any = evaluator(match, scope, 'LodashTemplate');
-        
-        if (typeof convertValue === 'object') {
-          return JSON.stringify(convertValue);
-        }
-        return convertValue;
-      } catch (e: any) {
-        logger.error('Error executing code:', e as Error, { match });
-        return match; // Return the original match on error
+    try {
+      const evaluator: TemplateEvaluator = createTemplateEvaluator({ escape: true });
+      const convertValue: any = evaluator(match, scope, 'LodashTemplate');
+      
+      if (typeof convertValue === 'object') {
+        return JSON.stringify(convertValue);
       }
-    });
-    
-    // Simpan hasil ke cache
-    evaluationCache.set(cacheKey, { 
-      result, 
-      timestamp: Date.now() 
-    });
-    
-    return result;
-  } catch (error) {
-    logger.error('Error in interpolateCode', error as Error, { code: code.substring(0, 100) });
-    return code;
-  }
+      return convertValue;
+    } catch (e: any) {
+      console.error('Error executing code:', e.message);
+      return null;
+    }
+  });
 };
+
+
+
+
+
 
 const SANDBOX_ADDITIONAL_SCOPE = {
   atob,
@@ -821,13 +747,15 @@ const SANDBOX_ADDITIONAL_SCOPE = {
  // formatDataAsObject,
   moment,
  // numbro,
-  _: lodash,
+  _,
  // Papa,
   uuid,
 }
 
+
 let callbackCount = 0
 const callbacks = {}
+
 
 interface RetoolJSCallback {
   type: '__RETOOL_JS_CALLBACK__';
@@ -858,13 +786,15 @@ function convertArguments(args: Argument[]): Argument[] {
       if (Array.isArray(arg)) {
         return arg.map(mapper);
       } else {
-        return lodash.mapValues(arg, mapper);
+        return _.mapValues(arg, mapper);
       }
     } else {
       return arg;
     }
   });
 }
+
+
 
 interface PluginVariable {
   [key: string]: any; // Consolidated index signature
@@ -885,7 +815,7 @@ function convertPlugin(
   variable: PluginVariable,
   _selector: string[]
 ): PluginVariable {
-  return lodash.mapValues(variable, (field: any | string, _: string) => {
+  return _.mapValues(variable, (field: any | string, _: string) => {
     if (field === '__RETOOL_JS_API__') {
       return function (...args: any[]): Promise<any> {
         const convertedArgs = convertArguments(Array.prototype.slice.call(args));
@@ -914,9 +844,12 @@ function convertPlugin(
   });
 }
 
+
+
 interface Scope {
   [key: string]: any;
 }
+
 
 interface MainWindow extends Window {}
 
@@ -926,7 +859,7 @@ function convertScope(
   origin: string,
   scope: Scope
 ): Scope {
-  return lodash.mapValues(scope, (variable: any, variableName: string) => {
+  return _.mapValues(scope, (variable: any, variableName: string) => {
     if (
       variableName === 'i' ||
       variable == null ||
@@ -939,7 +872,7 @@ function convertScope(
     // Hacky way to check if it's in a listview
     const inListView = variable.pluginType && variable[0];
     if (inListView) {
-      return lodash.mapValues(variable, (field: any, key: string) => {
+      return _.mapValues(variable, (field: any, key: string) => {
         if (key !== 'pluginType') {
           return convertPlugin(mainWindow, origin, requestId, field, [variableName, key]);
         }
@@ -951,10 +884,15 @@ function convertScope(
   });
 }
 
+
+
+
+
 const Le=/{{([\s\S]*?)}}/gm,Oe=/{{/gm,Te=/}}/gm;
-const containInterpolation = (str) => {
+export const containInterpolation = (str) => {
   return typeof str === 'string' && new RegExp(Le).test(str);
 }
+
 
 interface EvaluateJobData {
   evalType: 'jsquery' | 'function' | 'alasql';
@@ -1043,11 +981,23 @@ export async function evaluateJob(
   }
 }
 
+
+
+
+
+
+
+
 // common
 function preprocessTemplate(template: string): string {
   if (typeof template !== 'string') return template;
   return template.replace(/{{{/g, '{{ {').replace(/}}}/g, '} }}');
 }
+
+
+
+
+
 
 interface TemplateEvalScope {
   [key: string]: any;
@@ -1101,6 +1051,9 @@ export async function templateEval(
   }
 }
 
+
+
+
 interface QueryTemplate {
   [key: string]: string;
 }
@@ -1129,6 +1082,8 @@ export async function buildUserParams(
   return userParams;
 }
 
+
+
 export async function buildUserParam(
   value: string, 
   parentData: Record<string, any>, 
@@ -1153,25 +1108,5 @@ export async function buildUserParam(
   return parameters;
 }
 
-// Fungsi untuk membersihkan cache
-export function clearEvaluationCache(): void {
-  evaluationCache.clear();
-  logger.debug('Evaluation cache cleared');
-}
 
-// Fungsi untuk mendapatkan ukuran cache
-export function getEvaluationCacheSize(): number {
-  return evaluationCache.size;
-}
 
-// Fungsi untuk mengatur TTL cache
-export function setEvaluationCacheTTL(ttl: number): void {
-  // Validasi input
-  if (ttl < 0) {
-    throw new Error('Cache TTL must be a positive number');
-  }
-  
-  // Perbarui TTL global
-  (global as any).CACHE_TTL = ttl;
-  logger.debug('Evaluation cache TTL updated', { ttl });
-}

@@ -3,8 +3,7 @@ import { spanWidget, spanConfig } from './SpanWidget';
 import { textConfig, textWidget } from './TextWidget';
 import { imgConfig, imgWidget } from './ImageWidget';
 import { buttonConfig, buttonWidget } from './ButtonWidget';
-import { chartWidget, chartConfig } from './ChartWidget';
-import { tableWidget, tableConfig } from './TableWidget';
+import { tableConfig, tableWidget } from './TableWidget';
 import { barchartConfig, barchartWidget } from './BarChartWidget';
 import { linechartConfig, linechartWidget } from './LineChartWidget';
 import { piechartConfig, piechartWidget } from './PieChartWidget';
@@ -94,13 +93,7 @@ const componentConfigs = {
     category: COMPONENT_CATEGORIES.FORM,
     description: 'Clickable button element'
   },
-  chart: { 
-    icon: BarChart4, 
-    config: chartConfig, 
-    builder: chartWidget,
-    category: COMPONENT_CATEGORIES.DATA,
-    description: 'Generic chart component'
-  },
+ 
   table: { 
     icon: TableIcon, 
     config: tableConfig, 
@@ -124,7 +117,6 @@ const widgetConfigs = {
   text: textConfig,
   img: imgConfig,
   button: buttonConfig,
-  chart: chartConfig,
   table: tableConfig
 };
 

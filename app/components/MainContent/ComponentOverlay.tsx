@@ -132,17 +132,17 @@ export const ComponentOverlay = memo(() => {
 
   // Handle adding new component
   const handleAddComponent = useCallback((type: string, config: any) => {
-    if (!selectedPage || !selectedComponent) {
-      return;
-    }
+    //if (!selectedPage || !selectedComponent) {
+    //  return;
+    //}
     
-    const siblings = Object.values(component).filter(c => c.parentId === selectedComponent && c.pageId === selectedPage);
+    const siblings = Object.values(component).filter(c => c.parentId === selectedComponent /*&& c.pageId === selectedPage*/);
     const maxOrder = siblings.reduce((max, c) => Math.max(max, c.order || 0), -1);
     const newComponentId = `${type}-${Date.now()}`;
     const newComponent = {
       id: newComponentId,
       type,
-      pageId: selectedPage,
+     // pageId: selectedPage,
       parentId: selectedComponent,
       props: config.props,
       order: maxOrder + 1
@@ -153,7 +153,7 @@ export const ComponentOverlay = memo(() => {
     setHoveredComponent(null);
     setIsPopoverOpen(false);
     
-  }, [selectedComponent, selectedPage, component, setComponent, setSelectedComponent, setHoveredComponent]);
+  }, [selectedComponent,/* selectedPage,*/ component, setComponent, setSelectedComponent, setHoveredComponent]);
 
 
 

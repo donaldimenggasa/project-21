@@ -9,6 +9,20 @@ import { CheckboxField } from '~/components/form/fields/CheckboxField';
 import { SwitchField } from '~/components/form/fields/SwitchField';
 import { IconField } from '~/components/form/fields/IconField';
 import { ColorField } from '~/components/form/fields/ColorField';
+import { DateField } from '~/components/form/fields/DateField';
+import { DateTimeField } from '~/components/form/fields/DateTimeField';
+import { FileField } from '~/components/form/fields/FileField';
+import { ImageField } from '~/components/form/fields/ImageField';
+import { MonetaryField } from '~/components/form/fields/MonetaryField';
+import { NumberField } from '~/components/form/fields/NumberField';
+import { TagsField } from '~/components/form/fields/TagsField';
+import { SignatureField } from '~/components/form/fields/SignatureField';
+import { RelatedField } from '~/components/form/fields/RelatedField';
+import { PriorityField } from '~/components/form/fields/PriorityField';
+import { LinesField } from '~/components/form/fields/LinesField';
+import { One2ManyField } from '~/components/form/fields/One2ManyField';
+import { Many2OneField } from '~/components/form/fields/Many2OneField';
+import { Many2ManyField } from '~/components/form/fields/Many2ManyField';
 import { X, Save, ArrowRight, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { cn } from '~/lib/utils';
 
@@ -16,6 +30,8 @@ interface FieldBase {
   name: string;
   title: string;
   description?: string;
+  required?: boolean;
+  readonly?: boolean;
   rules?: {
     required?: string;
     min?: number;
@@ -30,46 +46,146 @@ interface FieldBase {
 
 interface CharField extends FieldBase {
   type: 'char';
-  icon?: React.ComponentType<any>;
+  defaultValue?: string;
+  placeholder?: string;
+  maxLength?: number;
 }
 
-interface TextAreaField extends FieldBase {
+interface TextField extends FieldBase {
   type: 'text';
-  icon?: React.ComponentType<any>;
+  defaultValue?: string;
+  placeholder?: string;
+  rows?: number;
 }
 
-interface NumberField extends FieldBase {
-  type: 'number';
-  icon?: React.ComponentType<any>;
+interface IntegerField extends FieldBase {
+  type: 'integer';
+  defaultValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
-interface SelectField extends FieldBase {
-  type: 'select';
+interface FloatField extends FieldBase {
+  type: 'float';
+  defaultValue?: number;
+  precision?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+interface MonetaryField extends FieldBase {
+  type: 'monetary';
+  defaultValue?: number;
+  currency_field?: string;
+  precision?: number;
+}
+
+interface BooleanField extends FieldBase {
+  type: 'boolean';
+  defaultValue?: boolean;
+}
+
+interface SelectionField extends FieldBase {
+  type: 'selection';
   options: { value: string; label: string }[];
-  icon?: React.ComponentType<any>;
+  defaultValue?: string;
 }
 
-interface CheckboxField extends FieldBase {
-  type: 'checkbox';
-  icon?: React.ComponentType<any>;
+interface DateField extends FieldBase {
+  type: 'date';
+  defaultValue?: string;
+  minDate?: string;
+  maxDate?: string;
 }
 
-interface SwitchField extends FieldBase {
-  type: 'switch';
-  icon?: React.ComponentType<any>;
+interface DateTimeField extends FieldBase {
+  type: 'datetime';
+  defaultValue?: string;
+  minDate?: string;
+  maxDate?: string;
 }
 
-interface IconField extends FieldBase {
-  type: 'icon';
-  icon?: React.ComponentType<any>;
+interface BinaryField extends FieldBase {
+  type: 'binary';
+  accept?: string;
+  maxSize?: number;
 }
 
-interface ColorField extends FieldBase {
-  type: 'color';
-  icon?: React.ComponentType<any>;
+interface ImageField extends FieldBase {
+  type: 'image';
+  accept?: string;
+  maxSize?: number;
+  width?: number;
+  height?: number;
 }
 
-type Field = CharField | TextAreaField | NumberField | SelectField | CheckboxField | SwitchField | IconField | ColorField;
+interface HTMLField extends FieldBase {
+  type: 'html';
+  defaultValue?: string;
+  sanitize?: boolean;
+}
+
+interface One2ManyField extends FieldBase {
+  type: 'one2many';
+  relation: string;
+  inverse_field: string;
+  domain?: any[];
+  context?: Record<string, any>;
+}
+
+interface Many2OneField extends FieldBase {
+  type: 'many2one';
+  relation: string;
+  domain?: any[];
+  context?: Record<string, any>;
+  optionsUrl?: string;
+  renderOptions?: (option: any) => React.ReactNode;
+}
+
+interface Many2ManyField extends FieldBase {
+  type: 'many2many';
+  relation: string;
+  domain?: any[];
+  context?: Record<string, any>;
+}
+
+interface TagsField extends FieldBase {
+  type: 'tags';
+  options: string[];
+  defaultValue?: string[];
+}
+
+interface PriorityField extends FieldBase {
+  type: 'priority';
+  defaultValue?: number;
+  levels?: number;
+}
+
+interface SignatureField extends FieldBase {
+  type: 'signature';
+  defaultValue?: string;
+  width?: number;
+  height?: number;
+}
+
+interface RelatedField extends FieldBase {
+  type: 'related';
+  relation: string;
+  path: string[];
+  readonly?: boolean;
+}
+
+interface LinesField extends FieldBase {
+  type: 'lines';
+  defaultValue?: string[];
+}
+
+type Field = CharField | TextField | IntegerField | FloatField | MonetaryField |
+  BooleanField | SelectionField | DateField | DateTimeField | BinaryField |
+  ImageField | HTMLField | One2ManyField | Many2OneField | Many2ManyField |
+  TagsField | PriorityField | SignatureField | RelatedField | LinesField;
 
 interface DynamicFormProps {
   id?: string;
@@ -87,29 +203,131 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
   const isLastStep = currentStep === totalSteps - 1;
   const isFirstStep = currentStep === 0;
 
-  // Generate Zod schema based on fields
   const generateSchema = () => {
     const schemaFields = fields.flat().reduce((acc, field) => {
-      let fieldSchema = z.string();
+      let fieldSchema: any;
 
-      if (field.rules?.required) {
-        fieldSchema = fieldSchema.min(1, field.rules.required);
+      switch (field.type) {
+        case 'many2one':
+          fieldSchema = z.number();
+          break;
+
+        case 'many2many':
+        case 'tags':
+          fieldSchema = z.array(z.string());
+          break;
+
+        case 'char':
+        case 'text':
+        case 'html': {
+          let schema = z.string();
+          if (field.rules?.required) {
+            schema = schema.min(1, field.rules.required);
+          }
+          if (field.rules?.min !== undefined) {
+            schema = schema.min(field.rules.min, `Minimum length is ${field.rules.min}`);
+          }
+          if (field.rules?.max !== undefined) {
+            schema = schema.max(field.rules.max, `Maximum length is ${field.rules.max}`);
+          }
+          fieldSchema = schema;
+          break;
+        }
+
+        case 'integer': {
+          let schema = z.number().int();
+          if (field.rules?.min !== undefined) {
+            schema = schema.min(field.rules.min, `Minimum value is ${field.rules.min}`);
+          }
+          if (field.rules?.max !== undefined) {
+            schema = schema.max(field.rules.max, `Maximum value is ${field.rules.max}`);
+          }
+          fieldSchema = z.preprocess((val) => {
+            if (typeof val === 'string') return parseInt(val, 10);
+            return val;
+          }, schema);
+          break;
+        }
+
+        case 'float':
+        case 'monetary': {
+          let schema = z.number();
+          if (field.rules?.min !== undefined) {
+            schema = schema.min(field.rules.min, `Minimum value is ${field.rules.min}`);
+          }
+          if (field.rules?.max !== undefined) {
+            schema = schema.max(field.rules.max, `Maximum value is ${field.rules.max}`);
+          }
+          fieldSchema = z.preprocess((val) => {
+            if (typeof val === 'string') return parseFloat(val);
+            return val;
+          }, schema);
+          break;
+        }
+
+        case 'boolean':
+          fieldSchema = z.boolean();
+          break;
+
+        case 'selection':
+          fieldSchema = z.string();
+          break;
+
+        case 'date': {
+          fieldSchema = z.string().refine(
+            (val) => {
+              if (!val) return true;
+              const date = new Date(val);
+              return !isNaN(date.getTime());
+            },
+            { message: "Invalid date format" }
+          );
+          break;
+        }
+
+        case 'datetime': {
+          fieldSchema = z.string().refine(
+            (val) => {
+              if (!val) return true;
+              const date = new Date(val);
+              return !isNaN(date.getTime());
+            },
+            { message: "Invalid datetime format" }
+          );
+          break;
+        }
+
+        case 'binary':
+        case 'image':
+          fieldSchema = z.any();
+          break;
+
+        case 'one2many':
+        case 'many2many':
+          fieldSchema = z.array(z.string());
+          break;
+
+        case 'priority':
+          fieldSchema = z.number();
+          break;
+
+        case 'signature':
+          fieldSchema = z.string();
+          break;
+
+        case 'related':
+          fieldSchema = z.any();
+          break;
+
+        case 'lines':
+          fieldSchema = z.array(z.string());
+          break;
+
+        default:
+          fieldSchema = z.any();
       }
 
-      if (field.type === 'number') {
-        fieldSchema = z.string()
-          .transform(Number)
-          .pipe(z.number());
-        
-        if (field.rules?.min !== undefined) {
-          fieldSchema = fieldSchema.min(field.rules.min);
-        }
-        if (field.rules?.max !== undefined) {
-          fieldSchema = fieldSchema.max(field.rules.max);
-        }
-      }
-
-      if (field.rules?.pattern) {
+      if (field.rules?.pattern && 'regex' in fieldSchema) {
         fieldSchema = fieldSchema.regex(field.rules.pattern.value, field.rules.pattern.message);
       }
 
@@ -120,13 +338,9 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
         );
       }
 
-      if (field.type === 'checkbox' || field.type === 'switch') {
-        fieldSchema = z.boolean().optional();
-      }
-
       return {
         ...acc,
-        [field.name]: fieldSchema,
+        [field.name]: field.required ? fieldSchema : fieldSchema.optional(),
       };
     }, {});
 
@@ -136,13 +350,21 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
   const form = useForm({
     resolver: zodResolver(generateSchema()),
     defaultValues: initialData,
+    mode: 'onChange',
   });
 
-  // Set initial form values when initialData changes
   useEffect(() => {
     if (initialData) {
       Object.entries(initialData).forEach(([key, value]) => {
-        form.setValue(key, value);
+        if (Array.isArray(value)) {
+          form.setValue(key, [...value], { shouldValidate: true });
+        } 
+        else if (typeof value === 'object' && value !== null) {
+          form.setValue(key, value, { shouldValidate: true });
+        }
+        else {
+          form.setValue(key, value, { shouldValidate: true });
+        }
       });
     }
   }, [initialData, form]);
@@ -155,16 +377,38 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
   };
 
   const handleNext = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     const isValid = await validateCurrentStep();
     if (isValid) {
+      const currentValues = form.getValues();
       setCurrentStep(prev => prev + 1);
+      
+      Object.entries(currentValues).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          form.setValue(key, [...value], { shouldValidate: false });
+        } else if (typeof value === 'object' && value !== null) {
+          form.setValue(key, { ...value }, { shouldValidate: false });
+        } else {
+          form.setValue(key, value, { shouldValidate: false });
+        }
+      });
     }
   };
 
   const handleBack = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
+    const currentValues = form.getValues();
     setCurrentStep(prev => prev - 1);
+    
+    Object.entries(currentValues).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        form.setValue(key, [...value], { shouldValidate: false });
+      } else if (typeof value === 'object' && value !== null) {
+        form.setValue(key, { ...value }, { shouldValidate: false });
+      } else {
+        form.setValue(key, value, { shouldValidate: false });
+      }
+    });
   };
 
   const handleSubmit = async (data: any) => {
@@ -174,66 +418,97 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
     }
   };
 
-  const handleCancel = () => {
-    const formValues = form.getValues();
-    const hasValues = Object.values(formValues).some(value => {
-      if (typeof value === 'string') return value.trim() !== '';
-      return value !== undefined && value !== false;
-    });
-
-    if (hasValues) {
-      setShowConfirmModal(true);
-    } else {
-      onCancel();
-    }
-  };
-
   const renderField = (field: Field) => {
     const commonProps = {
       key: field.name,
       name: field.name,
       label: field.title,
       description: field.description,
+      required: field.required,
+      readonly: field.readonly,
     };
 
     switch (field.type) {
       case 'char':
-        return <TextField {...commonProps} />;
+        return <TextField {...commonProps} type="text" />;
       case 'text':
         return <TextareaField {...commonProps} />;
-      case 'number':
-        return <TextField {...commonProps} type="number" />;
-      case 'select':
-        return <SelectField {...commonProps} options={field.options} />;
-      case 'checkbox':
+      case 'integer':
+        return <NumberField {...commonProps} step={1} />;
+      case 'float':
+        return <NumberField {...commonProps} step={0.01} />;
+      case 'monetary':
+        return <MonetaryField {...commonProps} />;
+      case 'boolean':
         return <CheckboxField {...commonProps} />;
-      case 'switch':
-        return <SwitchField {...commonProps} />;
-      case 'icon':
-        return <IconField {...commonProps} />;
-      case 'color':
-        return <ColorField {...commonProps} />;
+      case 'selection':
+        return <SelectField {...commonProps} options={field.options} />;
+      case 'date':
+        return <DateField {...commonProps} />;
+      case 'datetime':
+        return <DateTimeField {...commonProps} />;
+      case 'binary':
+        return <FileField {...commonProps} />;
+      case 'image':
+        return <ImageField {...commonProps} />;
+      case 'html':
+        return <TextareaField {...commonProps} />;
+      case 'one2many':
+        return <One2ManyField {...commonProps} relation={field.relation} inverse_field={field.inverse_field} />;
+      case 'many2one':
+        return <Many2OneField {...commonProps} relation={field.relation} optionsUrl={field.optionsUrl} renderOptions={field.renderOptions} />;
+      case 'many2many':
+        return <Many2ManyField {...commonProps} relation={field.relation} />;
+      case 'tags':
+        return <TagsField {...commonProps} options={field.options} />;
+      case 'priority':
+        return <PriorityField {...commonProps} levels={field.levels} />;
+      case 'signature':
+        return <SignatureField {...commonProps} />;
+      case 'related':
+        return <RelatedField {...commonProps} relation={field.relation} path={field.path} />;
+      case 'lines':
+        return <LinesField {...commonProps} />;
       default:
         return null;
     }
   };
 
   return (
-    <>
-      <div className="bg-card">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-auto relative transform transition-all">
+        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Complete all required information
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              const hasValues = Object.values(form.getValues()).some(Boolean);
+              hasValues ? setShowConfirmModal(true) : onCancel();
+            }}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="h-5 w-5 text-gray-400" />
+          </button>
+        </div>
+
         {totalSteps > 1 && (
-          <div className="px-6 pt-6">
+          <div className="px-6 pt-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-secondary">
+              <span className="text-sm font-medium text-gray-600">
                 Step {currentStep + 1} of {totalSteps}
               </span>
-              <span className="text-sm font-medium text-primary">
+              <span className="text-sm font-medium text-blue-600">
                 {Math.round(((currentStep + 1) / totalSteps) * 100)}% Complete
               </span>
             </div>
-            <div className="h-1.5 bg-background rounded-full overflow-hidden">
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-primary transition-all duration-300 ease-in-out"
+                className="h-full bg-blue-500 transition-all duration-500 ease-out"
                 style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
               />
             </div>
@@ -243,15 +518,27 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="p-6">
             <div className="space-y-6">
-              {fields[currentStep].map(field => renderField(field))}
+              {fields[currentStep].map((field, index) => (
+                <div
+                  key={field.name}
+                  className="transform transition-all duration-300 ease-out"
+                  style={{
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                    transitionDelay: `${index * 100}ms`
+                  }}
+                >
+                  {renderField(field)}
+                </div>
+              ))}
             </div>
 
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
               {isFirstStep ? (
                 <button
                   type="button"
-                  onClick={handleCancel}
-                  className="btn btn-sm btn-ghost"
+                  onClick={() => setShowConfirmModal(true)}
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <X className="h-4 w-4 mr-2" />
                   Cancel
@@ -260,7 +547,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="btn btn-sm btn-outline"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back
@@ -270,7 +557,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
               {isLastStep ? (
                 <button
                   type="submit"
-                  className="btn btn-sm btn-primary"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Save
@@ -279,7 +566,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="btn btn-sm btn-primary"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Next
                   <ArrowRight className="h-4 w-4 ml-2" />
@@ -290,29 +577,28 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
         </FormProvider>
       </div>
 
-      {/* Confirmation Modal */}
       {showConfirmModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-card rounded-xl shadow-lg p-6 max-w-md w-full mx-4 border border-border">
-            <div className="flex items-center space-x-4 text-warning mb-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full mx-4 transform transition-all">
+            <div className="flex items-center space-x-4 text-amber-500 mb-4">
               <AlertTriangle className="h-6 w-6" />
               <h3 className="text-lg font-semibold">Confirm Cancel</h3>
             </div>
-            <p className="text-foreground mb-6">
+            <p className="text-gray-600 mb-6">
               Are you sure you want to cancel? All entered data will be lost and cannot be recovered.
             </p>
             <div className="flex justify-end space-x-3">
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(false)}
-                className="btn btn-sm btn-ghost"
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
               >
                 Keep Editing
               </button>
               <button
                 type="button"
                 onClick={onCancel}
-                className="btn btn-sm btn-destructive"
+                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
               >
                 Yes, Cancel
               </button>
@@ -320,6 +606,6 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

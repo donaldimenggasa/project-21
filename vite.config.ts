@@ -14,28 +14,17 @@ declare module "@remix-run/node" {
 
 export default defineConfig({
   plugins: [
-    //checker({
-    //  typescript: true,
-    //  eslint: {
-    //    lintCommand: 'eslint --quiet "./app/**/*.{ts,tsx}"',
-    //    dev: {
-    //      logLevel: ["error"],
-    //    },
-    //  },
-    //}),
+    
     remix({
-      ignoredRouteFiles: ['**/*', "**/*.css"],
+      ignoredRouteFiles: ['**/*', '**/*.css'],
+      
+      
       routes(defineRoutes) {
-        return flatRoutes('routes', defineRoutes, {
-          ignoredRouteFiles: ['**/.*'], // Ignore dot files (like .DS_Store)
-          //appDir: 'app',
-          //routeDir: 'routes',
-          //basePath: '/',
-          //paramPrefixChar: '$',
-          //nestedDirectoryChar: '+',
-          //routeRegex: /((\${nestedDirectoryChar}[\/\\][^\/\\:?*]+)|[\/\\]((index|route|layout|page)|(_[^\/\\:?*]+)|([^\/\\:?*]+\.route)))\.(ts|tsx|js|jsx|md|mdx)$$/,
-        })
+        return flatRoutes('routes', defineRoutes, { ignoredRouteFiles: ['**/.*']})
       }, 
+
+      
+
       future: {
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,

@@ -1,4 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
+import React, { MouseEvent as ReactMouseEvent, useEffect, useState } from "react";
+import { motion, useMotionTemplate, useMotionValue, useAnimationControls } from "framer-motion";
+import { CSSProperties } from "react";
+
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,11 +11,132 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
+function TypingText({
+  words = ["Hello", "World", "Typing", "Effect"],
+  typingSpeed = 150,
+  deleteSpeed = 100,
+  delayBetweenWords = 1000,
+}: {
+  words?: string[];
+  typingSpeed?: number;
+  deleteSpeed?: number;
+  delayBetweenWords?: number;
+}) {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const controls = useAnimationControls();
+
+  useEffect(() => {
+    const word = words[currentWordIndex];
+
+    if (isDeleting) {
+      if (currentText === "") {
+        setIsDeleting(false);
+        setCurrentWordIndex((prev) => (prev + 1) % words.length);
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        setCurrentText(word.substring(0, currentText.length - 1));
+      }, deleteSpeed);
+      return () => clearTimeout(timer);
+    }
+
+    if (currentText === word) {
+      const timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, delayBetweenWords);
+      return () => clearTimeout(timer);
+    }
+
+    const timer = setTimeout(() => {
+      setCurrentText(word.substring(0, currentText.length + 1));
+    }, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [
+    currentText,
+    currentWordIndex,
+    isDeleting,
+    words,
+    typingSpeed,
+    deleteSpeed,
+    delayBetweenWords,
+  ]);
+
+  useEffect(() => {
+    controls.start({
+      opacity: [0.2, 1],
+      transition: {
+        duration: 0.5,
+        repeat: Infinity,
+        repeatType: "reverse",
+      },
+    });
+  }, [controls]);
+
+  return (
+    <div className="w-full h-full flex items-center justify-center bg-gray-900">
+      <div className="text-4xl font-mono text-white">
+        {currentText}
+        <motion.span animate={controls}>|</motion.span>
+      </div>
+    </div>
+  );
+}
+const Demo = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove({
+    currentTarget,
+    clientX,
+    clientY,
+  }: ReactMouseEvent<HTMLDivElement>) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  const background = useMotionTemplate`radial-gradient(650px circle at ${mouseX}px ${mouseY}px, rgba(14, 165, 233, 0.15), transparent 80%)`;
+
+  return (
+    <div
+      className="group relative max-w-md rounded-xl border border-white/10 bg-gray-900 px-8 py-16 shadow-2xl"
+      onMouseMove={handleMouseMove}
+    >
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100"
+        style={{ background }}
+      />
+      <div>
+        <h3 className="text-base font-semibold leading-7 text-sky-500">
+          Byline
+        </h3>
+        <div className="mt-2 flex items-center gap-x-2">
+          <span className="text-5xl font-bold tracking-tight text-white">
+            Hero
+          </span>
+        </div>
+        <p className="mt-6 text-base leading-7 text-gray-300">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit, facilis illum
+          eum ullam nostrum atque quam.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+
 export default function Index() {
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="flex flex-col items-center gap-16">
         <header className="flex flex-col items-center gap-9">
+          <Demo/>
+
+          <TypingText/>
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
             Welcome to <span className="sr-only">Remix</span>
           </h1>

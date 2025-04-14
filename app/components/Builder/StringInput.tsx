@@ -3,7 +3,7 @@ import { Component } from "~/lib/types";
 import { Terminal } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { CodeEditor } from "~/components/codeEditor";
-import { Logger } from "~/lib/logger";
+
 
 interface EditorProps {
   title: string;
@@ -23,7 +23,6 @@ const StringPropertyEditor: React.FC<EditorProps> = ({
   component,
   propertyKey
 }) => {
-  const logger = useRef(Logger.getInstance()).current;
   const componentPropsRef = useRef(componentProps);
   
   // Update ref when componentProps changes
@@ -33,40 +32,20 @@ const StringPropertyEditor: React.FC<EditorProps> = ({
   
   const setBindable = useCallback(() => {
     const isCurrentlyBindable = componentPropsRef.current?.bindable;
-    
-    logger.debug('Toggling bindable property', { 
-      componentId: component.id, 
-      property: propertyKey, 
-      currentValue: isCurrentlyBindable,
-      newValue: !isCurrentlyBindable
-    });
-    
     onChange({
       bindable: !isCurrentlyBindable,
     });
-  }, [onChange, component.id, propertyKey, logger]);
+  }, [onChange, component.id, propertyKey]);
 
   const onChangeBindable = useCallback((value: string) => {
-    logger.debug('Updating bindValue', { 
-      componentId: component.id, 
-      property: propertyKey, 
-      value: value.substring(0, 50) 
-    });
-    
     onChange({
       bindValue: value,
     });
-  }, [onChange, component.id, propertyKey, logger]);
+  }, [onChange, component.id, propertyKey]);
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    logger.debug('Updating property value', { 
-      componentId: component.id, 
-      property: propertyKey, 
-      value: e.target.value.substring(0, 50) 
-    });
-    
     onChange({ value: e.target.value });
-  }, [onChange, component.id, propertyKey, logger]);
+  }, [onChange, component.id, propertyKey]);
 
   return (
     <Fragment>
@@ -122,7 +101,7 @@ const StringPropertyEditor: React.FC<EditorProps> = ({
                 : configProps.defaultValue
             }
             onChange={handleInputChange}
-            className="w-full p-2 text-sm border border-border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary bg-input outline-none"
+            className="w-full p-2 text-sm border border-gray-800 rounded-md bg-gray-800 outline-none"
             placeholder={`Enter ${title.toLowerCase()}...`}
           />
         )

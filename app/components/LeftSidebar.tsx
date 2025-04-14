@@ -19,36 +19,38 @@ export function LeftSidebar() {
   const tabs: TabConfig[] = [
     { id: 'pages', icon: Layout, label: 'Pages', color: 'blue' },
     { id: 'components', icon: Box, label: 'Components', color: 'violet' },
-    { id: 'files', icon: FileText, label: 'Files', color: 'emerald' },
-    { id: 'database', icon: Database, label: 'Database', color: 'amber' },
-    { id: 'settings', icon: Settings, label: 'Settings', color: 'slate' }
+  //  { id: 'files', icon: FileText, label: 'Files', color: 'emerald' },
+  //  { id: 'database', icon: Database, label: 'Database', color: 'amber' },
+  //  { id: 'settings', icon: Settings, label: 'Settings', color: 'slate' }
   ];
+
+
 
   const tabButton = useCallback((tab: TabConfig) => {
     const isActive = activeTab === tab.id;
     return (
-      <button
-        key={tab.id}
-        onClick={() => setActiveTab(tab.id)}
-        className={cn(
-          'flex flex-col items-center justify-center py-3 px-1 transition-colors relative',
-          isActive
-            ? `text-${tab.color}-500 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-${tab.color}-500`
-            : 'text-secondary hover:text-foreground'
-        )}
-        title={tab.label}
-      >
-        <tab.icon className={cn("h-5 w-5", isActive && `text-${tab.color}-500`)} />
-        <span className="text-[10px] mt-1 font-medium">{tab.label}</span>
-      </button>
+      <button key={tab.id} 
+      onClick={() => setActiveTab(tab.id)}
+      className={cn(
+        '  text-sm uppercase flex w-1/2 h-full items-center justify-center border-r border-gray-800  ',
+        'hover:bg-orange-800 transition-colors relative',
+        isActive
+          ? `bg-orange-700 font-bold text-white`
+          : 'cursor-pointer hover:text-white text-gray-400'
+      )}>
+          {tab.label}
+        </button>
     );
   }, [activeTab]);
 
+
+
+  
   return (
-    <div className={`w-[280px]  bg-gray-900 text-gray-100 flex flex-col h-full border-r border-gray-800`}>
+    <div className={`w-[280px] bg-gray-900 text-gray-100 flex flex-col h-full border-r border-gray-800`}>
       {/* Tabs */}
-      <div className="flex justify-between border-b border-border px-1">
-        <div className="flex-1 flex justify-between">
+      <div className="flex border-b border-gray-800 h-10">
+      <div className="flex flex-row w-full h-full ">
           {tabs.map(tab => tabButton(tab))}
         </div>
       </div>

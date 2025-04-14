@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import * as Label from '@radix-ui/react-label';
 import { cn } from '~/lib/utils';
-import { Check, ChevronDown, AlertCircle } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 
 interface ColorFieldProps {
   name: string;
@@ -45,13 +45,13 @@ export function ColorField({ name, label, description }: ColorFieldProps) {
   const selectedColor = colors.find(c => c.value === value);
 
   const handleColorSelect = (colorValue: string) => {
-    setValue(name, colorValue, { shouldValidate: true });
+    setValue(name, colorValue);
     setIsOpen(false);
   };
 
   return (
     <div className="space-y-2">
-      <Label.Root className="text-sm font-medium text-foreground">
+      <Label.Root className="text-sm font-medium text-gray-700">
         {label}
       </Label.Root>
 
@@ -61,40 +61,39 @@ export function ColorField({ name, label, description }: ColorFieldProps) {
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
             "w-full flex items-center justify-between",
-            "px-3 py-2 rounded-md transition-colors",
-            "border",
+            "px-3 py-2 rounded-lg transition-colors",
+            "border border-gray-300",
+            "bg-white",
             error 
-              ? "border-destructive focus-visible:ring-destructive/30" 
-              : "border-border focus-visible:ring-primary/30",
-            "bg-input",
-            "focus-visible:outline-none focus-visible:ring-2"
+              ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20" 
+              : "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
           )}
         >
           <div className="flex items-center gap-2">
             {value && (
               <div
-                className="w-4 h-4 rounded-full border border-border"
+                className="w-4 h-4 rounded-full border border-gray-200"
                 style={{ backgroundColor: value }}
               />
             )}
-            <span className="text-sm">{selectedColor?.name || 'Select a color...'}</span>
+            <span>{selectedColor?.name || 'Select a color...'}</span>
           </div>
-          <ChevronDown className="h-4 w-4 text-secondary" />
+          <ChevronDown className="h-4 w-4 text-gray-500" />
         </button>
 
         {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-card rounded-md shadow-lg border border-border">
+          <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200">
             <div className="p-2 grid grid-cols-8 gap-1">
               {colors.map(({ value: colorValue, name }) => (
                 <button
                   key={colorValue}
                   type="button"
                   onClick={() => handleColorSelect(colorValue)}
-                  className="group relative aspect-square rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="group relative aspect-square rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   title={name}
                 >
                   <div
-                    className="w-full h-full rounded-md border border-border transition-transform group-hover:scale-110"
+                    className="w-full h-full rounded-md border border-gray-200 transition-transform group-hover:scale-110"
                     style={{ backgroundColor: colorValue }}
                   />
                   {value === colorValue && (
@@ -106,13 +105,13 @@ export function ColorField({ name, label, description }: ColorFieldProps) {
               ))}
             </div>
             
-            <div className="p-2 border-t border-border">
+            <div className="p-2 border-t border-gray-100">
               <button
                 type="button"
                 onClick={() => {
                   setShowCustomPicker(!showCustomPicker);
                 }}
-                className="w-full text-left text-sm text-secondary hover:text-foreground px-2 py-1 rounded hover:bg-background"
+                className="w-full text-left text-sm text-gray-600 hover:text-gray-900 px-2 py-1 rounded hover:bg-gray-50"
               >
                 Custom color
               </button>
@@ -131,15 +130,12 @@ export function ColorField({ name, label, description }: ColorFieldProps) {
         )}
       </div>
 
-      {description && !error && (
-        <p className="text-sm text-secondary">{description}</p>
+      {description && (
+        <p className="text-sm text-gray-500">{description}</p>
       )}
       
       {error && (
-        <p className="text-sm text-destructive flex items-center gap-1">
-          <AlertCircle className="h-3.5 w-3.5" />
-          {error}
-        </p>
+        <p className="text-sm text-red-500">{error}</p>
       )}
 
       <input type="hidden" {...register(name)} />

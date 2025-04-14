@@ -5,6 +5,7 @@ import pkg from "pg";
 import * as users from './schema/users';
 import * as unit_amc from './schema/unit_amc';
 import * as yori_builder from './schema/yori_builder';
+import * as datasource from './schema/datasource';
 
 
 
@@ -18,6 +19,7 @@ export const db = drizzle({
         ...users,
         ...unit_amc,
         ...yori_builder,
+        ...datasource,
     }
 });
 

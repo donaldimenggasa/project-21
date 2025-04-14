@@ -5,6 +5,7 @@ import { Component } from "~/lib/types";
 import NoBindableConfig from './NoBindableConfig';
 import BindableConfig from './BindableConfig';
 
+
 interface EditorProps {
   title: string;
   component: Component;
@@ -15,53 +16,51 @@ interface EditorProps {
   onChange: (value: any) => void;
 }
 
-export const ChartDatasourceEditor = memo(
-  ({ title, componentProps, configProps, onChange }: EditorProps) => {
-    const setBindable = useCallback(() => {
+
+
+export const ChartDatasourceEditor = memo(({ title, componentProps, configProps, onChange }: EditorProps) => {
+
+
+  const onChangeBindable = useCallback(() => {
+    if(componentProps.bindValue === '') {
       onChange({
         bindable: !componentProps.bindable,
+        bindValue: String(componentProps.value !== null ? componentProps.value : configProps.defaultValue),
       });
-    }, [componentProps, onChange]);
+      return;
+    }
+    onChange({
+      bindable: !componentProps.bindable,
+    });
+  }, [componentProps, onChange]);
+  
+  
+  
+  const onChangeValue = useCallback((value: any) => {
+    onChange(value);
+  }, [onChange]);
 
-    const onChangeBindable = useCallback(
-      (value: string) => {
+
+    const onChangeBindValue = useCallback((text : string) => {
         onChange({
-          bindValue: value,
+          bindValue: text,
         });
-      },
-      [onChange]
-    );
+        return;
+    }, [componentProps, onChange]);
+  
 
-    const onChangeValue = useCallback(
-      (value: any) => {
-        onChange(value);
-      },
-      [onChange]
-    );
+
 
     return (
-      <Fragment>
-        <div className="flex items-center justify-between mb-2 px-2">
-          <label
-            className={cn(
-              "block text-sm text-gray-300 uppercase font-semibold",
-              componentProps.bindable ? "text-lime-400" : "text-gray-300"
-            )}
-          >
-            {title}
-          </label>
-          <button
-            className="bloc text-xs text-gray-300 cursor-pointer"
-            onClick={setBindable}
-          >
-            <Terminal
-              className={cn(
-                "h-5 w-5 font-bold",
-                componentProps.bindable ? "text-lime-400" : "text-gray-300"
-              )}
-            />
-          </button>
-        </div>
+      <div className=" border-b border-gray-800 p-2">
+        <div className="flex items-center justify-between text-xs mb-4">
+                <label className={cn('block text-gray-400 uppercase', componentProps.bindable ? 'text-lime-400' : 'text-gray-300')}>
+                  {title}
+                </label>
+                <button className="bloc text-xs text-gray-300 cursor-pointer" onClick={onChangeBindable}>
+                  <Terminal className={cn('h-4 w-4 text-gray-400', componentProps.bindable ? 'text-lime-400' : 'text-gray-300')}/>
+                </button>
+              </div>
 
         {!componentProps?.bindable ? (
           <NoBindableConfig
@@ -75,10 +74,10 @@ export const ChartDatasourceEditor = memo(
         ) : (
           <BindableConfig
             value={componentProps.bindValue}
-            onChange={onChangeBindable}
+            onChange={onChangeBindValue}
           />
         )}
-      </Fragment>
+      </div>
     );
   }
 );

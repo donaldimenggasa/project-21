@@ -154,6 +154,12 @@ const SortablePageItem = React.memo(({
 
 SortablePageItem.displayName = 'SortablePageItem';
 
+
+
+
+
+
+
 export function PagesTab() {
   const { page, selectedPage, setSelectedPage, reorderPages, deletePage } = useStore();
   const [searchQuery, setSearchQuery] = useState('');
@@ -222,7 +228,7 @@ export function PagesTab() {
             placeholder="Search pages..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm bg-background border border-border rounded-md text-foreground placeholder-secondary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full pl-9 pr-4 py-2 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:border-blue-500"
           />
         </div>
         

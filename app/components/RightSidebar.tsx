@@ -103,7 +103,7 @@ export const RightSidebar: React.FC = React.memo(() => {
       </div>
 
       {/* Section Content */}
-      <div className="flex-1 overflow-auto p-4 custom-scrollbar">
+      <div className="flex-1 overflow-auto custom-scrollbar">
         <PropertyView 
           component={selectedComponentData} 
           config={config} 

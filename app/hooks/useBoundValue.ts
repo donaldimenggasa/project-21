@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import { interpolateCode, helperFuncs } from '~/lib/evaluate';
+import { createTemplateEvaluator, containInterpolation, covertPureJavaScript, helperFuncs } from '~/lib/evaluate';
 import { useStore } from '~/store/zustand/store';
 import { useShallow } from 'zustand/react/shallow';
+
+
 
 
 
@@ -16,18 +18,33 @@ const currentPropsValue = useStore(useShallow((state) => state.component[compone
     if (typeof currentPropsValue === 'object' && !currentPropsValue.bindable) {
         return currentPropsValue.value !== null ? currentPropsValue.value : currentPropsValue.defaultValue;
     }else{
+
       const bindValue = typeof currentPropsValue === 'object' ? currentPropsValue.bindValue || '' : '';
-      if (!bindValue.match(/{{.*}}/)) {
+      if (!containInterpolation(bindValue)) {
         return bindValue;
       }else{
+     
+        let result = null;
+        try{
+          const scope = {
+            ...helperFuncs
+          };
 
-        const scope = {
-          ...helperFuncs
-        };
-        const result = interpolateCode(bindValue, scope);
-
-        console.log(result);
-        return result
+          const cleanCode = covertPureJavaScript(bindValue);
+          const evaluator = createTemplateEvaluator(bindValue);
+          result = evaluator(
+            cleanCode,
+            scope,
+            'FunctionTemplate'
+          );
+        }catch(e){
+          console.log('Error evaluating bindValue:', e);
+        }finally{
+          console.log('RESULT EXECUTE', result);
+          console.log(result)
+          console.log(currentPropsValue)
+          return result;
+        }
       }
     }
 

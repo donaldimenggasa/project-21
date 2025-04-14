@@ -65,12 +65,12 @@ interface SortableRowProps {
   handleDeleteRow: (index: number) => void;
 }
 
-const SortableRow = memo(({ 
-  row, 
-  rowIndex, 
-  columns, 
-  handleUpdateCell, 
-  handleDeleteRow 
+const SortableRow = memo(({
+  row,
+  rowIndex,
+  columns,
+  handleUpdateCell,
+  handleDeleteRow
 }: SortableRowProps) => {
   const {
     attributes,
@@ -89,17 +89,17 @@ const SortableRow = memo(({
   };
 
   return (
-    <tr 
-      ref={setNodeRef} 
-      style={style} 
+    <tr
+      ref={setNodeRef}
+      style={style}
       className={cn(
         "border-b border-gray-800/50 hover:bg-gray-800/30 group",
         isDragging && "bg-gray-800/70"
       )}
     >
       <td className="p-2 w-10">
-        <div 
-          {...attributes} 
+        <div
+          {...attributes}
           {...listeners}
           className="cursor-grab active:cursor-grabbing p-1 hover:bg-gray-700/50 rounded flex items-center justify-center"
         >
@@ -136,11 +136,11 @@ const SortableRow = memo(({
 
 SortableRow.displayName = 'SortableRow';
 
-const TableModal = ({ 
-  onClose, 
-  columns, 
-  value, 
-  handleUpdateCell, 
+const TableModal = ({
+  onClose,
+  columns,
+  value,
+  handleUpdateCell,
   handleDeleteRow,
   handleAddRow,
   handleEditColumn,
@@ -163,11 +163,11 @@ const TableModal = ({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     if (over && active.id !== over.id) {
       const activeIndex = value.findIndex(row => row.id === active.id);
       const overIndex = value.findIndex(row => row.id === over.id);
-      
+
       if (activeIndex !== -1 && overIndex !== -1) {
         handleMoveRow(activeIndex, overIndex);
       }
@@ -206,7 +206,7 @@ const TableModal = ({
               <Plus className="h-3.5 w-3.5" />
               Add Row
             </button>
-            <button 
+            <button
               onClick={onClose}
               className="p-2 hover:bg-gray-800 rounded text-gray-400 hover:text-gray-200"
             >
@@ -214,7 +214,7 @@ const TableModal = ({
             </button>
           </div>
         </div>
-        
+
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left border-collapse">
             <thead className="sticky top-0 bg-gray-900 z-10">
@@ -247,12 +247,12 @@ const TableModal = ({
               </tr>
             </thead>
             <tbody className="bg-gray-900/50">
-              <DndContext 
+              <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
               >
-                <SortableContext 
+                <SortableContext
                   items={value.map(row => row.id)}
                   strategy={verticalListSortingStrategy}
                 >
@@ -285,7 +285,7 @@ const DownloadModal = ({ onClose, onDownload }: DownloadModalProps) => {
       <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 w-96">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-200">Download Data</h3>
-          <button 
+          <button
             onClick={onClose}
             className="p-1 hover:bg-gray-700 rounded text-gray-400 hover:text-gray-200"
           >
@@ -449,7 +449,16 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
 
 ColumnForm.displayName = "ColumnForm";
 
+
+
+
+
+
+
+
 function NoBindableConfig({ value, onChange }: any) {
+
+
   const [columns, setColumns] = useState<Column[]>([
     { key: 'name', name: 'Name', type: 'text' },
     { key: 'pv', name: 'Page Views', type: 'number' },
@@ -460,6 +469,11 @@ function NoBindableConfig({ value, onChange }: any) {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [showTableModal, setShowTableModal] = useState(false);
 
+
+  console.log(value)
+
+
+
   // Ensure all rows have an id for drag and drop
   const rowsWithIds = React.useMemo(() => {
     return value.map((row: any, index: number) => ({
@@ -467,6 +481,8 @@ function NoBindableConfig({ value, onChange }: any) {
       id: row.id || `row-${index}-${Date.now()}`
     }));
   }, [value]);
+
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -479,6 +495,9 @@ function NoBindableConfig({ value, onChange }: any) {
     })
   );
 
+
+
+
   const handleAddRow = () => {
     const newRow: DataRow = { id: `row-${Date.now()}` };
     columns.forEach(col => {
@@ -488,6 +507,8 @@ function NoBindableConfig({ value, onChange }: any) {
     onChange({ value: newData });
   };
 
+
+
   const handleDeleteRow = (index: number) => {
     const newData = rowsWithIds.filter((_: any, i: number) => i !== index);
     onChange({ value: newData });
@@ -496,7 +517,7 @@ function NoBindableConfig({ value, onChange }: any) {
   const handleUpdateCell = (rowIndex: number, field: string, newValue: any) => {
     const column = columns.find(col => col.key === field);
     const parsedValue = column?.type === 'number' ? Number(newValue) : newValue;
-    
+
     const newData = [...rowsWithIds];
     newData[rowIndex] = {
       ...newData[rowIndex],
@@ -512,11 +533,11 @@ function NoBindableConfig({ value, onChange }: any) {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     if (over && active.id !== over.id) {
       const activeIndex = rowsWithIds.findIndex(row => row.id === active.id);
       const overIndex = rowsWithIds.findIndex(row => row.id === over.id);
-      
+
       if (activeIndex !== -1 && overIndex !== -1) {
         handleMoveRow(activeIndex, overIndex);
       }
@@ -527,11 +548,11 @@ function NoBindableConfig({ value, onChange }: any) {
     if (editingColumn) {
       // Update existing column
       const oldKey = editingColumn.key;
-      const newColumns = columns.map(col => 
+      const newColumns = columns.map(col =>
         col.key === oldKey ? column : col
       );
       setColumns(newColumns);
-      
+
       // Update data with new column key if changed
       if (oldKey !== column.key) {
         const newData = rowsWithIds.map((row: DataRow) => {
@@ -546,7 +567,7 @@ function NoBindableConfig({ value, onChange }: any) {
     } else {
       // Add new column
       setColumns([...columns, column]);
-      
+
       // Add the new column to existing rows with default value
       const defaultValue = column.type === 'number' ? 0 : '';
       const newData = rowsWithIds.map((row: DataRow) => ({
@@ -555,7 +576,7 @@ function NoBindableConfig({ value, onChange }: any) {
       }));
       onChange({ value: newData });
     }
-    
+
     setShowColumnForm(false);
     setEditingColumn(null);
   };
@@ -568,7 +589,7 @@ function NoBindableConfig({ value, onChange }: any) {
   const handleDeleteColumn = (columnKey: string) => {
     // Remove column from columns list
     setColumns(columns.filter(col => col.key !== columnKey));
-    
+
     // Remove column from all rows
     const newData = rowsWithIds.map((row: DataRow) => {
       const { [columnKey]: removed, ...rest } = row;
@@ -576,6 +597,8 @@ function NoBindableConfig({ value, onChange }: any) {
     });
     onChange({ value: newData });
   };
+
+
 
   const handleDownload = (filename: string, format: string) => {
     const data = rowsWithIds;
@@ -601,11 +624,11 @@ function NoBindableConfig({ value, onChange }: any) {
           header: true,
           quotes: true // Quote all fields
         });
-        
+
         // Add BOM for Excel UTF-8 detection
         const BOM = '\ufeff';
         content = BOM + csvContent;
-        
+
         mimeType = 'application/vnd.ms-excel;charset=utf-8';
         extension = 'xls';
         break;
@@ -632,43 +655,56 @@ function NoBindableConfig({ value, onChange }: any) {
   };
 
   return (
-    <div className="flex flex-col h-[400px] border border-gray-800 rounded-lg">
+    <div className="flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-800">
-        <div className="flex items-center gap-4">
-          <h4 className="text-sm font-medium text-gray-300">Chart Data</h4>
-          <button
+      <div className="flex items-center justify-between border border-gray-800">
+        <div className="flex flex-row w-full mx-auto">
+          <button className={cn(
+            'w-1/4 h-6 rounded-tl-sm rounded-bl-sm text-xs text-gray-300 cursor-pointer border-r border-gray-800',
+            'hover:bg-purple-700'
+          )}
+            onClick={handleAddRow}>
+            <span className="text-xs text-gray-300">ADD ROW</span>
+          </button>
+
+          <button className={cn(
+            'w-1/4 h-6 text-xs text-gray-300 cursor-pointer',
+            'hover:bg-purple-700'
+          )}
             onClick={() => {
               setEditingColumn(null);
               setShowColumnForm(true);
-            }}
-            className="px-2 py-1 text-xs bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 rounded flex items-center gap-1"
-          >
-            <Settings className="h-3.5 w-3.5" />
-            Add Column
+            }}>
+            <span className="text-xs text-gray-300">ADD COL</span>
           </button>
-          <button
-            onClick={() => setShowDownloadModal(true)}
-            className="px-2 py-1 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 rounded flex items-center gap-1"
-          >
-            <Download className="h-3.5 w-3.5" />
-            Download
+
+          <button className={cn(
+            'w-1/4 h-6 text-xs text-gray-300 cursor-pointer',
+            'hover:bg-purple-700'
+          )}
+            onClick={() => {
+              setShowDownloadModal(true)
+            }}>
+            <span className="text-xs text-gray-300">DOWNLOAD</span>
           </button>
-          <button
-            onClick={() => setShowTableModal(true)}
-            className="px-2 py-1 text-xs bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded flex items-center gap-1"
-          >
-            <Maximize2 className="h-3.5 w-3.5" />
-            Full View
+
+          <button className={cn(
+            'w-1/4 h-6 rounded-tr-sm rounded-br-sm text-xs text-gray-300 cursor-pointer',
+            'hover:bg-purple-700'
+          )}
+            onClick={() => setShowTableModal(true)}>
+            <span className="text-xs text-gray-300">FULL VIEW</span>
           </button>
+
+
+
+
+
+
+
+
         </div>
-        <button
-          onClick={handleAddRow}
-          className="px-2 py-1 text-xs bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded flex items-center gap-1"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          Add Row
-        </button>
+
       </div>
 
       {showColumnForm && (
@@ -689,6 +725,7 @@ function NoBindableConfig({ value, onChange }: any) {
         />
       )}
 
+
       {showTableModal && (
         <TableModal
           onClose={() => setShowTableModal(false)}
@@ -705,6 +742,7 @@ function NoBindableConfig({ value, onChange }: any) {
           handleMoveRow={handleMoveRow}
         />
       )}
+
 
       {/* Table Container with Fixed Header */}
       <div className="flex-1 overflow-hidden">
@@ -740,12 +778,12 @@ function NoBindableConfig({ value, onChange }: any) {
               </tr>
             </thead>
             <tbody className="bg-gray-900/50">
-              <DndContext 
+              <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
               >
-                <SortableContext 
+                <SortableContext
                   items={rowsWithIds.map(row => row.id)}
                   strategy={verticalListSortingStrategy}
                 >

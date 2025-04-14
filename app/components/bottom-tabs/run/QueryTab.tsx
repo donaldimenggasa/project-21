@@ -55,8 +55,13 @@ const DeleteConfirmation = memo(({ workflowName, onConfirm, onCancel }: DeleteCo
 
 DeleteConfirmation.displayName = 'DeleteConfirmation';
 
+
+
+
+
+
 export function QueryTab() {
-  const { workflow, selectedWorkflow, selectedPage, setSelectedWorkflow, deleteWorkflow } = useStore();
+  const { workflow, selectedWorkflow, setSelectedWorkflow, deleteWorkflow } = useStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeWorkflowMenu, setActiveWorkflowMenu] = useState<string | null>(null);
   const [deletingWorkflow, setDeletingWorkflow] = useState<{ id: string; name: string } | null>(null);
@@ -64,16 +69,20 @@ export function QueryTab() {
 
   const sortedWorkflows = React.useMemo(() => {
     return Object.values(workflow)
-      .filter(workflow => workflow.parentPageId === selectedPage)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [workflow, selectedPage]);
+  }, [workflow]);
+
+
 
   // Select first workflow if none is selected
   useEffect(() => {
-    if (selectedPage && sortedWorkflows.length > 0 && !selectedWorkflow) {
+    if ( sortedWorkflows.length > 0 && !selectedWorkflow) {
       setSelectedWorkflow(sortedWorkflows[0].id);
     }
-  }, [selectedPage, sortedWorkflows, selectedWorkflow, setSelectedWorkflow]);
+  }, [ sortedWorkflows, selectedWorkflow, setSelectedWorkflow]);
+
+
+
 
   const handleDeleteWorkflow = useCallback((workflowId: string) => {
     deleteWorkflow(workflowId);
@@ -92,6 +101,9 @@ export function QueryTab() {
     )
   , [sortedWorkflows, searchQuery]);
 
+
+
+
   return (
     <div className="">
       <div className="space-y-6">
@@ -102,12 +114,12 @@ export function QueryTab() {
             <button 
               className="p-1 hover:bg-gray-800 rounded"
               onClick={() => setShowCreateForm(true)}
-              disabled={!selectedPage}
-              title={!selectedPage ? "Select a page first" : "Create new workflow"}
+             // disabled={!selectedPage}
+              title={"Create new Action"}
             >
               <Plus className={clsx(
                 "h-4 w-4",
-                selectedPage ? "text-gray-400" : "text-gray-600"
+                "text-gray-400" 
               )} />
             </button>
           </div>
@@ -124,7 +136,7 @@ export function QueryTab() {
           </div>
 
           <div className="space-y-2">
-            {!selectedPage ? (
+            {false ? (
               <div className="text-center py-4">
                 <p className="text-sm text-gray-500">Select a page to view its workflows</p>
               </div>

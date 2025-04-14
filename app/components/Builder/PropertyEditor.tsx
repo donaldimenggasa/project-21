@@ -25,7 +25,7 @@ const EditorComponents = {
 
 export const PropertyEditor: React.FC<PropertyEditorProps> = ({ component, config, sectionProperties }) => {
   const { setComponent } = useStore();
-  const logger = useRef(Logger.getInstance()).current;
+ 
   const componentRef = useRef(component);
   const propsRef = useRef<Record<string, any>>({});
   
@@ -38,19 +38,8 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ component, confi
   }, [component]);
   
   const updateProperty = useCallback((key: string, value: any) => {
-    // Gunakan componentRef.current untuk memastikan kita selalu menggunakan versi terbaru
     const currentComponent = componentRef.current;
     const currentProps = propsRef.current[key] || {};
-    
-    // Periksa apakah nilai benar-benar berubah untuk mencegah render ulang yang tidak perlu
-    if (isEqual(currentProps, { ...currentProps, ...value })) {
-      logger.debug('Property unchanged, skipping update', { 
-        componentId: currentComponent.id, 
-        property: key
-      });
-      return;
-    }
-    
     // Buat salinan mendalam dari komponen untuk menghindari mutasi
     const updatedComponent = {
       ...currentComponent,
@@ -72,17 +61,13 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({ component, confi
     
     // Perbarui referensi props
     propsRef.current[key] = { ...propsRef.current[key], ...value };
-    
-    logger.debug('Updating component property', { 
-      componentId: currentComponent.id, 
-      property: key, 
-      value: JSON.stringify(value).substring(0, 100) 
-    });
-    
     // Perbarui komponen di store
     setComponent(updatedComponent);
-  }, [setComponent, logger]);
+  }, [setComponent]);
 
+
+
+  
   return (
     <Fragment>
       <div className="flex justify-between">

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 import * as Label from '@radix-ui/react-label';
 import { cn } from '~/lib/utils';
-import { AlertCircle } from 'lucide-react';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -18,37 +17,33 @@ export function TextField({ name, label, description, className, ...props }: Tex
     <div className="space-y-2">
       <Label.Root
         htmlFor={name}
-        className="text-sm font-medium text-foreground"
+        className="text-sm font-medium text-gray-700"
       >
         {label}
       </Label.Root>
       
-      <div className="relative">
-        <input
-          {...register(name)}
-          {...props}
-          id={name}
-          className={cn(
-            "input",
-            error && "border-destructive focus-visible:ring-destructive/30",
-            className
-          )}
-        />
-        {error && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-destructive">
-            <AlertCircle className="h-4 w-4" />
-          </div>
+      <input
+        {...register(name)}
+        {...props}
+        id={name}
+        className={cn(
+          "w-full px-3 py-2 rounded-lg transition-colors",
+          "border border-gray-300",
+          "outline-none",
+          error 
+            ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20" 
+            : "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
+          className
         )}
-      </div>
+      />
       
-      {description && !error && (
-        <p className="text-sm text-secondary">{description}</p>
+      {description && (
+        <p className="text-sm text-gray-500">{description}</p>
       )}
       
       {error && (
-        <p className="text-sm text-destructive flex items-center gap-1">
-          {error}
-        </p>
+        <p className="text-sm text-red-500">{error}</p>
       )}
     </div>
   );

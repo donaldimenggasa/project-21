@@ -1,12 +1,11 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { createId, generateChecksum } from '~/lib/utils';
-import { sampleComponents } from '~/sample_template';
 import { divConfig } from '~/components/widgets/DivWidget';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { shallow } from 'zustand/shallow';
-import { Logger } from '~/lib/logger';
-import { Cache } from '~/lib/cache';
+
+
 
 
 // Types
@@ -22,7 +21,6 @@ import type {
 } from '../types';
 
 const defaultPageId = 'page-bYNmnE6';
-const logger = Logger.getInstance();
 
 interface ComponentPositionPayload {
   id: string;
@@ -153,7 +151,7 @@ const initialUISlice: UISlice = {
 };
 
 const initialComponentSlice: ComponentSlice = {
-  component: sampleComponents,
+  component: {},
 };
 
 
@@ -164,7 +162,7 @@ const initialWorkflowSlice: WorkflowSlice = {
 
 const initialPageSlice: PageSlice = {
   page: {
-    [defaultPageId]: {
+    /*[defaultPageId]: {
       "id": "page-bYNmnE6",
       "title": "sdas",
       "description": "sdas\n",
@@ -176,7 +174,7 @@ const initialPageSlice: PageSlice = {
       "content": "",
       "createdAt": "2025-04-06T22:31:35.443Z",
       "order": 4
-    },
+    },*/
   },
   selectedPage: defaultPageId,
 };
@@ -607,24 +605,19 @@ export const useStore = create<UIState & AllActions>()(
         window.URL.revokeObjectURL(url);
       },
 
-      uploadState: (fileContent) => set(state => {
-        try {
-          const uploadedData = JSON.parse(fileContent);
 
-          // Validate structure
+      uploadState: (uploadedData : any) => set(state => {
+        try {
+          /*const uploadedData = JSON.parse(fileContent);
           if (!uploadedData.state || !uploadedData.checksum) {
             throw new Error('Invalid file format');
           }
-
-          // Validate checksum
           const calculatedChecksum = generateChecksum(JSON.stringify(uploadedData.state));
           if (calculatedChecksum !== uploadedData.checksum) {
             throw new Error('Invalid checksum');
-          }
+          }*/
 
-          // Restore state
-          const { state: newState } = uploadedData;
-
+          const newState = uploadedData;
           // Reset all state first
           state.component = {};
           state.workflow = {};
@@ -633,6 +626,8 @@ export const useStore = create<UIState & AllActions>()(
           state.page = {};
           state.selectedWorkflow = null;
           state.selectedPage = null;
+
+
 
           // Then restore each state slice
           Object.entries(newState.component || {}).forEach(([id, data]) => {
@@ -647,20 +642,20 @@ export const useStore = create<UIState & AllActions>()(
             }
           });
 
-          Object.entries(newState.page || {}).forEach(([id, data]) => {
+          /*Object.entries(newState.page || {}).forEach(([id, data]) => {
             state.page[id] = data as any;
-          });
+          });*/
 
           state.pageAppState = newState.pageAppState || {};
           state.localStorage = newState.localStorage || {};
 
           // Set selected page to first page in uploaded state
           const pages = Object.values(newState.page || {});
-          if (pages.length > 0) {
-            state.selectedPage = pages[0].id;
-          }
+          //if (pages.length > 0) {
+          //  state.selectedPage = pages[0].id;
+          //}
         } catch (error) {
-          logger.error('Error uploading file:', error as Error);
+          console.log(error)
           throw error;
         }
       })
@@ -679,6 +674,7 @@ export const useRootComponent = () => useStore(
   (a, b) => a?.id === b?.id
 );
 
+
 export const useComponentChildren = (parentId: string) => {
   // Create a memoized selector function to avoid recreating it on each render
   const selector = React.useMemo(
@@ -688,6 +684,69 @@ export const useComponentChildren = (parentId: string) => {
         .sort((a, b) => a.order - b.order),
     [parentId]
   );
-  
   return useStore(selector, shallow);
 };
+
+
+let inactivityTimer: ReturnType<typeof setTimeout> | undefined;
+let hasChangedOnce = false;
+
+export const initializeInactivityBackup = (projectId  : number, pageId? : number) => {
+  useStore.subscribe((state) => [state.component, state.workflow, state.pageAppState, state.localStorage],
+    (newSelectedState, prevSelectedState) => {
+      // shallow compare: jika nilainya sama, return
+      if (shallow(newSelectedState, prevSelectedState)) return;
+      type SelectedState = [
+        UIState['component'],
+        UIState['workflow'],
+        UIState['pageAppState'],
+        UIState['localStorage']
+      ];
+      if (!hasChangedOnce) {
+        hasChangedOnce = true;
+        return;
+      }
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        const fullState = useStore.getState();
+        uploadStateToServer(projectId, pageId, fullState);
+      }, 5000);
+    },
+    {
+      fireImmediately: false,
+    }
+  );
+};
+
+
+
+async function uploadStateToServer(projectId : number, pageId : number, fullState: UIState & AllActions) {
+  try {
+    const stateToUpload = {
+      component: fullState.component,
+      workflow: fullState.workflow,
+      pageAppState: fullState.pageAppState,
+      localStorage: fullState.localStorage,
+    };
+ 
+    const response = await fetch('/developers/api/save-state', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        projectId: projectId,
+        pageId : pageId,
+        state: stateToUpload,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to upload state: ${response.statusText}`);
+    }
+
+    console.log('State successfully uploaded to the server.');
+  } catch (error) {
+    console.error('Error uploading state to the server:', error);
+  }
+}

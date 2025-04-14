@@ -1,0 +1,1 @@
+ALTER TABLE "ir_ui_menu" ALTER COLUMN "parent_id" SET DEFAULT NULL;

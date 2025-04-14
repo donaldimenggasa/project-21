@@ -7,12 +7,14 @@ import { ComponentOverlay } from './ComponentOverlay';
 const MainContent = () => {
   const selectedPage = useStore(state => state.selectedPage);
   const allComponent = useStore.getState().component;
-  const rootComponent = Object.values(allComponent).find(
-    c => c.parentId === null && c.pageId === selectedPage
-  );
+  const rootComponent = Object.values(allComponent).find(c => c.parentId === null);
+
+  console.log(rootComponent)
+
+
 
   if (!rootComponent) {
-    return ( <div className="h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    return ( <div className="flex flex-1 h-full overflow-hidden bg-slate-100 relative custom-scrollbar items-center justify-center">
       <div className="text-center">
         <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No Content</h2>
         <p className="text-gray-500 dark:text-gray-400">

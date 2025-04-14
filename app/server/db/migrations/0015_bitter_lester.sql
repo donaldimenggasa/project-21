@@ -1,0 +1,1 @@
+ALTER TABLE "ir_model" ADD COLUMN "modules" varchar;

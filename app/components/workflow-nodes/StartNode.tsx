@@ -3,8 +3,8 @@ import { Play, RefreshCw, ChevronDown, ChevronUp, Settings, Save, X, Check, Cloc
 import { Handle, Position } from '@xyflow/react';
 import { cn } from '~/lib/utils';
 import { useStore } from '~/store/zustand/store';
-import { Logger } from '~/lib/logger';
 import { WorkflowExecutor } from '~/lib/workflow-executor';
+
 
 interface StartNodeData {
   label: string;
@@ -24,30 +24,28 @@ interface StartNodeProps {
   id: string;
 }
 
+
+
+
 export function StartNode({ data, id }: StartNodeProps) {
+  const resultRef = useRef<HTMLDivElement>(null);
   const { selectedWorkflow, workflow, updateWorkflow } = useStore();
-  const logger = useMemo(() => Logger.getInstance(), []);
   const workflowExecutor = useMemo(() => WorkflowExecutor.getInstance(), []);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isConfiguring, setIsConfiguring] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
   const [localAutoStart, setLocalAutoStart] = useState(data.autoStart || false);
-  const [localTriggerType, setLocalTriggerType] = useState<'manual' | 'scheduled' | 'webhook'>(
-    data.triggerType || 'manual'
-  );
+  const [localTriggerType, setLocalTriggerType] = useState<'manual' | 'scheduled' | 'webhook'>(data.triggerType || 'manual');
   const [localSchedule, setLocalSchedule] = useState(data.schedule || '0 0 * * *'); // Default to midnight
   
-  const resultRef = useRef<HTMLDivElement>(null);
 
+  
   const handleStartWorkflow = useCallback(async () => {
     if (!selectedWorkflow) {
-      logger.warn('Cannot start workflow: no workflow selected', { nodeId: id });
       return;
     }
-
     setIsStarting(true);
-    
-    // Update node with running state
+
     updateWorkflow({
       id: selectedWorkflow,
       nodes: (prev) => {
@@ -68,20 +66,12 @@ export function StartNode({ data, id }: StartNodeProps) {
     });
 
     try {
-      logger.debug('Starting workflow execution', { nodeId: id, workflowId: selectedWorkflow });
-
       const startTime = performance.now();
-      
-      // Get the current workflow
       const currentWorkflow = workflow[selectedWorkflow];
-      
-      // Execute the workflow
-      const executionContext = await workflowExecutor.executeWorkflow(
-        currentWorkflow,
-        id,
-        { startTime: Date.now() }
-      );
-      
+      console.log(id);
+      console.log(currentWorkflow);
+
+      const executionContext = await workflowExecutor.executeWorkflow( currentWorkflow, id, { startTime: Date.now() });
       const endTime = performance.now();
       const duration = endTime - startTime;
       
@@ -105,7 +95,6 @@ export function StartNode({ data, id }: StartNodeProps) {
         id: selectedWorkflow,
         nodes: (prev) => {
           return prev.map(node => {
-            // For the start node
             if (node.id === id) {
               return { 
                 ...node, 
@@ -142,32 +131,19 @@ export function StartNode({ data, id }: StartNodeProps) {
                 }
               };
             }
-            
             return node;
           });
         }
       });
       
       setIsStarting(false);
-      
-      // Scroll to result if expanded
       if (isExpanded) {
         setTimeout(() => {
           resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
       }
       
-      logger.info('Workflow execution completed', { 
-        nodeId: id, 
-        workflowId: selectedWorkflow,
-        executionId: executionContext.executionId,
-        duration,
-        success: !hasErrors,
-        executedNodes: executionContext.executedNodes.length
-      });
     } catch (error) {
-      logger.error('Error executing workflow', error as Error);
-      
       // Update node with error state
       updateWorkflow({
         id: selectedWorkflow,
@@ -187,14 +163,14 @@ export function StartNode({ data, id }: StartNodeProps) {
           );
         }
       });
-      
       setIsStarting(false);
     }
-  }, [id, selectedWorkflow, updateWorkflow, logger, workflow, workflowExecutor, isExpanded, data.executionHistory]);
+  }, [id, selectedWorkflow, updateWorkflow, workflow, workflowExecutor, isExpanded, data.executionHistory]);
+
+
 
   const saveConfiguration = useCallback(() => {
     if (!selectedWorkflow) return;
-    
     try {
       // Update node configuration
       updateWorkflow({
@@ -216,13 +192,14 @@ export function StartNode({ data, id }: StartNodeProps) {
           );
         }
       });
-      
       setIsConfiguring(false);
-      logger.info('Start node configuration saved', { nodeId: id });
     } catch (error) {
-      logger.error('Error saving start node configuration', error as Error);
+      
     }
-  }, [selectedWorkflow, id, localAutoStart, localTriggerType, localSchedule, updateWorkflow, logger]);
+  }, [selectedWorkflow, id, localAutoStart, localTriggerType, localSchedule, updateWorkflow]);
+
+
+
 
   // Format timestamp for display
   const formatTimestamp = (timestamp: number): string => {
@@ -238,7 +215,7 @@ export function StartNode({ data, id }: StartNodeProps) {
 
   // Render the configuration panel
   const renderConfigPanel = () => (
-    <div className="p-3 bg-gray-900/80 border-t border-emerald-500/20 rounded-b-lg">
+    <div className="p-3 bg-gray-900/80 border-t border-emerald-500/20 rounded-b-lg nodrag nowheel">
       <h4 className="text-xs font-medium text-gray-300 mb-2">Start Configuration</h4>
       
       <div className="space-y-3">
@@ -371,6 +348,8 @@ export function StartNode({ data, id }: StartNodeProps) {
     </div>
   );
 
+
+
   return (
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden',
@@ -441,7 +420,7 @@ export function StartNode({ data, id }: StartNodeProps) {
         </div>
         
         {/* Trigger info */}
-        <div className="px-3 py-1.5">
+        <div className="px-3 py-1.5 ">
           <div className="flex items-center gap-1.5">
             {data.triggerType === 'scheduled' ? (
               <Clock className="h-3.5 w-3.5 text-gray-400" />
@@ -512,7 +491,7 @@ export function StartNode({ data, id }: StartNodeProps) {
               Execution History
             </div>
             
-            <div className="space-y-1 max-h-[200px] overflow-auto pr-1">
+            <div className="space-y-1 max-h-[200px] overflow-auto pr-1 nodrag nowheel">
               {data.executionHistory.map((execution, index) => (
                 <div 
                   key={index}

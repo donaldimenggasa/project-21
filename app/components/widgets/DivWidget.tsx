@@ -25,8 +25,8 @@ export const divConfig = {
   type: 'div',
   props: {
     className: {
-      order: 2000,
-      section: 'style',
+      order: 0,
+      section: 'basic',
       type: 'string',
       displayName: 'CSS Classes',
       bindable: false,
@@ -35,8 +35,8 @@ export const divConfig = {
       bindValue:"",
     },
     style: {
-      order: 2001,
-      section: 'style',
+      order: 1,
+      section: 'basic',
       type: 'object',
       displayName: 'Inline Styles',
       bindable: false,
@@ -51,23 +51,16 @@ export const divConfig = {
       name: 'Basic',
       order: 0
     },
-    style: {
-      name: 'Style',
-      order: 1
-    },
     binding: {
       name: 'Binding',
-      order: 2
+      order: 1
     }
   }
 };
 
 const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, children, editorProps={} }) => {
-  //const { props } = component;
-  //const { hidden, loading } = props;
   const className = useBoundValue(component.id, 'className');
   const style = useBoundValue(component.id, 'style');
-
   return (
     <div className={cn(className )}  {...editorProps}>
       {Array.isArray(children) && children.length > 0 ? children : (<span className=' h-12 w-12 flex justify-center items-center text-center'>no content</span>)}
@@ -89,12 +82,9 @@ export const divWidget = new ComponentBuilder()
     view: (props) => <PropertyEditor {...props} config={divConfig} />
   })
   .addPropertySection({
-    name: divConfig.sections.style.name,
+    name: divConfig.sections.binding.name,
     view: (props) => <PropertyEditor {...props} config={divConfig} />
   })
-  .addPropertySection({
-    name: divConfig.sections.style.name,
-    view: (props) => <BindingProperties {...props} config={divConfig} />
-  })
+ 
   .setRender(componentRenderer)
   .build();

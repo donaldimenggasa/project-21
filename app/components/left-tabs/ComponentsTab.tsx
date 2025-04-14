@@ -205,6 +205,11 @@ const AddComponentPopover: React.FC<AddComponentPopoverProps> = ({
   );
 };
 
+
+
+
+
+
 export function ComponentsTab() {
   const { 
     component, 
@@ -240,14 +245,14 @@ export function ComponentsTab() {
 
   // Filter components by selected page
   const listComponents = useMemo(() => {
-    if (!component || !selectedPage) return [];
+    if (!component /*|| !selectedPage*/) return [];
     return Object.keys(component)
-      .filter(id => component[id].pageId === selectedPage)
+     // .filter(id => component[id].pageId === selectedPage)
       .map((id) => ({
         ...component[id],
         name: id,
       }));
-  }, [component, selectedPage]);
+  }, [component/*, selectedPage*/]);
 
   const jsonToArrayBuilder = useCallback((components: any[], parentKey: string | null) => {
     try {

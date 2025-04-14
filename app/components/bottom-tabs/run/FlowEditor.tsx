@@ -5,8 +5,7 @@ import '@xyflow/react/dist/style.css';
 import { useStore } from '~/store/zustand/store';
 import { Share2, Plus, AlertCircle, Lock, LayoutGrid } from 'lucide-react';
 import { CreateWorkflowForm } from '~/components/forms/CreateWorkflowForm';
-import { Logger } from '~/lib/logger';
-import { autoLayout, autoLayoutHorizontal } from '~/lib/layout';
+import {  autoLayoutHorizontal } from '~/lib/layout';
 import { cn } from '~/lib/utils';
 
 import {
@@ -18,8 +17,11 @@ import {
   NotificationNode,
   FileNode,
   StartNode,
-  ExecuteWorkflowNode
+  ExecuteWorkflowNode,
+  OdooGetListDataNode,
 } from '~/components/workflow-nodes';
+
+
 import { CustomEdge } from '~/components/workflow-nodes/CustomEdge';
 
 const nodeTypes = {
@@ -31,7 +33,8 @@ const nodeTypes = {
   intervalNode: IntervalNode,
   notificationNode: NotificationNode,
   fileNode: FileNode,
-  executeWorkflowNode: ExecuteWorkflowNode
+  executeWorkflowNode: ExecuteWorkflowNode,
+  odooGetListDataNode : OdooGetListDataNode
 };
 
 const edgeTypes = {
@@ -41,13 +44,10 @@ const edgeTypes = {
 let id = 0;
 const getId = () => `node_${id++}`;
 
-interface FlowEditorProps {
-  
-}
+
 
 export function FlowEditor() {
   const { 
-    selectedPage, 
     selectedWorkflow, 
     workflow, 
     changeNodePosition, 
@@ -65,11 +65,11 @@ export function FlowEditor() {
   const connectingHandleId = useRef<string | null>(null);
   const [isLayouting, setIsLayouting] = useState(false);
   
-  const logger = useMemo(() => Logger.getInstance(), []);
 
   const currentPageWorkflows = useMemo(() => 
-    Object.values(workflow).filter((w) => (w as { parentPageId: string }).parentPageId === selectedPage)
-  , [workflow, selectedPage]);
+    Object.values(workflow)
+  , [workflow]);
+
 
   const activeWorkflow = useMemo(() => 
     selectedWorkflow ? workflow[selectedWorkflow] : null
@@ -102,6 +102,8 @@ export function FlowEditor() {
     });
   }, [WorkflowNode, isInitialNode]);
   
+
+
   const _getConvertEdge = useCallback(() => {
     return WorkflowEdge.map((item : Edge) => {
       return {
@@ -111,6 +113,8 @@ export function FlowEditor() {
     });
   }, [WorkflowEdge]);
 
+
+/*
   // Apply auto layout when workflow changes
   useEffect(() => {
     if (activeWorkflow && reactFlowInstance) {
@@ -126,6 +130,9 @@ export function FlowEditor() {
       }
     }
   }, [activeWorkflow, reactFlowInstance, WorkflowNode, WorkflowEdge]);
+
+*/
+
 
   // Handle node changes immutably
   const onNodesChange = useCallback((changes: NodeChange<Node>[]) => {
@@ -203,11 +210,15 @@ export function FlowEditor() {
     }
   }, [WorkflowNode, WorkflowEdge, changeNodePosition, activeWorkflow, selectedWorkflow, updateWorkflowNodesChanges, updateWorkflowEdgesChanges, isInitialNode]);
 
+
+
   const _onConnectStart = useCallback((event: React.MouseEvent | React.TouchEvent, params: any) => {
     connectingNodeId.current = params?.nodeId;
     connectingHandleId.current = params?.handleId;
   },[]);
 
+
+  
   // Check if a target node already has a connection to the specified handle
   const hasExistingConnection = useCallback((targetId: string, targetHandle: string | null) => {
     return WorkflowEdge.some(edge => 
@@ -216,6 +227,9 @@ export function FlowEditor() {
     );
   }, [WorkflowEdge]);
 
+
+
+
   // Check if a source node already has a connection from the specified handle
   const hasExistingSourceConnection = useCallback((sourceId: string, sourceHandle: string | null) => {
     return WorkflowEdge.some(edge => 
@@ -223,6 +237,9 @@ export function FlowEditor() {
       (sourceHandle ? edge.sourceHandle === sourceHandle : true)
     );
   }, [WorkflowEdge]);
+
+
+
 
   // Validate connection before it's created
   const isValidConnection = useCallback((connection: Connection) => {
@@ -266,18 +283,10 @@ export function FlowEditor() {
       connectingNodeId.current = null;
       connectingHandleId.current = null;
       updateWorkflowEdgesChanges({ id: selectedWorkflow, edges: validEdges });
-      
-      logger.debug('Edge connected', { 
-        workflowId: selectedWorkflow,
-        source: connection.source,
-        target: connection.target,
-        sourceHandle: connection.sourceHandle,
-        targetHandle: connection.targetHandle
-      });
     } catch (error) {
-      logger.error('Error connecting edge', error as Error);
+     
     }
-  }, [WorkflowEdge, updateWorkflowEdgesChanges, selectedWorkflow, logger, isValidConnection]);
+  }, [WorkflowEdge, updateWorkflowEdgesChanges, selectedWorkflow, isValidConnection]);
   
   const _onConnectEnd = useCallback((event: MouseEvent | TouchEvent) => {
     if (!reactFlowInstance || !connectingNodeId.current) return;
@@ -332,26 +341,24 @@ export function FlowEditor() {
       }));
       
       updateWorkflowNodesChanges({ id: selectedWorkflow, nodes: validNodes });
-      
-      logger.debug('Node added', { 
-        workflowId: selectedWorkflow,
-        nodeType: nodeData.type,
-        position
-      });
+   
     } catch (error) {
-      logger.error('Error adding node', error as Error);
+     
     }
-  }, [reactFlowInstance, activeWorkflow, WorkflowNode, selectedWorkflow, updateWorkflowNodesChanges, logger]);
+  }, [reactFlowInstance, activeWorkflow, WorkflowNode, selectedWorkflow, updateWorkflowNodesChanges]);
+
+
+
 
   // Apply auto layout to the workflow
   const applyAutoLayout = useCallback(() => {
     if (!selectedWorkflow || !activeWorkflow) {
-      logger.warn('Cannot apply auto layout: no workflow selected');
+     
       return;
     }
     
     try {
-      setIsLayouting(true);
+     // setIsLayouting(true);
       
       // Get current nodes and edges
       const currentNodes = Array.isArray(activeWorkflow.nodes) ? [...activeWorkflow.nodes] : [];
@@ -373,32 +380,13 @@ export function FlowEditor() {
         }
         setIsLayouting(false);
       }, 300);
-      
-      logger.info('Auto layout applied', { workflowId: selectedWorkflow });
     } catch (error) {
-      logger.error('Error applying auto layout', error as Error);
-      setIsLayouting(false);
+      
+     // setIsLayouting(false);
     }
-  }, [selectedWorkflow, activeWorkflow, updateWorkflowNodesChanges, reactFlowInstance, logger]);
+  }, [selectedWorkflow, activeWorkflow, updateWorkflowNodesChanges, reactFlowInstance]);
 
-  // Render conditions
-  if (!selectedPage) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-gray-950/50">
-        <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-6 bg-gray-800/50 rounded-full">
-              <Share2 className="h-12 w-12 text-gray-600" />
-            </div>
-          </div>
-          <h2 className="text-xl font-semibold text-gray-400 mb-2">No Page Selected</h2>
-          <p className="text-gray-500 max-w-md mx-auto">
-            Select a page from the sidebar to view or create workflows.
-          </p>
-        </div>
-      </div>
-    );
-  }
+
 
   if (currentPageWorkflows.length === 0) {
     return (

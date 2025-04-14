@@ -1,0 +1,1 @@
+ALTER TABLE "ir_act_window" DROP COLUMN "xml_id";

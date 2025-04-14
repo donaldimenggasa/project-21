@@ -1,0 +1,1240 @@
+{
+  "id": "ee9df9ea-ce6f-4246-8228-ca3e84c51278",
+  "prevId": "9f2d2469-390f-4697-890c-74e82930dc61",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.ir_model_fields": {
+      "name": "ir_model_fields",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "field_description": {
+          "name": "field_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ir_model_fields_create_uid_res_users_id_fk": {
+          "name": "ir_model_fields_create_uid_res_users_id_fk",
+          "tableFrom": "ir_model_fields",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "ir_model_fields_write_uid_res_users_id_fk": {
+          "name": "ir_model_fields_write_uid_res_users_id_fk",
+          "tableFrom": "ir_model_fields",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ir_model": {
+      "name": "ir_model",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "model": {
+          "name": "model",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "state": {
+          "name": "state",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ir_model_create_uid_res_users_id_fk": {
+          "name": "ir_model_create_uid_res_users_id_fk",
+          "tableFrom": "ir_model",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "ir_model_write_uid_res_users_id_fk": {
+          "name": "ir_model_write_uid_res_users_id_fk",
+          "tableFrom": "ir_model",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_studio_operator": {
+      "name": "x_studio_operator",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_studio_operator_create_uid_res_users_id_fk": {
+          "name": "x_studio_operator_create_uid_res_users_id_fk",
+          "tableFrom": "x_studio_operator",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_studio_operator_write_uid_res_users_id_fk": {
+          "name": "x_studio_operator_write_uid_res_users_id_fk",
+          "tableFrom": "x_studio_operator",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_data_airport": {
+      "name": "x_data_airport",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_data_airport_create_uid_res_users_id_fk": {
+          "name": "x_data_airport_create_uid_res_users_id_fk",
+          "tableFrom": "x_data_airport",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_data_airport_write_uid_res_users_id_fk": {
+          "name": "x_data_airport_write_uid_res_users_id_fk",
+          "tableFrom": "x_data_airport",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_data_amc": {
+      "name": "x_data_amc",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "x_studio_operator": {
+          "name": "x_studio_operator",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "x_studio_from": {
+          "name": "x_studio_from",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "x_studio_destination": {
+          "name": "x_studio_destination",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_data_amc_x_studio_operator_x_studio_operator_id_fk": {
+          "name": "x_data_amc_x_studio_operator_x_studio_operator_id_fk",
+          "tableFrom": "x_data_amc",
+          "tableTo": "x_studio_operator",
+          "columnsFrom": [
+            "x_studio_operator"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_data_amc_x_studio_from_x_data_airport_id_fk": {
+          "name": "x_data_amc_x_studio_from_x_data_airport_id_fk",
+          "tableFrom": "x_data_amc",
+          "tableTo": "x_data_airport",
+          "columnsFrom": [
+            "x_studio_from"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_data_amc_x_studio_destination_x_data_airport_id_fk": {
+          "name": "x_data_amc_x_studio_destination_x_data_airport_id_fk",
+          "tableFrom": "x_data_amc",
+          "tableTo": "x_data_airport",
+          "columnsFrom": [
+            "x_studio_destination"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_data_amc_create_uid_res_users_id_fk": {
+          "name": "x_data_amc_create_uid_res_users_id_fk",
+          "tableFrom": "x_data_amc",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_data_amc_write_uid_res_users_id_fk": {
+          "name": "x_data_amc_write_uid_res_users_id_fk",
+          "tableFrom": "x_data_amc",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.res_users": {
+      "name": "res_users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "login": {
+          "name": "login",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "res_users_login_unique": {
+          "name": "res_users_login_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "login"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ir_act_window": {
+      "name": "ir_act_window",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "res_model": {
+          "name": "res_model",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ir_act_window_create_uid_res_users_id_fk": {
+          "name": "ir_act_window_create_uid_res_users_id_fk",
+          "tableFrom": "ir_act_window",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "ir_act_window_write_uid_res_users_id_fk": {
+          "name": "ir_act_window_write_uid_res_users_id_fk",
+          "tableFrom": "ir_act_window",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ir_ui_menu": {
+      "name": "ir_ui_menu",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "sequence": {
+          "name": "sequence",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 10
+        },
+        "action": {
+          "name": "action",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ir_ui_menu_create_uid_res_users_id_fk": {
+          "name": "ir_ui_menu_create_uid_res_users_id_fk",
+          "tableFrom": "ir_ui_menu",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "ir_ui_menu_write_uid_res_users_id_fk": {
+          "name": "ir_ui_menu_write_uid_res_users_id_fk",
+          "tableFrom": "ir_ui_menu",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_project_groups": {
+      "name": "x_project_groups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "x_name": {
+          "name": "x_name",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_project_groups_create_uid_res_users_id_fk": {
+          "name": "x_project_groups_create_uid_res_users_id_fk",
+          "tableFrom": "x_project_groups",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_project_groups_write_uid_res_users_id_fk": {
+          "name": "x_project_groups_write_uid_res_users_id_fk",
+          "tableFrom": "x_project_groups",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_projects_line_75ab2": {
+      "name": "x_projects_line_75ab2",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "x_projects_id": {
+          "name": "x_projects_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "x_name": {
+          "name": "x_name",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_studio_prod_snapshot": {
+          "name": "x_studio_prod_snapshot",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_studio_state": {
+          "name": "x_studio_state",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_projects_line_75ab2_x_projects_id_x_projects_id_fk": {
+          "name": "x_projects_line_75ab2_x_projects_id_x_projects_id_fk",
+          "tableFrom": "x_projects_line_75ab2",
+          "tableTo": "x_projects",
+          "columnsFrom": [
+            "x_projects_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_projects_line_75ab2_create_uid_res_users_id_fk": {
+          "name": "x_projects_line_75ab2_create_uid_res_users_id_fk",
+          "tableFrom": "x_projects_line_75ab2",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_projects_line_75ab2_write_uid_res_users_id_fk": {
+          "name": "x_projects_line_75ab2_write_uid_res_users_id_fk",
+          "tableFrom": "x_projects_line_75ab2",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_projects_line_e076e": {
+      "name": "x_projects_line_e076e",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "x_projects_id": {
+          "name": "x_projects_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "x_name": {
+          "name": "x_name",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_projects_line_e076e_x_projects_id_x_projects_id_fk": {
+          "name": "x_projects_line_e076e_x_projects_id_x_projects_id_fk",
+          "tableFrom": "x_projects_line_e076e",
+          "tableTo": "x_projects",
+          "columnsFrom": [
+            "x_projects_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_projects_line_e076e_create_uid_res_users_id_fk": {
+          "name": "x_projects_line_e076e_create_uid_res_users_id_fk",
+          "tableFrom": "x_projects_line_e076e",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_projects_line_e076e_write_uid_res_users_id_fk": {
+          "name": "x_projects_line_e076e_write_uid_res_users_id_fk",
+          "tableFrom": "x_projects_line_e076e",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.x_projects": {
+      "name": "x_projects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "x_name": {
+          "name": "x_name",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_active": {
+          "name": "x_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "x_studio_group": {
+          "name": "x_studio_group",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "x_studio_index_page": {
+          "name": "x_studio_index_page",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_studio_pathname": {
+          "name": "x_studio_pathname",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_studio_descriptions_1": {
+          "name": "x_studio_descriptions_1",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_studio_descriptions_2": {
+          "name": "x_studio_descriptions_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "x_studio_status": {
+          "name": "x_studio_status",
+          "type": "x_studio_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "x_projects_x_studio_group_x_project_groups_id_fk": {
+          "name": "x_projects_x_studio_group_x_project_groups_id_fk",
+          "tableFrom": "x_projects",
+          "tableTo": "x_project_groups",
+          "columnsFrom": [
+            "x_studio_group"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_projects_create_uid_res_users_id_fk": {
+          "name": "x_projects_create_uid_res_users_id_fk",
+          "tableFrom": "x_projects",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "x_projects_write_uid_res_users_id_fk": {
+          "name": "x_projects_write_uid_res_users_id_fk",
+          "tableFrom": "x_projects",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ir_ui_view": {
+      "name": "ir_ui_view",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "arch": {
+          "name": "arch",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "model": {
+          "name": "model",
+          "type": "char",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "create_date": {
+          "name": "create_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "write_date": {
+          "name": "write_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "create_uid": {
+          "name": "create_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        },
+        "write_uid": {
+          "name": "write_uid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "NULL"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ir_ui_view_create_uid_res_users_id_fk": {
+          "name": "ir_ui_view_create_uid_res_users_id_fk",
+          "tableFrom": "ir_ui_view",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "create_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "ir_ui_view_write_uid_res_users_id_fk": {
+          "name": "ir_ui_view_write_uid_res_users_id_fk",
+          "tableFrom": "ir_ui_view",
+          "tableTo": "res_users",
+          "columnsFrom": [
+            "write_uid"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

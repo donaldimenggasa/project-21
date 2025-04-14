@@ -1,0 +1,1 @@
+ALTER TABLE "ir_ui_menu" ADD COLUMN "sequence" integer DEFAULT 10;

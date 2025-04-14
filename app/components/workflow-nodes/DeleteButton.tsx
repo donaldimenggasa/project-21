@@ -3,36 +3,33 @@ import { Trash2 } from 'lucide-react';
 import { useStore } from '~/store/zustand/store';
 import { cn } from '~/lib/utils';
 import { v4 as uuidv4 } from 'uuid';
-import { Logger } from '~/lib/logger';
 import { autoLayoutHorizontal } from '~/lib/layout';
+
 
 interface DeleteButtonProps {
   nodeId: string;
   isLocked?: boolean;
 }
 
+
+
 export function DeleteButton({ nodeId, isLocked = false }: DeleteButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { selectedWorkflow, workflow, updateWorkflowNodesChanges, updateWorkflowEdgesChanges } = useStore();
-  const logger = Logger.getInstance();
+ 
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
     if (isLocked) {
-      logger.warn('Cannot delete locked node', { nodeId });
       return;
     }
-    
     if (!selectedWorkflow) {
-      logger.warn('Cannot delete node: no workflow selected', { nodeId });
       return;
     }
     
     try {
       const currentWorkflow = workflow[selectedWorkflow];
       if (!currentWorkflow) {
-        logger.warn('Cannot delete node: workflow not found', { workflowId: selectedWorkflow });
         return;
       }
       
@@ -77,13 +74,8 @@ export function DeleteButton({ nodeId, isLocked = false }: DeleteButtonProps) {
       // Update the workflow with the new layout
       updateWorkflowNodesChanges({ id: selectedWorkflow, nodes: layoutedNodes });
       updateWorkflowEdgesChanges({ id: selectedWorkflow, edges: finalEdges });
-      
-      logger.info('Node deleted with connections preserved and layout reorganized', { 
-        nodeId, 
-        newEdgesCreated: newEdges.length 
-      });
     } catch (error) {
-      logger.error('Error deleting node', error as Error);
+     
     }
   };
 

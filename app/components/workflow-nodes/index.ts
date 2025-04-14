@@ -7,3 +7,4 @@ export { NotificationNode } from './NotificationNode';
 export { FileNode } from './FileNode';
 export { StartNode } from './StartNode';
 export { ExecuteWorkflowNode } from './ExecuteWorkflowNode';
+export { OdooGetListDataNode } from "./Odoo/OdooGetListDataNode";

@@ -1,0 +1,1 @@
+ALTER TABLE "ir_ui_menu" DROP COLUMN "complete_name";

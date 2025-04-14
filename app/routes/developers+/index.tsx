@@ -1,208 +1,316 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Panel, PanelGroup } from "react-resizable-panels";
-import { TopNavbar } from "~/components/TopNavbar";
-import { LeftSidebar } from "~/components/LeftSidebar";
-import { RightSidebar } from "~/components/RightSidebar";
-import MainContent from "~/components/MainContent";
-import { BottomPanel } from "~/components/BottomPanel";
-import { ResizeHandle } from "~/components/ResizeHandle";
-import { useStore } from "~/store/zustand/store";
-import { FileText, Plus, Upload } from "lucide-react";
-import { CreatePageForm } from "~/components/forms/CreatePageForm";
+import { db } from "~/server/db";
+import { eq } from "drizzle-orm";
+import { projects, project_pages, ProjectStatus } from "~/server/db/schema/yori_builder";
 
-function App() {
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isLoading, setIsLoading] = useState(true);
+import { Link, useLoaderData } from '@remix-run/react'
+import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { Header } from "@/components/layout/developers/header";
+import { Fragment } from 'react/jsx-runtime';
 
-  const {
-    showLeftPanel,
-    showRightPanel,
-    showBottomPanel,
-    page,
-    selectedPage,
-    uploadState,
-    setActiveTab,
-    isDarkMode,
-    toggleDarkMode,
-  } = useStore();
 
-  // Load saved UI preferences and state
-  useEffect(() => {
-    try {
-      // Load UI preferences
-      const savedPreferences = localStorage.getItem("uiPreferences");
-      if (savedPreferences) {
-        const preferences = JSON.parse(savedPreferences);
 
-        // Apply saved preferences
-        if ("isDarkMode" in preferences) {
-          // Update the theme in the store if it doesn't match the saved preference
-          if (preferences.isDarkMode !== isDarkMode) {
-            toggleDarkMode();
-          }
+export const action = async ({ request }: LoaderFunctionArgs) => {
+  const headers_res = new Headers();
+  headers_res.set("Content-Type", "application/json");
+  try {
+    const body = await request.json();
+    let new_project = {}
 
-          // Apply the theme class directly
-          document.documentElement.classList.toggle(
-            "dark",
-            preferences.isDarkMode
-          );
+    await db.transaction(async (tx) => {
+      new_project = await tx.insert(projects).values({
+        x_name: { en_US: body.x_name },
+        x_studio_group: body.x_studio_group,
+        pathname: body.pathname,
+        x_active: true,
+        description: body.description,
+        x_studio_status: "DRAFT" as ProjectStatus
+      }).returning();
+
+      const index_page = await tx.insert(project_pages).values({
+        x_name: { en_US: `${body.x_name} - Home` },
+        x_projects_id: new_project[0].id,
+        prod_state: {
+          //page: {},
+          component: {
+            root: {
+              id: "root",
+              //pageId: "page-bYNmnE6",
+              parentId: null,
+              order: 0,
+              type: "div",
+              props: {
+                className: {
+                  order: 2000,
+                  section: "style",
+                  type: "string",
+                  displayName: "CSS Classes",
+                  bindable: false,
+                  defaultValue: "",
+                  value: "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full w-full",
+                  bindValue: ""
+                },
+                style: {
+                  order: 2001,
+                  section: "style",
+                  type: "object",
+                  displayName: "Inline Styles",
+                  bindable: false,
+                  defaultValue: {},
+                  value: {},
+                  bindValue: ""
+                },
+                hidden: {
+                  type: "boolean",
+                  defaultValue: false,
+                  value: false,
+                  displayName: "Hidden",
+                  section: "basic",
+                  bindable: false,
+                  bindValue: "",
+                  order: 1000
+                },
+                loading: {
+                  type: "boolean",
+                  defaultValue: false,
+                  value: false,
+                  displayName: "Loading",
+                  section: "basic",
+                  bindable: false,
+                  bindValue: "",
+                  order: 1001
+                }
+              },
+              sections: {
+                basic: {
+                  name: "Basic",
+                  order: 0
+                },
+                style: {
+                  name: "Style",
+                  order: 1
+                },
+                binding: {
+                  name: "Binding",
+                  order: 2
+                }
+              },
+            }
+          },
+          workflow: {},
+          pageAppState: {},
+          localStorage: {}
+        },
+        state: {
+          // page: {},
+          component: {
+            root: {
+              id: "root",
+              //pageId: "page-bYNmnE6",
+              parentId: null,
+              order: 0,
+              type: "div",
+              props: {
+                className: {
+                  order: 2000,
+                  section: "style",
+                  type: "string",
+                  displayName: "CSS Classes",
+                  bindable: false,
+                  defaultValue: "",
+                  value: "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 h-full w-full",
+                  bindValue: ""
+                },
+                style: {
+                  order: 2001,
+                  section: "style",
+                  type: "object",
+                  displayName: "Inline Styles",
+                  bindable: false,
+                  defaultValue: {},
+                  value: {},
+                  bindValue: ""
+                },
+                hidden: {
+                  type: "boolean",
+                  defaultValue: false,
+                  value: false,
+                  displayName: "Hidden",
+                  section: "basic",
+                  bindable: false,
+                  bindValue: "",
+                  order: 1000
+                },
+                loading: {
+                  type: "boolean",
+                  defaultValue: false,
+                  value: false,
+                  displayName: "Loading",
+                  section: "basic",
+                  bindable: false,
+                  bindValue: "",
+                  order: 1001
+                }
+              },
+              sections: {
+                basic: {
+                  name: "Basic",
+                  order: 0
+                },
+                style: {
+                  name: "Style",
+                  order: 1
+                },
+                binding: {
+                  name: "Binding",
+                  order: 2
+                }
+              },
+            }
+          },
+          workflow: {},
+          pageAppState: {},
+          localStorage: {}
+        },
+        //  pathname: body.pathname,
+      }).returning();
+
+      await tx.update(projects).set({ x_studio_index_page: index_page[0]?.id })
+        .where(eq(projects.id, parseInt(new_project[0].id)));
+    });
+
+
+
+    return new Response(
+      JSON.stringify({
+        success: res,
+        message: "ok",
+      }),
+      { status: 200, headers: headers_res }
+    );
+  } catch (e) {
+    console.log(e)
+    return new Response(
+      JSON.stringify({
+        errors: {
+          general: "request invalid."
+        },
+      }),
+      { status: 400, headers: headers_res });
+  }
+}
+
+
+
+
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const headers_res = new Headers();
+  headers_res.set("Content-Type", "application/json");
+
+
+  try {
+    const result = await db.query.project_groups.findMany({
+      with: {
+        projects: true
+      }
+    });
+    return new Response(
+      JSON.stringify(result.map((item) => {
+        return {
+          ...item,
+          projects: item.projects.map((project) => {
+            return {
+              ...project,
+              category: {
+                name: (project?.x_name as { en_US?: string })?.en_US || 'APLIKASI',
+                icon: '<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />',
+                bgColor: "bg-green-100 dark:bg-green-900/20",
+                iconColor: "#10b981",
+              },
+              title: "Aplikasi Management Financial",
+              description:
+                "Sistem manajemen keuangan untuk pengelolaan anggaran dan pelaporan keuangan.",
+              status: {
+                label: "ACTIVE",
+                bgColor: "bg-green-100 dark:bg-green-800",
+                textColor: "text-green-800 dark:text-green-200",
+                variant: "outline",
+              },
+              comments: 5,
+              stars: 4,
+              avatars: [
+                { initials: "JD", color: "bg-orange-500" },
+                { initials: "KL", color: "bg-blue-500" },
+                { initials: "MN", color: "bg-green-500" },
+              ],
+              links: 3,
+              appRoute: "/aplikasi/internal/amc"
+            }
+          })
+
         }
-      } else {
-        // If no saved preferences, apply the current theme state
-        document.documentElement.classList.toggle("dark", isDarkMode);
-      }
-
-      // Load saved pages
-      const savedPages = localStorage.getItem("pages");
-      if (savedPages) {
-        try {
-          // In a real implementation, we would restore the pages here
-        } catch (error) { }
-      }
-
-      // Load saved workflows
-      const savedWorkflows = localStorage.getItem("workflows");
-      if (savedWorkflows) {
-        try {
-          // In a real implementation, we would restore the workflows here
-        } catch (error) { }
-      }
-
-      // Load saved page app state
-      const savedPageAppState = localStorage.getItem("pageAppState");
-      if (savedPageAppState) {
-        try {
-          // In a real implementation, we would restore the page app state here
-        } catch (error) { }
-      }
-
-      // Load saved localStorage
-      const savedLocalStorage = localStorage.getItem("appLocalStorage");
-      if (savedLocalStorage) {
-        try {
-          // In a real implementation, we would restore the localStorage here
-        } catch (error) { }
-      }
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
-  }, [isDarkMode, toggleDarkMode]);
-
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setIsLoading(true);
-      const fileContent = await file.text();
-      uploadState(fileContent);
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="h-screen w-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">
-            Loading application...
-          </p>
-        </div>
-      </div>
+      })),
+      { status: 200, headers: headers_res }
     );
+  } catch (e) {
+    console.log(e)
+    return new Response(
+      JSON.stringify({
+        errors: {
+          general: "request invalid."
+        },
+      }),
+      { status: 400, headers: headers_res });
   }
+}
 
-  if (!page || Object.keys(page).length === 0) {
-    return (
-      <div className="h-screen w-full flex flex-col">
-        <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-          <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="p-6 bg-blue-500/10 rounded-full">
-                <FileText className="h-16 w-16 text-blue-400" />
-              </div>
-            </div>
-            <h2 className="text-3xl font-semibold text-gray-700 dark:text-gray-200 mb-3">
-              Welcome to App Builder
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
-              Get started by creating your first page or upload an existing
-              state file.
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              <button
-                onClick={() => setShowCreateForm(true)}
-                className="inline-flex items-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
-              >
-                <Plus className="h-5 w-5 mr-2" />
-                Create Your First Page
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".json"
-                onChange={handleUpload}
-                className="hidden"
-              />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 rounded-lg transition-colors duration-200"
-              >
-                <Upload className="h-5 w-5 mr-2" />
-                Upload State
-              </button>
-            </div>
-          </div>
-        </div>
-        {showCreateForm && (
-          <CreatePageForm onClose={() => setShowCreateForm(false)} />
-        )}
-      </div>
-    );
-  }
+
+
+
+
+
+
+const AppHomePage = () => {
+  const user = null;
+  const data = useLoaderData<typeof loader>();
+
+
 
   return (
-    <div className="flex flex-col h-screen ">
-      <TopNavbar />
+    <div className="h-screen overflow-hidden">
+      <Header />
+      <main className="h-[calc(100vh-46px)] overflow-y-auto bg-gray-50 dark:bg-gray-900 mt-16">
+        <div className=" bg-gray-50 dark:bg-slate-950 flex flex-row items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-slate-800">
+          {data.map((item: any, index: number) => {
 
-      <PanelGroup direction="vertical" className="h-full">
-        <Panel defaultSize={96}>
-          <div className="flex flex-1 overflow-hidden h-full">
-            {showLeftPanel && (<LeftSidebar />)}
+            return (<Fragment key={index}>
 
-            <MainContent />
-            {showRightPanel && (<RightSidebar />)}
+              <div className="flex flex-col items-start w-1/6">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{item.x_name?.en_US}</h2>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{item.projects.length} Projects</span>
 
-          </div>
-
-        </Panel>
-        <ResizeHandle
-          orientation="horizontal"
-          style={{ display: showBottomPanel ? 'flex' : 'none' }}
-        />
-        <Panel
-          minSize={showBottomPanel ? 4 : 0}
-          defaultSize={showBottomPanel ? 4 : 0}
-          style={{ display: showBottomPanel ? 'block' : 'none' }}
-        >
-          <BottomPanel />
-        </Panel>
-      </PanelGroup>
+                {item.projects.map((aplikasi: any, index_: number) => {
+                  console.log(aplikasi)
+                  return (<Fragment key={index_}>
+                    <Link to={`/developers/${aplikasi.pathname}`} className="flex items-center gap-2 mt-2 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+                      {aplikasi.x_name?.en_US}
+                    </Link>
+                  </Fragment>)
+                })}
 
 
+              </div>
+
+
+
+            </Fragment>)
+          })}
+        </div>
+      </main>
 
 
     </div>
   );
-}
+};
 
-export default App;
+export default AppHomePage;

@@ -283,11 +283,7 @@ const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editor
       style={{ height: `${height || radarchartConfig.props.height.defaultValue}px`, ...style }} 
       {...editorProps}
     >
-      {chartTitle && (
-        <h3 className="text-center font-semibold mb-4 text-gray-700 dark:text-gray-300">
-          {chartTitle}
-        </h3>
-      )}
+     
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart 
           outerRadius={outerRadius || radarchartConfig.props.outerRadius.defaultValue} 

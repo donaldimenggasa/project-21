@@ -1,7 +1,7 @@
 import React from 'react';
 import { PanelResizeHandle, type PanelResizeHandleProps } from 'react-resizable-panels';
 
-export function ResizeHandle({ className = '', orientation = 'vertical', ...props }: PanelResizeHandleProps) {
+export function ResizeHandle({ className = '', orientation = 'vertical', ...props }: any) {
   const isHorizontal = orientation === 'horizontal';
   
   return (
