@@ -1,3 +1,6 @@
+
+
+
 export default () =>{
-    return (<>sdasdasdasdas</>)
+    return (<>DASHBOARD ANC</>)
 }

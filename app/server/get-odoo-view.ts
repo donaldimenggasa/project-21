@@ -2,7 +2,6 @@ import axios from "axios";
 
 const getView = async(model : string) =>{
   if(!model){
-    console.log('KASIH MASUK MODEL !!!!')
     return null;
   }
   try{
@@ -18,17 +17,33 @@ const getView = async(model : string) =>{
           ],
         },
       });
-
-      
-
       return result[0]
-  
-   
   }catch(e){
     console.log(e);
-    console.log('KUDA CUKIEE')
+    return null
+  }
+}
+
+
+const getData = async(params : any) =>{
+
+  try{
+    const { data : { result }} = await axios({
+      url: `${process.env.ODOO_PROTOCOL}//${process.env.ODOO_HOST}:${process.env.ODOO_PORT}/internal-action`,
+      method: "POST",
+      data: {
+        params: params,
+        queries: [
+          `env['${params._model}'].sudo().web_search_read(specification=_spesification, limit=_limit, offset=_offset, order=_order, domain=_domain)`,
+        ]
+      }
+    });
+    return result[0]
+  }catch(e){
+    console.log(e);
     return null
   }
 }
 
 export default getView;
+export { getData }
