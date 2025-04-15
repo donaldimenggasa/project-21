@@ -6,6 +6,7 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "cross-env NODE_ENV=development node --require dotenv/config ./server.js",
+    "juan": "cross-env NODE_ENV=development node --require dotenv/config ./server.js",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "cross-env PORT=4105 NODE_ENV=production node --require dotenv/config ./server.js",
     "start_local": "cross-env PORT=4105 MODE_YORI=LOCAL_PRODUCTION NODE_ENV=production node --require dotenv/config ./server.js",
