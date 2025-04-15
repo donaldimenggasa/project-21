@@ -36,7 +36,37 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
                     }
                 },
 
+                x_studio_reg_number: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
                 x_studio_status: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_from: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_destination: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_ata: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_atd: {
                     fields: {
                         x_name: {},
                     }
@@ -146,6 +176,13 @@ export default () => {
             },
 
             {
+                field: "x_studio_reg_number",
+                headerName: "NOMOR REGISTRASI",
+                filter: "agTextColumnFilter",
+                width: 150,
+            },
+
+            {
                 field: "x_studio_type_pesawat",
                 headerName: "TYPE PESAWAT",
                 filter: "agTextColumnFilter",
@@ -154,6 +191,42 @@ export default () => {
                     console.log(params.data?.x_studio_type_pesawat?.x_name)
                     return  params.data?.x_studio_type_pesawat?.x_name || "-";
                 }
+            },
+
+            {
+                field: "x_studio_from",
+                headerName: "ARRIVAL",
+                filter: "agTextColumnFilter",
+                width: 150,
+                cellRenderer: (params: any) => {
+                    console.log(params.data?.x_studio_from?.x_name)
+                    return  params.data?.x_studio_from?.x_name || "-";
+                }
+            },
+
+            {
+                field: "x_studio_destination",
+                headerName: "DEPARTURES",
+                filter: "agTextColumnFilter",
+                width: 150,
+                cellRenderer: (params: any) => {
+                    console.log(params.data?.x_studio_destination?.x_name)
+                    return  params.data?.x_studio_destination?.x_name || "-";
+                }
+            },
+
+            {
+                field: "x_studio_ata",
+                headerName: "ATA",
+                filter: "agTextColumnFilter",
+                width: 150,
+            },
+
+            {
+                field: "x_studio_atd",
+                headerName: "ATD",
+                filter: "agTextColumnFilter",
+                width: 150,
             },
 
            

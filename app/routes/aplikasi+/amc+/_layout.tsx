@@ -75,33 +75,38 @@ export default () => {
     {
       icon: <Star className="w-4 h-4" />,
       name: "DASHBOARD AMC",
-      pathname: "/aplikasi/amc",
+      pathname: "/aplikasi/amc/dashboard",
       children: [],
     },
+
     {
       icon: <Star className="w-4 h-4" />,
       name: "DATA AMC",
       pathname: "/aplikasi/amc/data-amc",
       children: [],
     },
+
     {
       icon: <Star className="w-4 h-4" />,
       name: "DATA OPERATOR",
       pathname: "/aplikasi/amc/data-operator",
       children: [],
     },
+
     {
       icon: <Star className="w-4 h-4" />,
       name: "DATA AIRPORT",
       pathname: "/aplikasi/amc/data-airport",
       children: [],
     },
+
     {
       icon: <Star className="w-4 h-4" />,
       name: "TYPE PESAWAT",
       pathname: "/aplikasi/amc/type-pesawat",
       children: [],
     },
+
   ];
 
   const handleMenuSelect = useCallback(
@@ -125,8 +130,8 @@ export default () => {
             <ChevronLeft className="w-4 h-4" />
             <span className=" font-bold text-sm">DEO AIRPORT - SOQ</span>
           </button>
-          <div>AMC</div>
-          <div>sdas</div>
+          <div>APRON MOVEMENT CONTROL</div>
+          <div>UNIT AMC</div>
         </div>
       </header>
 
