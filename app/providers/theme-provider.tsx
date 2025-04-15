@@ -12,9 +12,13 @@ type ThemeContextType = [Theme | null, Dispatch<SetStateAction<Theme | null>>];
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const prefersLightMQ = '(prefers-color-scheme: light)';
+const prefersDarkMQ = "(prefers-color-scheme: dark)";
 const getPreferredTheme = () =>
-  window.matchMedia(prefersLightMQ).matches ? Theme.LIGHT : Theme.DARK;
+  window.matchMedia(prefersDarkMQ).matches ? Theme.DARK : Theme.LIGHT;
+
+
+
+
 
 function ThemeProvider({
   children,
@@ -23,15 +27,38 @@ function ThemeProvider({
   children: ReactNode;
   specifiedTheme: Theme | null;
 }) {
+  const [theme, setTheme] = useState<Theme | null>(() => {
+    // On the server, if we don't have a specified theme then we should
+    // return null and the clientThemeCode will set the theme for us
+    // before hydration. Then (during hydration), this code will get the same
+    // value that clientThemeCode got so hydration is happy.
+    if (specifiedTheme) {
+      if (themes.includes(specifiedTheme)) {
+        return specifiedTheme;
+      } else {
+        return null;
+      }
+    }
 
-  const theme = 'light';
-  const setTheme=(piki : string)=>{}
-  
+    // there's no way for us to know what the theme should be in this context
+    // the client will have to figure it out before hydration.
+    if (typeof document === "undefined") {
+      return null;
+    }
+
+    return getPreferredTheme();
+  });
 
   const persistTheme = useFetcher();
+  // TODO: remove this when persistTheme is memoized properly
+  const persistThemeRef = useRef(persistTheme);
+  useEffect(() => {
+    persistThemeRef.current = persistTheme;
+  }, [persistTheme]);
+
   const mountRun = useRef(false);
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (!mountRun.current) {
       mountRun.current = true;
       return;
@@ -40,20 +67,20 @@ function ThemeProvider({
       return;
     }
 
-    persistTheme.submit(
+    persistThemeRef.current.submit(
       { theme },
-      { action: 'action/set-theme', method: 'post' }
+      { action: "action/set-theme", method: "post" },
     );
   }, [theme]);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(prefersLightMQ);
+    const mediaQuery = window.matchMedia(prefersDarkMQ);
     const handleChange = () => {
-      setTheme(mediaQuery.matches ? Theme.LIGHT : Theme.DARK);
+      setTheme(mediaQuery.matches ? Theme.DARK : Theme.LIGHT);
     };
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);*/
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   return (
     <ThemeContext.Provider value={[theme, setTheme]}>
@@ -62,13 +89,17 @@ function ThemeProvider({
   );
 }
 
+
+
+
+
 const clientThemeCode = `
 // hi there dear reader 👋
 // this is how I make certain we avoid a flash of the wrong theme. If you select
 // a theme, then I'll know what you want in the future and you'll not see this
 // script anymore.
 ;(() => {
-  const theme = window.matchMedia(${JSON.stringify(prefersLightMQ)}).matches
+  const theme = window.matchMedia(${JSON.stringify(prefersDarkMQ)}).matches
     ? 'light'
     : 'dark';
 
@@ -128,6 +159,7 @@ function NonFlashOfWrongThemeEls({ ssrTheme }: { ssrTheme: boolean }) {
     </>
   );
 }
+
 
 function useTheme() {
   const context = useContext(ThemeContext);

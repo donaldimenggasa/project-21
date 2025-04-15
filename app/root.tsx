@@ -1,3 +1,5 @@
+import "./css/style.css";
+import "aos/dist/aos.css";
 import type { LinksFunction } from "@remix-run/node";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigation, useLoaderData} from "@remix-run/react";
 import { getThemeSession } from "~/server/theme-server";
@@ -6,12 +8,12 @@ import { NonFlashOfWrongThemeEls, ThemeProvider, Theme, useTheme } from "~/provi
 import lodash_fp from "lodash/fp";
 import AOS from "aos";
 import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
-
+import clsx from "clsx";
 const { compose, join, reject, isBoolean, isNil, flatten } = lodash_fp;
 
 
 
-import "./tailwind.css";
+
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -44,17 +46,22 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
+  console.log(data)
 
   return (
     <ThemeProvider specifiedTheme={data?.theme}>
-      <html lang="en">
+     
+  
+      <html lang="en" className={clsx(data?.theme)}
+      style={{ colorScheme: data?.theme === "dark" ? "dark" : "light" }}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data?.theme)} />
       </head>
-      <body>
+      <body className="font-inter antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 tracking-tight">
       <GlobalLoading />
         {children}
         <ScrollRestoration />
@@ -67,6 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const [theme] = useTheme();
 
 
   useEffect(() => {
