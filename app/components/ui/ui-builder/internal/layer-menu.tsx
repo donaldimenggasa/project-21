@@ -50,14 +50,14 @@ export const LayerMenu: React.FC<MenuProps> = ({
           zIndex: zIndex,
         }}
       >
-        <span className={cn("h-5 group flex items-center rounded-bl-full rounded-r-full bg-blue-500/85 p-0 text-sm font-semibold text-secondary-foreground shadow-sm ring-1 ring-inset ring-blue-500 hover:bg-secondary/85 hover:h-10 hover:ring-2 transition-all duration-200 ease-in-out overflow-hidden cursor-pointer hover:cursor-auto", popoverOpen ? "h-10 ring-2" : "")}>
+        <span className={cn("h-5 group flex items-center rounded-bl-full rounded-r-full bg-blue-500/85 p-0 text-sm font-semibold text-secondary-foreground shadow-xs ring-1 ring-inset ring-blue-500 hover:bg-secondary/85 hover:h-10 hover:ring-2 transition-all duration-200 ease-in-out overflow-hidden cursor-pointer hover:cursor-auto", popoverOpen ? "h-10 ring-2" : "")}>
           <ChevronRight className={cn("h-5 w-5 text-secondary-foreground group-hover:size-8 transition-all duration-200 ease-in-out group-hover:opacity-30", popoverOpen ? "size-8 opacity-30" : "")} />
 
           <div className={cn("overflow-hidden max-w-0 group-hover:max-w-xs transition-all duration-200 ease-in-out", popoverOpen ? "max-w-xs" : "")}>
             {hasChildrenInSchema && (
               <AddComponentsPopover
                 parentLayerId={layerId}
-                className="flex-shrink w-min inline-flex"
+                className="shrink w-min inline-flex"
                 onOpenChange={setPopoverOpen}
               >
                 <div className={cn(buttonVariants({ variant: "ghost", size: "sm" }),"cursor-pointer")} >

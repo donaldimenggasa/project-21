@@ -38,7 +38,7 @@ const RootNotification: React.FC<RootNotificationProps> = ({ title, message, typ
   return (
     <div 
       className={cn(
-        "fixed top-4 right-4 z-[9999] p-4 rounded-lg shadow-lg max-w-sm w-full animate-in slide-in-from-right-5 fade-in",
+        "fixed top-4 right-4 z-9999 p-4 rounded-lg shadow-lg max-w-sm w-full animate-in slide-in-from-right-5 fade-in",
         type === 'info' && "bg-blue-500/95 border border-blue-600",
         type === 'success' && "bg-green-500/95 border border-green-600",
         type === 'warning' && "bg-amber-500/95 border border-amber-600",
@@ -188,7 +188,7 @@ export function NotificationNode({ data, id }: NotificationNodeProps) {
       // Create a notification component
       const notification = document.createElement('div');
       notification.className = cn(
-        "fixed top-4 right-4 z-[9999] p-4 rounded-lg shadow-lg max-w-sm w-full animate-in slide-in-from-right-5 fade-in",
+        "fixed top-4 right-4 z-9999 p-4 rounded-lg shadow-lg max-w-sm w-full animate-in slide-in-from-right-5 fade-in",
         localType === 'info' && "bg-blue-500/95 border border-blue-600",
         localType === 'success' && "bg-green-500/95 border border-green-600",
         localType === 'warning' && "bg-amber-500/95 border border-amber-600",
@@ -409,7 +409,7 @@ export function NotificationNode({ data, id }: NotificationNodeProps) {
             type="text"
             value={localTitle}
             onChange={(e) => setLocalTitle(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-pink-500/30"
+            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-pink-500/30"
             placeholder="Enter notification title"
           />
         </div>
@@ -422,7 +422,7 @@ export function NotificationNode({ data, id }: NotificationNodeProps) {
           <textarea
             value={localMessage}
             onChange={(e) => setLocalMessage(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-pink-500/30 resize-none h-16"
+            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-pink-500/30 resize-none h-16"
             placeholder="Enter notification message"
           />
         </div>
@@ -555,7 +555,7 @@ export function NotificationNode({ data, id }: NotificationNodeProps) {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-pink-500/30',
-      'bg-gradient-to-b from-pink-500/5 to-pink-500/10',
+      'bg-linear-to-b from-pink-500/5 to-pink-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[280px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

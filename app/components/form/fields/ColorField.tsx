@@ -89,7 +89,7 @@ export function ColorField({ name, label, description }: ColorFieldProps) {
                   key={colorValue}
                   type="button"
                   onClick={() => handleColorSelect(colorValue)}
-                  className="group relative aspect-square rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="group relative aspect-square rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   title={name}
                 >
                   <div

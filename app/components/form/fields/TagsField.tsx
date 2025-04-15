@@ -174,7 +174,7 @@ export function TagsField({
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Search or enter tag..."
-                    className="w-full px-2 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="w-full px-2 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                   <div className="max-h-48 overflow-y-auto">
                     {loading ? (

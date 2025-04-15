@@ -307,7 +307,7 @@ export const TAILWIND_CLASSES = [
   "min-w-0","min-w-full","min-w-min","min-w-max","min-w-fit",
   
   /* Max-Width */
-  "max-w-0","max-w-none","max-w-xs","max-w-sm","max-w-md","max-w-lg","max-w-xl","max-w-2xl","max-w-3xl","max-w-4xl","max-w-5xl","max-w-6xl","max-w-7xl","max-w-full","max-w-min","max-w-max","max-w-fit","max-w-prose","max-w-screen-sm","max-w-screen-md","max-w-screen-lg","max-w-screen-xl","max-w-screen-2xl",
+  "max-w-0","max-w-none","max-w-xs","max-w-sm","max-w-md","max-w-lg","max-w-xl","max-w-2xl","max-w-3xl","max-w-4xl","max-w-5xl","max-w-6xl","max-w-7xl","max-w-full","max-w-min","max-w-max","max-w-fit","max-w-prose","max-w-(--breakpoint-sm)","max-w-(--breakpoint-md)","max-w-(--breakpoint-lg)","max-w-(--breakpoint-xl)","max-w-(--breakpoint-2xl)",
   
   /* Height */
   "h-0","h-px","h-0.5","h-1","h-1.5","h-2","h-2.5","h-3","h-3.5","h-4","h-5","h-6","h-7","h-8","h-9","h-10","h-11","h-12",
@@ -505,7 +505,7 @@ export const TAILWIND_CLASSES = [
   "bg-auto","bg-cover","bg-contain",
   
   /* Background Image */
-  "bg-none","bg-gradient-to-t","bg-gradient-to-tr","bg-gradient-to-r","bg-gradient-to-br","bg-gradient-to-b","bg-gradient-to-bl","bg-gradient-to-l","bg-gradient-to-tl","bg-[url('https://placehold.co/10')]","bg-[url('https://placehold.co/20')]","bg-[url('https://placehold.co/30')]","bg-[url('https://placehold.co/40')]","bg-[url('https://placehold.co/50')]","bg-[url('https://placehold.co/60')]","bg-[url('https://placehold.co/70')]","bg-[url('https://placehold.co/80')]","bg-[url('https://placehold.co/90')]","bg-[url('https://placehold.co/100')]","bg-[url('https://placehold.co/200')]","bg-[url('https://placehold.co/300')]","bg-[url('https://placehold.co/400')]","bg-[url('https://placehold.co/500')]","bg-[url('https://placehold.co/600')]","bg-[url('https://placehold.co/600x400')]","bg-[url('https://placehold.co/854x480')]","bg-[url('https://placehold.co/1280x720')]","bg-[url('https://placehold.co/1920x1080')]",
+  "bg-none","bg-linear-to-t","bg-linear-to-tr","bg-linear-to-r","bg-linear-to-br","bg-linear-to-b","bg-linear-to-bl","bg-linear-to-l","bg-linear-to-tl","bg-[url('https://placehold.co/10')]","bg-[url('https://placehold.co/20')]","bg-[url('https://placehold.co/30')]","bg-[url('https://placehold.co/40')]","bg-[url('https://placehold.co/50')]","bg-[url('https://placehold.co/60')]","bg-[url('https://placehold.co/70')]","bg-[url('https://placehold.co/80')]","bg-[url('https://placehold.co/90')]","bg-[url('https://placehold.co/100')]","bg-[url('https://placehold.co/200')]","bg-[url('https://placehold.co/300')]","bg-[url('https://placehold.co/400')]","bg-[url('https://placehold.co/500')]","bg-[url('https://placehold.co/600')]","bg-[url('https://placehold.co/600x400')]","bg-[url('https://placehold.co/854x480')]","bg-[url('https://placehold.co/1280x720')]","bg-[url('https://placehold.co/1920x1080')]",
   
   /* Gradient Color Stops */
   "from-inherit","from-current","from-transparent","from-black",
@@ -834,13 +834,13 @@ export const TAILWIND_CLASSES = [
   "outline-rose-50","outline-rose-100","outline-rose-200","outline-rose-300","outline-rose-400","outline-rose-500","outline-rose-600","outline-rose-700","outline-rose-800","outline-rose-900","outline-rose-950",
   
   /* Outline Style */
-  "outline-none","outline","outline-dashed","outline-dotted","outline-double",
+  "outline-hidden","outline","outline-dashed","outline-dotted","outline-double",
   
   /* Outline Offset */
   "outline-offset-0","outline-offset-1","outline-offset-2","outline-offset-4","outline-offset-8",
   
   /* Ring Width */
-  "ring-0","ring-1","ring-2","ring","ring-4","ring-8","ring-inset",
+  "ring-0","ring-1","ring-2","ring-3","ring-4","ring-8","ring-inset",
   
   /* Ring Color */
   "ring-inherit","ring-current","ring-transparent","ring-black","ring-white",
@@ -898,7 +898,7 @@ export const TAILWIND_CLASSES = [
   // MARK: Effects
   
   /* Box Shadow */
-  "shadow-sm","shadow","shadow-md","shadow-lg","shadow-xl","shadow-2xl","shadow-inner","shadow-none",
+  "shadow-xs","shadow-sm","shadow-md","shadow-lg","shadow-xl","shadow-2xl","shadow-inner","shadow-none",
   
   /* Box Shadow Color */
   "shadow-inherit","shadow-current","shadow-transparent","shadow-black","shadow-white",
@@ -938,7 +938,7 @@ export const TAILWIND_CLASSES = [
   // MARK: Filters
   
   /* Blur */
-  "blur-none","blur-sm","blur","blur-md","blur-lg","blur-xl","blur-2xl","blur-3xl",
+  "blur-none","blur-xs","blur-sm","blur-md","blur-lg","blur-xl","blur-2xl","blur-3xl",
   
   /* Brightness */
   "brightness-0","brightness-50","brightness-75","brightness-90","brightness-95","brightness-100","brightness-105","brightness-110","brightness-125","brightness-150","brightness-200",
@@ -947,7 +947,7 @@ export const TAILWIND_CLASSES = [
   "contrast-0","contrast-50","contrast-75","contrast-100","contrast-125","contrast-150","contrast-200",
   
   /* Drop Shadow */
-  "drop-shadow-sm","drop-shadow","drop-shadow-md","drop-shadow-lg","drop-shadow-xl","drop-shadow-2xl","drop-shadow-none",
+  "drop-shadow-xs","drop-shadow-sm","drop-shadow-md","drop-shadow-lg","drop-shadow-xl","drop-shadow-2xl","drop-shadow-none",
   
   /* Grayscale */
   "grayscale-0","grayscale",
@@ -965,7 +965,7 @@ export const TAILWIND_CLASSES = [
   "sepia-0","sepia",
   
   /* Backdrop Blur */
-  "backdrop-blur-none","backdrop-blur-sm","backdrop-blur","backdrop-blur-md","backdrop-blur-lg","backdrop-blur-xl","backdrop-blur-2xl","backdrop-blur-3xl",
+  "backdrop-blur-none","backdrop-blur-xs","backdrop-blur-sm","backdrop-blur-md","backdrop-blur-lg","backdrop-blur-xl","backdrop-blur-2xl","backdrop-blur-3xl",
   
   /* Backdrop Brightness */
   "backdrop-brightness-0","backdrop-brightness-50","backdrop-brightness-75","backdrop-brightness-90","backdrop-brightness-95","backdrop-brightness-100","backdrop-brightness-105","backdrop-brightness-110","backdrop-brightness-125","backdrop-brightness-150","backdrop-brightness-200",
@@ -2612,11 +2612,11 @@ const TAILWIND_CLASSES_MD = [
   "md:max-w-max",
   "md:max-w-fit",
   "md:max-w-prose",
-  "md:max-w-screen-sm",
-  "md:max-w-screen-md",
-  "md:max-w-screen-lg",
-  "md:max-w-screen-xl",
-  "md:max-w-screen-2xl",
+  "md:max-w-(--breakpoint-sm)",
+  "md:max-w-(--breakpoint-md)",
+  "md:max-w-(--breakpoint-lg)",
+  "md:max-w-(--breakpoint-xl)",
+  "md:max-w-(--breakpoint-2xl)",
   "md:h-0",
   "md:h-px",
   "md:h-0.5",
@@ -3406,14 +3406,14 @@ const TAILWIND_CLASSES_MD = [
   "md:bg-cover",
   "md:bg-contain",
   "md:bg-none",
-  "md:bg-gradient-to-t",
-  "md:bg-gradient-to-tr",
-  "md:bg-gradient-to-r",
-  "md:bg-gradient-to-br",
-  "md:bg-gradient-to-b",
-  "md:bg-gradient-to-bl",
-  "md:bg-gradient-to-l",
-  "md:bg-gradient-to-tl",
+  "md:bg-linear-to-t",
+  "md:bg-linear-to-tr",
+  "md:bg-linear-to-r",
+  "md:bg-linear-to-br",
+  "md:bg-linear-to-b",
+  "md:bg-linear-to-bl",
+  "md:bg-linear-to-l",
+  "md:bg-linear-to-tl",
   "md:bg-[url('https://placehold.co/10')]",
   "md:bg-[url('https://placehold.co/20')]",
   "md:bg-[url('https://placehold.co/30')]",
@@ -4386,7 +4386,7 @@ const TAILWIND_CLASSES_MD = [
   "md:outline-rose-800",
   "md:outline-rose-900",
   "md:outline-rose-950",
-  "md:outline-none",
+  "md:outline-hidden",
   "md:outline",
   "md:outline-dashed",
   "md:outline-dotted",
@@ -4399,7 +4399,7 @@ const TAILWIND_CLASSES_MD = [
   "md:ring-0",
   "md:ring-1",
   "md:ring-2",
-  "md:ring",
+  "md:ring-3",
   "md:ring-4",
   "md:ring-8",
   "md:ring-inset",
@@ -4902,8 +4902,8 @@ const TAILWIND_CLASSES_MD = [
   "md:ring-offset-rose-800",
   "md:ring-offset-rose-900",
   "md:ring-offset-rose-950",
+  "md:shadow-xs",
   "md:shadow-sm",
-  "md:shadow",
   "md:shadow-md",
   "md:shadow-lg",
   "md:shadow-xl",
@@ -5206,8 +5206,8 @@ const TAILWIND_CLASSES_MD = [
   "md:bg-blend-color",
   "md:bg-blend-luminosity",
   "md:blur-none",
+  "md:blur-xs",
   "md:blur-sm",
-  "md:blur",
   "md:blur-md",
   "md:blur-lg",
   "md:blur-xl",
@@ -5231,8 +5231,8 @@ const TAILWIND_CLASSES_MD = [
   "md:contrast-125",
   "md:contrast-150",
   "md:contrast-200",
+  "md:drop-shadow-xs",
   "md:drop-shadow-sm",
-  "md:drop-shadow",
   "md:drop-shadow-md",
   "md:drop-shadow-lg",
   "md:drop-shadow-xl",
@@ -5256,8 +5256,8 @@ const TAILWIND_CLASSES_MD = [
   "md:sepia-0",
   "md:sepia",
   "md:backdrop-blur-none",
+  "md:backdrop-blur-xs",
   "md:backdrop-blur-sm",
-  "md:backdrop-blur",
   "md:backdrop-blur-md",
   "md:backdrop-blur-lg",
   "md:backdrop-blur-xl",

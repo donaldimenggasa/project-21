@@ -33,7 +33,7 @@ const AppIcon: React.FC<AppIconProps> = ({
   >
     <div className="flex items-start justify-between">
       <div className="flex flex-col">
-        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-xs">
           {icon}
         </div>
         <h3 className="mt-4 text-lg font-semibold text-gray-900">
@@ -132,14 +132,14 @@ const AppGrid: React.FC<{ menu: MenuItem[] }> = ({ menu = [] }) => {
 
       <div className="relative">
         <div className="sticky top-0 z-10 mb-6">
-          <div className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-xs">
             <Search className="w-5 h-5 text-gray-400" />
             <input
               type="text"
               placeholder="Search applications..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 bg-transparent border-none text-sm focus:outline-none focus:ring-0"
+              className="flex-1 bg-transparent border-none text-sm focus:outline-hidden focus:ring-0"
             />
           </div>
         </div>

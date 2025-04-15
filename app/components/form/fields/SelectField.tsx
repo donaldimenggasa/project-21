@@ -46,7 +46,7 @@ export function SelectField({ name, label, options, description, placeholder = "
             "w-full flex items-center justify-between",
             "px-3 py-2 rounded-lg transition-colors",
             "border border-gray-300",
-            "outline-none",
+            "outline-hidden",
             "bg-white",
             error 
               ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20" 
@@ -81,9 +81,9 @@ export function SelectField({ name, label, options, description, placeholder = "
                     "text-sm text-gray-700",
                     "rounded-md",
                     "user-select-none",
-                    "data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-900",
-                    "data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-                    "cursor-pointer outline-none"
+                    "data-highlighted:bg-blue-50 data-highlighted:text-blue-900",
+                    "data-disabled:opacity-50 data-disabled:cursor-not-allowed",
+                    "cursor-pointer outline-hidden"
                   )}
                 >
                   <Select.ItemText>{option.label}</Select.ItemText>

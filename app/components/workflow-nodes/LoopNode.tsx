@@ -327,7 +327,7 @@ export function LoopNode({ data, id }: LoopNodeProps) {
               max="1000"
               value={localIterationCount}
               onChange={(e) => setLocalIterationCount(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500/30"
+              className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-green-500/30"
             />
           </div>
         ) : (
@@ -338,7 +338,7 @@ export function LoopNode({ data, id }: LoopNodeProps) {
             <textarea
               value={localItems}
               onChange={(e) => setLocalItems(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-green-500/30 font-mono h-20 resize-none"
+              className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-green-500/30 font-mono h-20 resize-none"
               placeholder="[1, 2, 3, 4, 5]"
             />
           </div>
@@ -389,7 +389,7 @@ export function LoopNode({ data, id }: LoopNodeProps) {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-green-500/30',
-      'bg-gradient-to-b from-green-500/5 to-green-500/10',
+      'bg-linear-to-b from-green-500/5 to-green-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[280px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

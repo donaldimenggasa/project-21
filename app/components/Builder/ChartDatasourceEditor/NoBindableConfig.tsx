@@ -117,7 +117,7 @@ const SortableRow = memo(({
               "border border-transparent hover:border-gray-700 focus:border-gray-600",
               "text-gray-300",
               column.type === 'number' && "font-mono",
-              "focus:outline-none"
+              "focus:outline-hidden"
             )}
           />
         </td>
@@ -281,7 +281,7 @@ const DownloadModal = ({ onClose, onDownload }: DownloadModalProps) => {
   const [format, setFormat] = useState('json');
 
   return (
-    <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-xs flex items-center justify-center z-50">
       <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 w-96">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-200">Download Data</h3>
@@ -306,7 +306,7 @@ const DownloadModal = ({ onClose, onDownload }: DownloadModalProps) => {
                 "w-full px-3 py-2 text-sm rounded-md",
                 "bg-gray-900 border border-gray-700",
                 "text-gray-200 placeholder-gray-500",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                "focus:outline-hidden focus:ring-2 focus:ring-blue-500/30"
               )}
               placeholder="Enter file name"
             />
@@ -323,7 +323,7 @@ const DownloadModal = ({ onClose, onDownload }: DownloadModalProps) => {
                 "w-full px-3 py-2 text-sm rounded-md",
                 "bg-gray-900 border border-gray-700",
                 "text-gray-200",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                "focus:outline-hidden focus:ring-2 focus:ring-blue-500/30"
               )}
             >
               <option value="json">JSON</option>
@@ -361,7 +361,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
   });
 
   return (
-    <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-xs flex items-center justify-center z-50">
       <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 w-96">
         <div className="space-y-4">
           <div className="space-y-2">
@@ -376,7 +376,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
                 "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
                 "bg-gray-800 border border-gray-700",
                 "text-gray-200 placeholder-gray-500 font-mono",
-                "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+                "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
               )}
               placeholder="column_key"
             />
@@ -394,7 +394,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
                 "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
                 "bg-gray-800 border border-gray-700",
                 "text-gray-200 placeholder-gray-500",
-                "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+                "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
               )}
               placeholder="Column Name"
             />
@@ -411,7 +411,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
                 "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
                 "bg-gray-800 border border-gray-700",
                 "text-gray-200",
-                "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+                "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
               )}
             >
               <option value="text">Text</option>

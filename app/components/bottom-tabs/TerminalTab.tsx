@@ -128,7 +128,7 @@ vite.config.ts`;
   };
 
   return (
-    <div className="h-full flex flex-col text-foreground bg-card/95 backdrop-blur-sm">
+    <div className="h-full flex flex-col text-foreground bg-card/95 backdrop-blur-xs">
       <div className="flex items-center justify-between p-3 border-b border-border">
         <div className="flex items-center">
           <TerminalIcon className="h-4 w-4 mr-2 text-primary" />
@@ -181,7 +181,7 @@ vite.config.ts`;
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent border-none outline-none text-foreground font-mono text-sm"
+          className="flex-1 bg-transparent border-none outline-hidden text-foreground font-mono text-sm"
           placeholder="Type a command..."
         />
         <button 

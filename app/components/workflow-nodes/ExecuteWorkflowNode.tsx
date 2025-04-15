@@ -334,7 +334,7 @@ export function ExecuteWorkflowNode({ data, id }: ExecuteWorkflowNodeProps) {
             <select
               value={localTargetWorkflowId}
               onChange={(e) => setLocalTargetWorkflowId(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-indigo-500/30"
             >
               <option value="">Select a workflow...</option>
               {currentPageWorkflows.map((w) => (
@@ -348,7 +348,7 @@ export function ExecuteWorkflowNode({ data, id }: ExecuteWorkflowNodeProps) {
           {/* Warning about infinite loops */}
           {localTargetWorkflowId && checkForInfiniteLoop(localTargetWorkflowId) && (
             <div className="mt-2 p-2 bg-red-500/10 border border-red-500/20 rounded-md text-xs text-red-400 flex items-start">
-              <AlertTriangle className="h-3.5 w-3.5 mr-1.5 mt-0.5 flex-shrink-0" />
+              <AlertTriangle className="h-3.5 w-3.5 mr-1.5 mt-0.5 shrink-0" />
               <div>
                 <strong>Infinite loop detected!</strong> This would create a circular reference between workflows.
               </div>
@@ -381,7 +381,7 @@ export function ExecuteWorkflowNode({ data, id }: ExecuteWorkflowNodeProps) {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-indigo-500/30',
-      'bg-gradient-to-b from-indigo-500/5 to-indigo-500/10',
+      'bg-linear-to-b from-indigo-500/5 to-indigo-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[280px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

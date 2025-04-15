@@ -226,7 +226,7 @@ export const JavaScriptNode = memo(({ data, id }: JavaScriptNodeProps) => {
       <div className={cn(
         'rounded-lg shadow-lg relative',
         'border border-yellow-500/30',
-        'bg-gradient-to-b from-yellow-500/5 to-yellow-500/10',
+        'bg-linear-to-b from-yellow-500/5 to-yellow-500/10',
         'min-w-[280px]',
         'transition-all duration-200',
         data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

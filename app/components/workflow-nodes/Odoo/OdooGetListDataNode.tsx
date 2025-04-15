@@ -257,7 +257,7 @@ const OdooGetListDataNode = memo(({ data, id }: any) => {
             <select
               value={localMethod}
               onChange={(e) => setLocalMethod(e.target.value as any)}
-              className="bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+              className="bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-blue-500/30"
             >
               <option value="GET">GET</option>
               <option value="POST">POST</option>
@@ -271,7 +271,7 @@ const OdooGetListDataNode = memo(({ data, id }: any) => {
               value={localUrl}
               onChange={(e) => setLocalUrl(e.target.value)}
               placeholder="https://api.example.com/data"
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-blue-500/30"
             />
           </div>
   
@@ -307,14 +307,14 @@ const OdooGetListDataNode = memo(({ data, id }: any) => {
                       value={key}
                       onChange={(e) => updateHeader(key, e.target.value, value)}
                       placeholder="Header name"
-                      className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+                      className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-blue-500/30"
                     />
                     <input
                       type="text"
                       value={value}
                       onChange={(e) => updateHeader(key, key, e.target.value)}
                       placeholder="Value"
-                      className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+                      className="flex-1 bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-blue-500/30"
                     />
                     <button
                       onClick={() => removeHeader(key)}
@@ -391,7 +391,7 @@ const OdooGetListDataNode = memo(({ data, id }: any) => {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-blue-500/30',
-      'bg-gradient-to-b from-blue-500/5 to-blue-500/10',
+      'bg-linear-to-b from-blue-500/5 to-blue-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[300px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',
@@ -461,7 +461,7 @@ const OdooGetListDataNode = memo(({ data, id }: any) => {
               <select
                 value={'x_data_amc'}
                 //onChange={(e) => setLocalMethod(e.target.value as any)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+                className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-blue-500/30"
               >
                 <option value="x_data_amc" className=' w-full'>x_data_amc</option>
                 <option value="POST">POST</option>

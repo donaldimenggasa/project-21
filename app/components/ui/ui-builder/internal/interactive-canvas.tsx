@@ -179,7 +179,7 @@ const ZoomControls = ({ onZoomIn, onZoomOut }: ZoomControlsProps) => {
         data-testid="button-ZoomIn"
         variant="secondary"
         size="icon"
-        className="rounded-l-full rounded-r-none shadow md:p-4 p-6"
+        className="rounded-l-full rounded-r-none shadow-sm md:p-4 p-6"
         onClick={onZoomIn}
       >
         <ZoomIn />
@@ -188,7 +188,7 @@ const ZoomControls = ({ onZoomIn, onZoomOut }: ZoomControlsProps) => {
         data-testid="button-ZoomOut"
         variant="secondary"
         size="icon"
-        className="rounded-l-none rounded-r-full shadow md:p-4 p-6"
+        className="rounded-l-none rounded-r-full shadow-sm md:p-4 p-6"
         onClick={onZoomOut}
       >
         <ZoomOut />

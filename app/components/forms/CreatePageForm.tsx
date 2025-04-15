@@ -103,7 +103,7 @@ export function CreatePageForm({ onClose, editingId, initialData }: CreatePageFo
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
       <div className={cn(
         "bg-card rounded-xl shadow-xl border border-border",
         "w-full max-w-2xl overflow-hidden"

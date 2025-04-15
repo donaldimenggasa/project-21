@@ -93,7 +93,7 @@ function MainLayout({ useCanvas }: { useCanvas: boolean }) {
   return (
     <div
       data-testid="component-editor"
-      className="flex flex-col w-full flex-grow h-screen"
+      className="flex flex-col w-full grow h-screen"
     >
       <NavBar useCanvas={useCanvas} />
       {/* Desktop Layout */}

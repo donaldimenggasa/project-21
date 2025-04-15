@@ -115,7 +115,7 @@ export default () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f1f1ff] to-[#e8e8ff]">
+    <div className="min-h-screen bg-linear-to-br from-[#f1f1ff] to-[#e8e8ff]">
       <header className="bg-gray-900 sticky top-0 z-50 border-b border-gray-800 h-12 text-white text-sm">
         <div className=" h-full mx-6 items-center flex justify-between text-center">
           <button

@@ -50,7 +50,7 @@ export function DateTimeField({ name, label, description, required, readonly }: 
                 "flex-1 flex items-center justify-between px-3 py-2 rounded-lg border text-left text-sm",
                 readonly ? "bg-gray-100 cursor-not-allowed" : "bg-white hover:bg-gray-50",
                 error ? "border-red-300" : "border-gray-300",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                "focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               )}
             >
               <span className="flex items-center gap-2">
@@ -75,7 +75,7 @@ export function DateTimeField({ name, label, description, required, readonly }: 
           </Popover.Portal>
         </Popover.Root>
 
-        <div className="relative flex-shrink-0">
+        <div className="relative shrink-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Clock className="h-4 w-4 text-gray-400" />
           </div>

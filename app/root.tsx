@@ -116,7 +116,7 @@ const GlobalLoading = () => {
       <div
         ref={ref}
         className={cx(
-          "h-full bg-gradient-to-r from-blue-400 to-cyan-500 transition-all duration-500 ease-in-out",
+          "h-full bg-linear-to-r from-blue-400 to-cyan-500 transition-all duration-500 ease-in-out",
           navigation.state === "idle" &&
             animationComplete &&
             "w-0 opacity-0 transition-none",

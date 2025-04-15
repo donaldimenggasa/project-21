@@ -422,7 +422,7 @@ const TableComponent: React.FC<TableProps> = ({
             className={cn(
               "px-3 py-2 text-sm rounded-lg transition-colors",
               "bg-white border border-gray-300",
-              "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              "focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             )}
           />
         </div>
@@ -546,7 +546,7 @@ const TableComponent: React.FC<TableProps> = ({
             className={cn(
               'px-3 py-2 text-sm rounded-lg transition-colors',
               'bg-white border border-gray-300',
-              'focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+              'focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
             )}
           >
             {[10, 25, 50, 100].map((size) => (

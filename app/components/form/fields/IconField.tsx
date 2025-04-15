@@ -32,7 +32,7 @@ export function IconField({ name, label, description }: IconFieldProps) {
         className={cn(
           "w-full px-3 py-2 rounded-lg transition-colors",
           "border border-gray-300",
-          "outline-none",
+          "outline-hidden",
           error 
             ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20" 
             : "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20",

@@ -176,7 +176,7 @@ export function ConditionNode({ data, id }: ConditionNodeProps) {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-purple-500/30',
-      'bg-gradient-to-b from-purple-500/5 to-purple-500/10',
+      'bg-linear-to-b from-purple-500/5 to-purple-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[280px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

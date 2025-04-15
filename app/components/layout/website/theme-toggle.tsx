@@ -22,7 +22,7 @@ export default function ThemeToggle({ className = '' }: {
       />
       <label className="relative" htmlFor="light-switch">
         <span
-          className="relative bg-linear-to-t from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 shadow-xs z-10"
+          className="relative bg-linear-to-t from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 shadow-2xs z-10"
           aria-hidden="true"
         ></span>
         <svg className="absolute inset-0" width="44" height="24" viewBox="0 0 44 24" xmlns="http://www.w3.org/2000/svg">
