@@ -1,5 +1,5 @@
 
-import { Outlet, useNavigate } from "@remix-run/react";
+import { Outlet, useNavigate, useLocation } from "@remix-run/react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import React, { useState, useCallback, Fragment } from "react";
 import clsx from "clsx";
@@ -43,15 +43,11 @@ const SubMenu: React.FC<{items: MenuItem[]; onSelect: (item: MenuItem) => void;}
 
 const MenuButton: React.FC<{icon : React.ReactNode; name: string; isActive?: boolean; onClick?: () => void;}> = ({icon, name, isActive, onClick }) => {
   return (
-    <div className=" flex flex-row items-center space-x-2">
-     {icon}
       <button
       onClick={onClick}
-      className={clsx('px-4 py-2 text-sm rounded-md transition-colors',
-        isActive ? "bg-gray-100 text-gray-900" : "text-gray-700 hover:bg-gray-50")}>
-          {name}
+      className={clsx('flex h-full px-4 text-xs items-center justify-center transition-colors cursor-pointer border-r border-gray-300', isActive ? "bg-gray-200 text-gray-900 font-semibold text-purple-700" : "text-gray-700 hover:bg-gray-50")}> 
+        <span className=" flex flex-row space-x-4">{icon} {name}</span>
     </button>
-    </div>
   )
 };
 
@@ -71,37 +67,39 @@ export default () => {
   const [activeMenu, setActiveMenu] = useState<MenuItem | null>(null);
   const [showSubMenu, setShowSubMenu] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const menu: MenuItem[] = [
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <Star className="w-4 h-4 mr-4" />,
       name: "DASHBOARD AMC",
       pathname: "/aplikasi/amc/dashboard",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <Star className="w-4 h-4 mr-4" />,
       name: "DATA AMC",
       pathname: "/aplikasi/amc/data-amc",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <Star className="w-4 h-4 mr-4" />,
       name: "DATA OPERATOR",
       pathname: "/aplikasi/amc/data-operator",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <Star className="w-4 h-4 mr-4" />,
       name: "DATA AIRPORT",
       pathname: "/aplikasi/amc/data-airport",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <Star className="w-4 h-4 mr-4" />,
       name: "TYPE PESAWAT",
       pathname: "/aplikasi/amc/type-pesawat",
       children: [],
@@ -127,7 +125,7 @@ export default () => {
             className="flex items-center space-x-2"
             onClick={() => navigate("/aplikasi")}
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-4 h-4 "/>
             <span className=" font-bold text-sm">DEO AIRPORT - SOQ</span>
           </button>
           <div>APRON MOVEMENT CONTROL</div>
@@ -136,15 +134,15 @@ export default () => {
       </header>
 
       <div className=" bg-white h-10 px-6 flex items-center">
-        <nav className="flex items-center space-x-1">
+        <nav className="w-full h-full flex justify-between items-center">
+          <div className="flex items-center flex-row h-full">
           {menu.map((item, index) => {
-            //console.log(item)
             return (
-              <div key={index} className="relative">
+              <Fragment key={index}>
                 <MenuButton
                   icon={item.icon}
                   name={item.name}
-                  isActive={activeMenu?.pathname === item.pathname}
+                  isActive={pathname === item.pathname}
                   onClick={() => {
                     if (item.children.length > 0) {
                       setShowSubMenu(showSubMenu === item.pathname ? null : item.pathname);
@@ -156,9 +154,15 @@ export default () => {
                 {showSubMenu === item.pathname && item.children.length > 0 && (
                   <SubMenu items={item.children} onSelect={handleMenuSelect} />
                 )}
-              </div>
+              </Fragment>
             );
           })}
+          </div>
+          <div>
+            <button className=" bg-blue-700 text-xs rounded-sm px-2 py-1">
+              CREATE
+            </button>
+          </div>
         </nav>
       </div>
       <main className="">

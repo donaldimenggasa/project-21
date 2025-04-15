@@ -4,20 +4,19 @@ import { useRef, useMemo, useCallback, useEffect } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ModuleRegistry } from "@ag-grid-community/core";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-import { useLoaderData, useLocation, useNavigation, useSearchParams } from "@remix-run/react";
+import { useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
 import { getData } from "~/server/get-odoo-view";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { fields } from "~/server/db/schema/yori_builder";
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 
 
 //INI BACKENDNYA
+const PAGE_SIZE = 50;
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     const headers_res = new Headers();
     headers_res.set("Content-Type", "application/json");
-
     try {
         //=================================
         //FOKUS DISINI
@@ -29,25 +28,21 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
                         x_name: {},
                     }
                 },
-                
                 x_studio_kota: {
                     fields: {
                         x_name: {},
                     }
                 },
-
                 x_studio_lat: {
                     fields: {
                         x_name: {},
                     }
                 },
-
                 x_studio_lang: {
                     fields: {
                         x_name: {},
                     }
                 },
-             
             },
             _domain: [],
             _limit: 50,
@@ -109,7 +104,7 @@ function debounce<T extends (...args: any[]) => void>(
 
 
 // INI FRONTENDNYA
-const PAGE_SIZE = 50;
+
 export default () => {
     const { records, length } = useLoaderData<typeof loader>();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -117,10 +112,7 @@ export default () => {
     const gridRef = useRef<AgGridReact | null>(null);
     const filterTimeoutRef = useRef<NodeJS.Timeout>();
     const isLoading = navigation.state === "loading";
-    console.log(records, length, searchParams.toString())
-
-
-
+  
     // ============================
     const columnDefs = useMemo(() => {
         return [
@@ -131,15 +123,12 @@ export default () => {
                 width: 90,
                 cellStyle: { textAlign: "center" },
             },
-
             {
                 field: "x_studio_nama_bandara",
                 headerName: "AIRPORT",
                 filter: "agTextColumnFilter",
                 width: 150,
-         
             },
-
             {
                 field: "x_studio_kota",
                 headerName: "KOTA",
@@ -147,7 +136,6 @@ export default () => {
                 width: 150,
          
             },
-
             {
                 field: "x_studio_lat",
                 headerName: "LAT",
@@ -155,7 +143,6 @@ export default () => {
                 width: 150,
          
             },
-
             {
                 field: "x_studio_lang",
                 headerName: "LANG",
