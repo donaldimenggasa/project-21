@@ -74,32 +74,8 @@ export default () => {
   const menu: MenuItem[] = [
     {
       icon: <Star className="w-4 h-4" />,
-      name: "DASHBOARD AMC",
-      pathname: "/aplikasi/amc",
-      children: [],
-    },
-    {
-      icon: <Star className="w-4 h-4" />,
-      name: "DATA AMC",
-      pathname: "/aplikasi/amc/data-amc",
-      children: [],
-    },
-    {
-      icon: <Star className="w-4 h-4" />,
-      name: "DATA OPERATOR",
-      pathname: "/aplikasi/amc/data-operator",
-      children: [],
-    },
-    {
-      icon: <Star className="w-4 h-4" />,
-      name: "DATA AIRPORT",
-      pathname: "/aplikasi/amc/data-airport",
-      children: [],
-    },
-    {
-      icon: <Star className="w-4 h-4" />,
-      name: "TYPE PESAWAT",
-      pathname: "/aplikasi/amc/type-pesawat",
+      name: "DASHBOARD ELBAN",
+      pathname: "/aplikasi/elban",
       children: [],
     },
   ];
