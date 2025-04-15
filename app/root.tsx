@@ -46,12 +46,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<typeof loader>();
-  console.log(data)
-
   return (
     <ThemeProvider specifiedTheme={data?.theme}>
-     
-  
       <html lang="en" className={clsx(data?.theme)}
       style={{ colorScheme: data?.theme === "dark" ? "dark" : "light" }}>
       <head>
@@ -73,10 +69,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+
+
 export default function App() {
-  const [theme] = useTheme();
-
-
   useEffect(() => {
     AOS.init({
       once: true,
@@ -85,11 +80,8 @@ export default function App() {
       easing: "ease-out-sine",
     });
   }, []);
-  
   return <Outlet />;
 }
-
-
 
 
 
