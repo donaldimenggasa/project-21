@@ -263,7 +263,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
   }, [type, entry, logger]);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50">
       <div className="bg-card rounded-lg border border-border shadow-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h3 className="text-lg font-medium text-foreground">
@@ -293,7 +293,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
                     if (!keyTouched) setKeyTouched(true);
                   }}
                   className={cn(
-                    "w-full px-3 py-2 bg-input border rounded-md text-foreground focus:outline-none focus:ring-2",
+                    "w-full px-3 py-2 bg-input border rounded-md text-foreground focus:outline-hidden focus:ring-2",
                     error && error.includes('Key') 
                       ? "border-destructive focus:ring-destructive/20" 
                       : "border-border focus:ring-primary/20"
@@ -316,7 +316,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value as StateValueType)}
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="string">String</option>
                   <option value="number">Number</option>
@@ -334,7 +334,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
                 <select
                   value={scope}
                   onChange={(e) => setScope(e.target.value as StateScope)}
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="appState">App State (Page-Specific)</option>
                   <option value="localStorage">Local Storage (Global)</option>
@@ -375,7 +375,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
                 <select
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
-                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                 >
                   <option value="true">True</option>
                   <option value="false">False</option>
@@ -399,7 +399,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
                   className={cn(
-                    "w-full px-3 py-2 bg-input border rounded-md text-foreground focus:outline-none focus:ring-2",
+                    "w-full px-3 py-2 bg-input border rounded-md text-foreground focus:outline-hidden focus:ring-2",
                     error && error.includes('number') 
                       ? "border-destructive focus:ring-destructive/20" 
                       : "border-border focus:ring-primary/20"
@@ -417,7 +417,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full px-3 py-2 bg-input border border-border rounded-md text-foreground focus:outline-hidden focus:ring-2 focus:ring-primary/20"
                 placeholder="Optional description"
                 rows={2}
               />
@@ -426,7 +426,7 @@ const StateEditor: React.FC<StateEditorProps> = ({
             {/* Error message */}
             {error && (
               <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-sm flex items-start">
-                <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
+                <AlertTriangle className="h-4 w-4 mr-2 mt-0.5 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
@@ -465,7 +465,7 @@ interface DeleteConfirmationProps {
 
 const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ entryKey, scope, onConfirm, onCancel }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50">
       <div className="bg-card rounded-lg border border-border shadow-lg p-6 max-w-md w-full">
         <div className="flex items-center text-destructive mb-4">
           <AlertTriangle className="h-6 w-6 mr-3" />
@@ -875,7 +875,7 @@ export function StateTab() {
   }, []);
 
   return (
-    <div className="h-full flex flex-col text-foreground bg-card/95 backdrop-blur-sm">
+    <div className="h-full flex flex-col text-foreground bg-card/95 backdrop-blur-xs">
       {/* Header with tabs */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center space-x-4">
@@ -993,7 +993,7 @@ export function StateTab() {
             placeholder={`Search ${activeScope === 'appState' ? 'App State' : 'Local Storage'}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-background border border-border rounded-md text-foreground placeholder-secondary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full pl-9 pr-4 py-2 bg-background border border-border rounded-md text-foreground placeholder-secondary focus:outline-hidden focus:ring-1 focus:ring-primary"
           />
         </div>
       </div>

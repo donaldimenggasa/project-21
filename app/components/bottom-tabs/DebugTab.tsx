@@ -199,7 +199,7 @@ export function DebugTab() {
   }, []);
 
   return (
-    <div className="h-full flex flex-col text-foreground bg-card/95 backdrop-blur-sm">
+    <div className="h-full flex flex-col text-foreground bg-card/95 backdrop-blur-xs">
       {/* Toolbar */}
       <div className="flex items-center justify-between p-4 border-b border-border bg-card/80">
         <div className="flex items-center space-x-2">
@@ -247,7 +247,7 @@ export function DebugTab() {
             placeholder="Search state..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-4 py-1.5 bg-background border border-border rounded-lg text-sm text-foreground placeholder-secondary focus:outline-none focus:ring-1 focus:ring-primary/50 transition-colors"
+            className="w-full pl-9 pr-4 py-1.5 bg-background border border-border rounded-lg text-sm text-foreground placeholder-secondary focus:outline-hidden focus:ring-1 focus:ring-primary/50 transition-colors"
           />
         </div>
 

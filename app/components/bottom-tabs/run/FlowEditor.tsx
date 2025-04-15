@@ -445,7 +445,7 @@ export function FlowEditor() {
       {/* Error Toast */}
       {showErrorToast && (
         <div className="absolute top-4 right-4 z-50 bg-red-500/90 text-white px-4 py-3 rounded-lg shadow-lg flex items-start max-w-md animate-in slide-in-from-top-5 fade-in">
-          <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+          <AlertCircle className="h-5 w-5 mr-2 mt-0.5 shrink-0" />
           <div>
             <p className="font-medium">Connection Error</p>
             <p className="text-white/90 text-sm">{errorMessage}</p>

@@ -205,7 +205,7 @@ const FlightSearchForm = ({ onSearch = () => {} }: FlightSearchFormProps) => {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-[2] h-10 bg-primary hover:bg-primary/90"
+                  className="flex-2 h-10 bg-primary hover:bg-primary/90"
                   size="sm"
                 >
                   <Search className="mr-1 h-3 w-3" /> Search

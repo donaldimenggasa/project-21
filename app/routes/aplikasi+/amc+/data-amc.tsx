@@ -8,6 +8,7 @@ import { useLoaderData, useLocation, useNavigation, useSearchParams } from "@rem
 import { getData } from "~/server/get-odoo-view";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import { fields } from "~/server/db/schema/yori_builder";
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 
@@ -22,9 +23,29 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         //FOKUS DISINI
         const params = {
             _model: "x_data_amc",
-            _spesification: {},
+            _spesification: {
+                x_studio_operator: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_type_pesawat: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_status: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                
+            },
             _domain: [],
-            _limit: 20,
+            _limit: 50,
             _offset: 0,
             _order: "id ASC",
         };
@@ -91,6 +112,7 @@ export default () => {
     const gridRef = useRef<AgGridReact | null>(null);
     const filterTimeoutRef = useRef<NodeJS.Timeout>();
     const isLoading = navigation.state === "loading";
+    console.log(records, length, searchParams.toString())
 
 
 
@@ -104,12 +126,37 @@ export default () => {
                 width: 90,
                 cellStyle: { textAlign: "center" },
             },
+
             {
-                field: "name",
-                headerName: "Name",
+                field: "x_studio_status",
+                headerName: "SCHEDULE",
+                filter: "agTextColumnFilter",
+                width: 150
+            },
+
+            {
+                field: "x_studio_operator",
+                headerName: "OPERATOR",
                 filter: "agTextColumnFilter",
                 width: 150,
+                cellRenderer: (params: any) => {
+                    console.log(params.data?.x_studio_operator?.x_st)
+                    return params.data?.x_studio_operator?.x_name || "-";
+                }
             },
+
+            {
+                field: "x_studio_type_pesawat",
+                headerName: "TYPE PESAWAT",
+                filter: "agTextColumnFilter",
+                width: 150,
+                cellRenderer: (params: any) => {
+                    console.log(params.data?.x_studio_type_pesawat?.x_name)
+                    return  params.data?.x_studio_type_pesawat?.x_name || "-";
+                }
+            },
+
+           
         ];
     }, []);
 

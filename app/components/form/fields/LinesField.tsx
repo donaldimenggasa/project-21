@@ -62,7 +62,7 @@ export function LinesField({ name, label, description, required, readonly }: Lin
           <button
             type="button"
             onClick={addLine}
-            className="mt-2 inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            className="mt-2 inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-xs text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
           >
             <Plus className="h-4 w-4 mr-1" />
             Add Line

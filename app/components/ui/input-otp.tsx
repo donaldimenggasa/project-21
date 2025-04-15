@@ -86,7 +86,7 @@ export function InputOTP({ value, onChange, maxLength = 6, className }: InputOTP
           className={cn(
             "w-12 h-14 text-center text-2xl font-semibold",
             "rounded-md border border-gray-300",
-            "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500",
+            "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500",
             "dark:bg-gray-800 dark:border-gray-600 dark:text-white",
             "transition-all duration-200"
           )}

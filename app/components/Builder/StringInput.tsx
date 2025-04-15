@@ -84,7 +84,7 @@ const StringPropertyEditor: React.FC<EditorProps> = ({
                 : configProps.defaultValue
             }
             onChange={handleInputChange}
-            className="w-full p-2 text-sm border border-border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary bg-input outline-none"
+            className="w-full p-2 text-sm border border-border rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary bg-input outline-hidden"
           >
             {configProps.options.map((option: string) => (
               <option key={option} value={option}>
@@ -101,7 +101,7 @@ const StringPropertyEditor: React.FC<EditorProps> = ({
                 : configProps.defaultValue
             }
             onChange={handleInputChange}
-            className="w-full p-2 text-sm border border-gray-800 rounded-md bg-gray-800 outline-none"
+            className="w-full p-2 text-sm border border-gray-800 rounded-md bg-gray-800 outline-hidden"
             placeholder={`Enter ${title.toLowerCase()}...`}
           />
         )

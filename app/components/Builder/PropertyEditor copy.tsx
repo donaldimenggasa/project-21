@@ -37,13 +37,13 @@ const inputBaseClasses = cn(
   "w-full px-3 py-2 text-sm rounded-lg transition-colors",
   "bg-gray-800 border border-gray-700",
   "text-gray-200 placeholder-gray-500",
-  "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40"
+  "focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40"
 );
 
 const buttonBaseClasses = cn(
   "p-2 rounded-lg transition-colors",
   "hover:bg-gray-700/50",
-  "focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+  "focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
 );
 
 const bindingInputClasses = cn(
@@ -366,7 +366,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
             "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
             "bg-gray-900/50 border border-gray-700/50",
             "text-gray-200 placeholder-gray-500",
-            "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+            "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
           )}
           placeholder="Column Header"
         />
@@ -384,7 +384,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
             "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
             "bg-gray-900/50 border border-gray-700/50",
             "text-gray-200 placeholder-gray-500 font-mono",
-            "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+            "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
           )}
           placeholder="data.field"
         />
@@ -402,7 +402,7 @@ const ColumnForm = memo(({ column, onSave, onCancel }: ColumnFormProps) => {
             "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
             "bg-gray-900/50 border border-gray-700/50",
             "text-gray-200 placeholder-gray-500",
-            "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+            "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
           )}
           placeholder="200"
         />

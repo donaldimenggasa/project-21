@@ -264,7 +264,7 @@ export function FileNode({ data, id }: FileNodeProps) {
             type="text"
             value={localFileName}
             onChange={(e) => setLocalFileName(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500/30"
+            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-cyan-500/30"
             placeholder="output.txt"
           />
         </div>
@@ -277,7 +277,7 @@ export function FileNode({ data, id }: FileNodeProps) {
           <select
             value={localFileType}
             onChange={(e) => setLocalFileType(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500/30"
+            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-cyan-500/30"
           >
             <option value="text/plain">Text (.txt)</option>
             <option value="application/json">JSON (.json)</option>
@@ -330,7 +330,7 @@ export function FileNode({ data, id }: FileNodeProps) {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-cyan-500/30',
-      'bg-gradient-to-b from-cyan-500/5 to-cyan-500/10',
+      'bg-linear-to-b from-cyan-500/5 to-cyan-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[280px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

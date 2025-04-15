@@ -270,7 +270,7 @@ export function CustomEdge({
                   onClick={() => handleAddNode(nodeType.id)}
                 >
                   <div className={cn(
-                    "mt-0.5 w-2 h-2 rounded-full flex-shrink-0",
+                    "mt-0.5 w-2 h-2 rounded-full shrink-0",
                     nodeType.color === 'yellow' && "bg-yellow-400",
                     nodeType.color === 'blue' && "bg-blue-400",
                     nodeType.color === 'green' && "bg-green-400",

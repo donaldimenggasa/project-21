@@ -1,6 +1,4 @@
 
-
-
 export default () =>{
-    return (<>DASHBOARD ANC</>)
+    return (<>NOT FOUND 404</>)
 }

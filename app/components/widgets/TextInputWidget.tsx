@@ -368,7 +368,7 @@ const componentRenderer: React.FC<WidgetProps> = React.memo(({ component, editor
           required={required}
           className={cn(
             // Base styles
-            'rounded-md border transition-colors duration-200 outline-none',
+            'rounded-md border transition-colors duration-200 outline-hidden',
             // Size
             getSizeClasses(),
             // Variant

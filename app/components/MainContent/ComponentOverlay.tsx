@@ -208,7 +208,7 @@ export const ComponentOverlay = memo(() => {
       {/* Selection Overlay */}
       {selectPosition && (
         <div
-          className="absolute z-[40] transition-all duration-150 ease-out pointer-events-none"
+          className="absolute z-40 transition-all duration-150 ease-out pointer-events-none"
           style={{
             top: selectPosition.top,
             left: selectPosition.left,
@@ -277,7 +277,7 @@ export const ComponentOverlay = memo(() => {
                             placeholder="Search components..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                            className="w-full pl-9 pr-4 py-2 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300 placeholder-gray-500 focus:outline-hidden focus:border-blue-500"
                           />
                         </div>
                       </div>
@@ -329,7 +329,7 @@ export const ComponentOverlay = memo(() => {
       {/* Hover Overlay - Only show if component is not selected */}
       {shouldShowHover && hoverPosition && (
         <div
-          className="absolute z-[40] transition-all duration-150 ease-out pointer-events-none"
+          className="absolute z-40 transition-all duration-150 ease-out pointer-events-none"
           style={{
             top: hoverPosition.top,
             left: hoverPosition.left,

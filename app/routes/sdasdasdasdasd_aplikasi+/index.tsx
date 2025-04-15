@@ -57,7 +57,7 @@ import { useLoaderData } from '@remix-run/react';
 
 const Header = () => {
     return (
-        <header className="bg-white shadow-sm sticky top-0 z-50">
+        <header className="bg-white shadow-xs sticky top-0 z-50">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center h-16 px-6">
                     <div className="flex items-center gap-6">
@@ -67,7 +67,7 @@ const Header = () => {
                             <input
                                 type="text"
                                 placeholder="Search..."
-                                className="pl-10 pr-4 py-2 w-64 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="pl-10 pr-4 py-2 w-64 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
                         </div>
                     </div>
@@ -103,7 +103,7 @@ const Header = () => {
 
 export default function Index() {
     const data = useLoaderData<typeof loader>();
-    return (<div className="min-h-screen bg-gradient-to-br from-[#f1f1ff] to-[#e8e8ff]">
+    return (<div className="min-h-screen bg-linear-to-br from-[#f1f1ff] to-[#e8e8ff]">
         <Header />
         <main className="container mx-auto px-6 py-8">
             <AppGrid menu={data}/>

@@ -326,7 +326,7 @@ export function IntervalNode({ data, id }: IntervalNodeProps) {
             max="1000"
             value={localMaxExecutions}
             onChange={(e) => setLocalMaxExecutions(Math.max(0, parseInt(e.target.value) || 0))}
-            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-none focus:ring-1 focus:ring-orange-500/30"
+            className="w-full bg-gray-800 border border-gray-700 rounded-md px-2 py-1.5 text-xs text-gray-300 focus:outline-hidden focus:ring-1 focus:ring-orange-500/30"
           />
         </div>
         
@@ -354,7 +354,7 @@ export function IntervalNode({ data, id }: IntervalNodeProps) {
     <div className={cn(
       'rounded-lg shadow-lg overflow-hidden relative',
       'border border-orange-500/30',
-      'bg-gradient-to-b from-orange-500/5 to-orange-500/10',
+      'bg-linear-to-b from-orange-500/5 to-orange-500/10',
       'min-w-[240px]',
       isExpanded && 'min-h-[280px]',
       data.isError && 'border-red-500/40 from-red-500/5 to-red-500/10',

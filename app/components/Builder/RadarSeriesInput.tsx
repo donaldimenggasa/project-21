@@ -167,7 +167,7 @@ const RadarSeriesForm = memo(({ series, onSave, onCancel }: RadarSeriesFormProps
                 "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
                 "bg-gray-800 border border-gray-700",
                 "text-gray-200 placeholder-gray-500",
-                "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+                "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
               )}
               placeholder="Mike"
             />
@@ -185,7 +185,7 @@ const RadarSeriesForm = memo(({ series, onSave, onCancel }: RadarSeriesFormProps
                 "w-full px-2.5 py-1.5 text-sm rounded-md transition-colors",
                 "bg-gray-800 border border-gray-700",
                 "text-gray-200 placeholder-gray-500 font-mono",
-                "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+                "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
               )}
               placeholder="A"
             />
@@ -218,7 +218,7 @@ const RadarSeriesForm = memo(({ series, onSave, onCancel }: RadarSeriesFormProps
                   "flex-1 px-2.5 py-1.5 text-sm rounded-md transition-colors",
                   "bg-gray-800 border border-gray-700",
                   "text-gray-200 placeholder-gray-500 font-mono",
-                  "focus:outline-none focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
+                  "focus:outline-hidden focus:ring-1 focus:ring-blue-500/30 focus:border-blue-500/30"
                 )}
               />
             </div>

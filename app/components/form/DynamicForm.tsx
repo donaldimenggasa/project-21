@@ -475,7 +475,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
   };
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-xs flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-auto relative transform transition-all">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div>
@@ -538,7 +538,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
                 <button
                   type="button"
                   onClick={() => setShowConfirmModal(true)}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <X className="h-4 w-4 mr-2" />
                   Cancel
@@ -547,7 +547,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back
@@ -557,7 +557,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
               {isLastStep ? (
                 <button
                   type="submit"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-xs text-white bg-blue-600 hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Save
@@ -566,7 +566,7 @@ export function DynamicForm({ id, fields, onSubmit, onCancel, title = 'Form', in
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-xs text-white bg-blue-600 hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Next
                   <ArrowRight className="h-4 w-4 ml-2" />

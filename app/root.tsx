@@ -1,13 +1,19 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigation} from "@remix-run/react";
+import "./css/style.css";
+import "aos/dist/aos.css";
 import type { LinksFunction } from "@remix-run/node";
-import lodash_fp from "lodash/fp";
-const { compose, join, reject, isBoolean, isNil, flatten } = lodash_fp;
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useNavigation, useLoaderData} from "@remix-run/react";
+import { getThemeSession } from "~/server/theme-server";
 import { useRef, useState, useEffect } from "react";
+import { NonFlashOfWrongThemeEls, ThemeProvider, Theme, useTheme } from "~/providers/theme-provider";
+import lodash_fp from "lodash/fp";
 import AOS from "aos";
+import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import clsx from "clsx";
+const { compose, join, reject, isBoolean, isNil, flatten } = lodash_fp;
 
 
 
-import "./tailwind.css";
+
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -21,28 +27,51 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const themeSession = await getThemeSession(request);
+  const headers_res = new Headers();
+  headers_res.set("Content-Type", "application/json");
+  return new Response(
+    JSON.stringify({
+      theme: themeSession.getTheme(),
+    }),
+    {
+      headers: headers_res,
+      status: 200,
+    }
+  );
+};
+
+
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useLoaderData<typeof loader>();
   return (
-    <html lang="en">
+    <ThemeProvider specifiedTheme={data?.theme}>
+      <html lang="en" className={clsx(data?.theme)}
+      style={{ colorScheme: data?.theme === "dark" ? "dark" : "light" }}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <NonFlashOfWrongThemeEls ssrTheme={Boolean(data?.theme)} />
       </head>
-      <body>
+      <body className="font-inter antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 tracking-tight">
       <GlobalLoading />
         {children}
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+    </ThemeProvider>
+    
   );
 }
 
+
+
 export default function App() {
-
-
   useEffect(() => {
     AOS.init({
       once: true,
@@ -51,11 +80,8 @@ export default function App() {
       easing: "ease-out-sine",
     });
   }, []);
-  
   return <Outlet />;
 }
-
-
 
 
 
@@ -90,7 +116,7 @@ const GlobalLoading = () => {
       <div
         ref={ref}
         className={cx(
-          "h-full bg-gradient-to-r from-blue-400 to-cyan-500 transition-all duration-500 ease-in-out",
+          "h-full bg-linear-to-r from-blue-400 to-cyan-500 transition-all duration-500 ease-in-out",
           navigation.state === "idle" &&
             animationComplete &&
             "w-0 opacity-0 transition-none",
