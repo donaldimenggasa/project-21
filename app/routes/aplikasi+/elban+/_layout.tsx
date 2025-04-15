@@ -78,6 +78,22 @@ export default () => {
       pathname: "/aplikasi/elban",
       children: [],
     },
+
+    {
+      icon: <Star className="w-4 h-4" />,
+      name: "PERALATAN",
+      pathname: "/aplikasi/elban/peralatan-elban",
+      children: [],
+    },
+
+    {
+      icon: <Star className="w-4 h-4" />,
+      name: "KATEGORI PERALATAN",
+      pathname: "/aplikasi/elban/kategori-elban",
+      children: [],
+    },
+
+
   ];
 
   const handleMenuSelect = useCallback(
@@ -101,8 +117,8 @@ export default () => {
             <ChevronLeft className="w-4 h-4" />
             <span className=" font-bold text-sm">DEO AIRPORT - SOQ</span>
           </button>
-          <div>AMC</div>
-          <div>sdas</div>
+          <div>ELEKTRONIKA BANDARA</div>
+          <div>UNIT ELBAN</div>
         </div>
       </header>
 

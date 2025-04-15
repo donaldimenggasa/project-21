@@ -22,27 +22,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         //=================================
         //FOKUS DISINI
         const params = {
-            _model: "x_data_amc",
+            _model: "x_elb_peralatan",
             _spesification: {
-                x_studio_operator: {
+                x_studio_kelompok_peralatan: {
                     fields: {
                         x_name: {},
                     }
                 },
-
-                x_studio_type_pesawat: {
-                    fields: {
-                        x_name: {},
-                    }
-                },
-
-                x_studio_status: {
-                    fields: {
-                        x_name: {},
-                    }
-                },
-
                 
+             
             },
             _domain: [],
             _limit: 50,
@@ -128,35 +116,18 @@ export default () => {
             },
 
             {
-                field: "x_studio_status",
-                headerName: "SCHEDULE",
-                filter: "agTextColumnFilter",
-                width: 150
-            },
-
-            {
-                field: "x_studio_operator",
-                headerName: "OPERATOR",
+                field: "x_studio_kelompok_peralatan",
+                headerName: "KATEGORI PERALATAN",
                 filter: "agTextColumnFilter",
                 width: 150,
                 cellRenderer: (params: any) => {
-                    console.log(params.data?.x_studio_operator?.x_st)
-                    return params.data?.x_studio_operator?.x_name || "-";
+                    console.log(params.data?.x_studio_kelompok_peralatan?.x_st)
+                    return params.data?.x_studio_kelompok_peralatan?.x_name || "-";
                 }
+         
             },
 
-            {
-                field: "x_studio_type_pesawat",
-                headerName: "TYPE PESAWAT",
-                filter: "agTextColumnFilter",
-                width: 150,
-                cellRenderer: (params: any) => {
-                    console.log(params.data?.x_studio_type_pesawat?.x_name)
-                    return  params.data?.x_studio_type_pesawat?.x_name || "-";
-                }
-            },
 
-           
         ];
     }, []);
 
