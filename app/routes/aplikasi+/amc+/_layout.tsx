@@ -78,6 +78,7 @@ export default () => {
     },
 
     {
+
       icon: <ChartNoAxesCombined  className="w-4 h-4 mr-4 text-red-800" />,
       name: "DATA AMC",
       pathname: "/aplikasi/amc/data-amc",
@@ -99,9 +100,17 @@ export default () => {
     },
 
     {
+
       icon: <Tag  className="w-4 h-4 mr-4 text-red-800" />,
       name: "TYPE PESAWAT",
       pathname: "/aplikasi/amc/type-pesawat",
+      children: [],
+    },
+
+    {
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
+      name: "PERKING STAND",
+      pathname: "/aplikasi/amc/parking-stand",
       children: [],
     },
 
@@ -126,10 +135,10 @@ export default () => {
             onClick={() => navigate("/aplikasi")}
           >
             <ChevronLeft className="w-4 h-4 "/>
-            <span className=" font-bold text-sm">DEO AIRPORT - SOQ</span>
+            <span className=" font-bold text-sm text-red-600">DEO AIRPORT - SOQ</span>
           </button>
-          <div>APRON MOVEMENT CONTROL</div>
-          <div>UNIT AMC</div>
+          <span className="font-bold text-sm">APRON MOVEMENT CONTROL</span>
+          <span className="font-bold text-sm">UNIT AMC</span>
         </div>
       </header>
 
@@ -159,7 +168,7 @@ export default () => {
           })}
           </div>
           <div>
-            <button className=" bg-blue-700 text-xs rounded-sm px-2 py-1">
+            <button className=" bg-blue-700 text-xs rounded-sm px-2 py-1 text-white">
               CREATE
             </button>
           </div>

@@ -1,6 +1,6 @@
 
 import { Outlet, useNavigate } from "@remix-run/react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, LayoutGrid } from "lucide-react";
 import React, { useState, useCallback, Fragment } from "react";
 import clsx from "clsx";
 
@@ -73,23 +73,30 @@ export default () => {
   const navigate = useNavigate();
   const menu: MenuItem[] = [
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <LayoutGrid className="w-4 h-4 text-blue-600" />,
       name: "DASHBOARD ELBAN",
       pathname: "/aplikasi/elban",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <LayoutGrid className="w-4 h-4 text-blue-600" />,
       name: "PERALATAN",
       pathname: "/aplikasi/elban/peralatan-elban",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4" />,
+      icon: <LayoutGrid className="w-4 h-4 text-blue-600" />,
       name: "KATEGORI PERALATAN",
       pathname: "/aplikasi/elban/kategori-elban",
+      children: [],
+    },
+
+    {
+      icon: <LayoutGrid className="w-4 h-4 text-blue-600" />,
+      name: "KELOMPOK PERALATAN",
+      pathname: "/aplikasi/elban/kelompok-elban",
       children: [],
     },
 

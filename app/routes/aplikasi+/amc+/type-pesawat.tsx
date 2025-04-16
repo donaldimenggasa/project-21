@@ -22,9 +22,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         //=================================
         //FOKUS DISINI
         const params = {
-            _model: "x_data_amc",
+            _model: "x_data_type_pesawat",
             _spesification: {
-                x_studio_type_pesawat: {
+                x_name: {},
+                x_studio_mtow: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_kapasitas_penumpang: {
                     fields: {
                         x_name: {},
                     }
@@ -116,14 +123,24 @@ export default () => {
             },
 
             {
-                field: "x_studio_type_pesawat",
+                field: "x_name",
                 headerName: "TYPE PESAWAT",
                 filter: "agTextColumnFilter",
                 width: 150,
-                cellRenderer: (params: any) => {
-                    console.log(params.data?.x_studio_type_pesawat?.x_name)
-                    return  params.data?.x_studio_type_pesawat?.x_name || "-";
-                }
+            },
+
+            {
+                field: "x_studio_mtow",
+                headerName: "MTOW",
+                filter: "agTextColumnFilter",
+                width: 100,
+            },
+
+            {
+                field: "x_studio_kapasitas_penumpang",
+                headerName: "KAPASITAS PENUMPANG",
+                filter: "agTextColumnFilter",
+                width: 200,
             },
 
            

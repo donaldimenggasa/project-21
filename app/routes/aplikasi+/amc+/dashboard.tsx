@@ -177,7 +177,7 @@ export default () => {
 
             {
                 field: "x_studio_reg_number",
-                headerName: "NOMOR REGISTRASI",
+                headerName: "NO REGISTRASI",
                 filter: "agTextColumnFilter",
                 width: 150,
             },
@@ -198,10 +198,6 @@ export default () => {
                 headerName: "ARRIVAL",
                 filter: "agTextColumnFilter",
                 width: 150,
-                cellRenderer: (params: any) => {
-                    console.log(params.data?.x_studio_from?.x_name)
-                    return  params.data?.x_studio_from?.x_name || "-";
-                }
             },
 
             {
@@ -209,10 +205,6 @@ export default () => {
                 headerName: "DEPARTURES",
                 filter: "agTextColumnFilter",
                 width: 150,
-                cellRenderer: (params: any) => {
-                    console.log(params.data?.x_studio_destination?.x_name)
-                    return  params.data?.x_studio_destination?.x_name || "-";
-                }
             },
 
             {
