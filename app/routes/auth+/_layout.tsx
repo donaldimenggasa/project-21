@@ -8,24 +8,26 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+
 export default function Index() {
   const { pathname } = useLocation();
-  const showSidebar = pathname.startsWith("/aplikasi/internal/amc");
   return (
-    <div className="h-screen overflow-hidden">
-      <div className="flex h-full">
-        {showSidebar && (
-          <div className="hidden md:flex md:w-64 md:flex-col">
-            {/** <Sidebar /> */}
-          </div>
-        )}
-        <div className="flex flex-1 flex-col">
-          {/**<Header /> */}
-          <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 mt-12 ">
-            <Outlet />
-          </main>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-red-950 to-red-800 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="flex h-full w-full items-center justify-center">
+        <Outlet />
       </div>
     </div>
   );
 }
+
+/*
+export default function Index() {
+  const { pathname } = useLocation();
+  return (
+    <div className="min-h-screen ">
+      <div className="flex h-full w-full items-center justify-center">
+        <Outlet />
+      </div>
+    </div>
+  );
+}*/

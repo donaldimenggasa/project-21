@@ -7,17 +7,23 @@ interface InputOTPProps {
   onChange: (value: string) => void;
   maxLength?: number;
   className?: string;
+  response?: any;
 }
 
-export default function InputOTP({ value, onChange, maxLength = 6, className }: InputOTPProps) {
+
+
+export default function InputOTP({ value, onChange, maxLength = 6, className, response }: InputOTPProps) {
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
+ 
 
   React.useEffect(() => {
-    // Initialize refs array
     inputRefs.current = inputRefs.current.slice(0, maxLength);
-    // Focus first input on mount
-    inputRefs.current[0]?.focus();
-  }, [maxLength]);
+    if(value === ''){
+      inputRefs.current[0]?.focus();
+    }
+  }, [maxLength, value]);
+
+
 
   const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const newChar = e.target.value.slice(-1);
@@ -69,7 +75,15 @@ export default function InputOTP({ value, onChange, maxLength = 6, className }: 
   };
 
   return (
-    <div className={cn("flex justify-center gap-2", className)}>
+    <React.Fragment>
+
+
+    {response?.errors &&( <div className="text-red-500 text-sm m-2 text-center flex justify-center">
+          {response?.errors?.general || response?.errors?.message}
+        </div>)}
+   
+
+      <div className={cn("flex justify-center gap-2")}>
       {Array.from({ length: maxLength }).map((_, index) => (
         <input
           key={index}
@@ -92,5 +106,9 @@ export default function InputOTP({ value, onChange, maxLength = 6, className }: 
         />
       ))}
     </div>
+
+   
+    </React.Fragment>
+    
   );
 }

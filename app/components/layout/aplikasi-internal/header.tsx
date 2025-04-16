@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from 'react';
+import { useFetcher } from "@remix-run/react";
 import {  ChevronDown, Grid, Plus,User, Settings, LogOut, Mail } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -87,7 +88,7 @@ type FilterOptionType = {
 
 
 export function Header() {
- 
+  const  fetcher = useFetcher();
   const { toast } = useToast();
   const [currentEmployee, setCurrentEmployee] = useState<any>({
     name: '',
@@ -102,7 +103,17 @@ export function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('/api/auth/logout', {
+      fetcher.submit(
+        {
+          _token : "logout",
+        },
+        {
+          method: "POST",
+          encType: "application/json",
+          action: "/auth/logout/internal",
+        }
+      );
+     /* const response = await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,13 +127,13 @@ export function Header() {
         //router.replace('/login/internal');
       } else {
         throw new Error('Logout failed');
-      }
+      }*/
     } catch (error) {
-      toast({
+      /*toast({
         title: "Error",
         description: "Failed to logout",
         variant: "destructive",
-      });
+      });*/
     }
   };
 

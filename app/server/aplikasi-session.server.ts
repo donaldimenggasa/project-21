@@ -38,5 +38,17 @@ async function getAuthSession(request: Request) {
     commit: () => authStorage.commitSession(session),
   };
 }
-export { getAuthSession };
+
+
+async function logout(request: Request) {
+  const session = await authStorage.getSession(request.headers.get('Cookie'));
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await authStorage.destroySession(session),
+    },
+  });
+}
+
+
+export { getAuthSession, logout };
 
