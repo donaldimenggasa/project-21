@@ -1,6 +1,6 @@
 
 import { Outlet, useNavigate, useLocation } from "@remix-run/react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, ChartColumnStacked, Plane, ChartNoAxesCombined, ChartPie, Tag  } from "lucide-react";
 import React, { useState, useCallback, Fragment } from "react";
 import clsx from "clsx";
 
@@ -71,35 +71,35 @@ export default () => {
 
   const menu: MenuItem[] = [
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <ChartColumnStacked className="w-4 h-4 mr-4 text-red-800" />,
       name: "DASHBOARD AMC",
       pathname: "/aplikasi/amc/dashboard",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <ChartNoAxesCombined  className="w-4 h-4 mr-4 text-red-800" />,
       name: "DATA AMC",
       pathname: "/aplikasi/amc/data-amc",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <Plane className="w-4 h-4 mr-4 text-red-800" />,
       name: "DATA OPERATOR",
       pathname: "/aplikasi/amc/data-operator",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <ChartPie  className="w-4 h-4 mr-4 text-red-800" />,
       name: "DATA AIRPORT",
       pathname: "/aplikasi/amc/data-airport",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <Tag  className="w-4 h-4 mr-4 text-red-800" />,
       name: "TYPE PESAWAT",
       pathname: "/aplikasi/amc/type-pesawat",
       children: [],
