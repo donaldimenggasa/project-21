@@ -23,6 +23,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         const params = {
             _model: "x_data_airport",
             _spesification: {
+                x_name: {},
                 x_studio_nama_bandara: {
                     fields: {
                         x_name: {},
@@ -123,31 +124,42 @@ export default () => {
                 width: 90,
                 cellStyle: { textAlign: "center" },
             },
+
+            {
+                field: "x_name",
+                headerName: "ICAO CODE",
+                filter: "agTextColumnFilter",
+                width: 120,
+            },
+
             {
                 field: "x_studio_nama_bandara",
                 headerName: "AIRPORT",
                 filter: "agTextColumnFilter",
-                width: 150,
+                width: 250,
             },
+
             {
                 field: "x_studio_kota",
                 headerName: "KOTA",
                 filter: "agTextColumnFilter",
-                width: 150,
+                width: 100,
          
             },
+
             {
                 field: "x_studio_lat",
                 headerName: "LAT",
                 filter: "agTextColumnFilter",
-                width: 150,
+                width: 100,
          
             },
+
             {
                 field: "x_studio_lang",
                 headerName: "LANG",
                 filter: "agTextColumnFilter",
-                width: 150,
+                width: 100,
          
             },
 
