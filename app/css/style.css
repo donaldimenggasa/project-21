@@ -578,11 +578,12 @@
   --ag-input-focus-box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.25);
 }
 
+
+
 .ag-theme-alpine .ag-header-cell {
   font-weight: 500;
   font-size: 12px;
   text-transform: none;
-  border-right: solid 1px #e9ecef;
 }
 
 .ag-theme-alpine .ag-header-row {
@@ -602,10 +603,7 @@
 }
 
 .ag-theme-alpine .ag-cell {
-  font-size: 12px;
-  line-height: 20px;
-  padding-left: 8px;
-  padding-right: 8px;
+  @apply text-xs h-full flex items-center;
 }
 
 .ag-theme-alpine .ag-cell-focus {

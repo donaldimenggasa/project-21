@@ -8,7 +8,6 @@ import { useLoaderData, useLocation, useNavigation, useSearchParams } from "@rem
 import { getData } from "~/server/get-odoo-view";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-import { fields } from "~/server/db/schema/yori_builder";
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 
@@ -19,6 +18,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     headers_res.set("Content-Type", "application/json");
 
     try {
+        const url = new URL(request.url);
+        const skip = Number(url.searchParams.get("skip")) || 0;
+        const limit = Number(url.searchParams.get("limit")) || 10;
+        const filters: Record<string, string> = {};
+        for (const [key, value] of url.searchParams.entries()) {
+            if (key.startsWith('filter_')) {
+                filters[key.replace('filter_', '')] = value;
+            }
+        }
         //=================================
         //FOKUS DISINI
         const params = {
@@ -29,68 +37,45 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
                         x_name: {},
                     }
                 },
-
                 x_studio_type_pesawat: {
                     fields: {
                         x_name: {},
                     }
                 },
-
                 x_studio_reg_number: {
                     fields: {
                         x_name: {},
                     }
                 },
-
                 x_studio_status: {
                     fields: {
                         x_name: {},
                     }
                 },
-
                 x_studio_from: {
                     fields: {
                         x_name: {},
                     }
                 },
-
                 x_studio_destination: {
                     fields: {
                         x_name: {},
                     }
                 },
-
-                x_studio_ata: {
-                    fields: {
-                        x_name: {},
-                    }
-                },
-
-                x_studio_atd: {
-                    fields: {
-                        x_name: {},
-                    }
-                },
+                x_studio_ata: {},
+                x_studio_atd: {},
 
                 
             },
             _domain: [],
-            _limit: 50,
-            _offset: 0,
+            _limit: limit,
+            _offset:skip,
             _order: "id ASC",
         };
         //=================================
-        const url = new URL(request.url);
-        const skip = Number(url.searchParams.get("skip")) || 0;
-        const limit = Number(url.searchParams.get("limit")) || 10;
-
-        // Get filter parameters
-        const filters: Record<string, string> = {};
-        for (const [key, value] of url.searchParams.entries()) {
-            if (key.startsWith('filter_')) {
-                filters[key.replace('filter_', '')] = value;
-            }
-        }
+        
+        
+        
         // Build query string for filtering
         let queryString = `limit=${limit}&skip=${skip}`;
         if (Object.keys(filters).length > 0) {
@@ -276,7 +261,6 @@ export default () => {
                 newParams.set('limit', (params.endRow - params.startRow).toString());
                 setSearchParams(newParams, { replace: true });
             }
-
             params.successCallback(records, length);
         }
     }), [searchParams, records, length, isLoading, navigation.state]);
@@ -318,7 +302,7 @@ export default () => {
               cacheBlockSize={10}
               maxBlocksInCache={1}
               infiniteInitialRowCount={length}
-              rowClass="hover:bg-gray-50"
+              rowClass="hover:bg-gray-50 h-full flex items-center justify-center"
               enableCellTextSelection={true}
               animateRows={true}
               loadingOverlayComponent="loadingOverlay"
