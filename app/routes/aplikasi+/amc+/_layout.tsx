@@ -1,6 +1,6 @@
 
 import { Outlet, useNavigate, useLocation } from "@remix-run/react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, LayoutGrid } from "lucide-react";
 import React, { useState, useCallback, Fragment } from "react";
 import clsx from "clsx";
 
@@ -71,37 +71,44 @@ export default () => {
 
   const menu: MenuItem[] = [
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
       name: "DASHBOARD AMC",
       pathname: "/aplikasi/amc/dashboard",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
       name: "DATA AMC",
       pathname: "/aplikasi/amc/data-amc",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
       name: "DATA OPERATOR",
       pathname: "/aplikasi/amc/data-operator",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
       name: "DATA AIRPORT",
       pathname: "/aplikasi/amc/data-airport",
       children: [],
     },
 
     {
-      icon: <Star className="w-4 h-4 mr-4" />,
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
       name: "TYPE PESAWAT",
       pathname: "/aplikasi/amc/type-pesawat",
+      children: [],
+    },
+
+    {
+      icon: <LayoutGrid className="w-4 h-4 mr-4 text-blue-600" />,
+      name: "PERKING STAND",
+      pathname: "/aplikasi/amc/parking-stand",
       children: [],
     },
 
@@ -126,10 +133,10 @@ export default () => {
             onClick={() => navigate("/aplikasi")}
           >
             <ChevronLeft className="w-4 h-4 "/>
-            <span className=" font-bold text-sm">DEO AIRPORT - SOQ</span>
+            <span className=" font-bold text-sm text-red-600">DEO AIRPORT - SOQ</span>
           </button>
-          <div>APRON MOVEMENT CONTROL</div>
-          <div>UNIT AMC</div>
+          <span className="font-bold text-sm">APRON MOVEMENT CONTROL</span>
+          <span className="font-bold text-sm">UNIT AMC</span>
         </div>
       </header>
 
@@ -159,7 +166,7 @@ export default () => {
           })}
           </div>
           <div>
-            <button className=" bg-blue-700 text-xs rounded-sm px-2 py-1">
+            <button className=" bg-blue-700 text-xs rounded-sm px-2 py-1 text-white">
               CREATE
             </button>
           </div>

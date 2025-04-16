@@ -30,6 +30,24 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
                         x_name: {},
                     }
                 },
+
+                x_studio_type: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_no_seri: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
+
+                x_studio_kode_lokasi: {
+                    fields: {
+                        x_name: {},
+                    }
+                },
              
             },
             _domain: [],
@@ -131,6 +149,27 @@ export default () => {
                     console.log(params.data?.x_studio_kelompok_peralatan?.x_st)
                     return params.data?.x_studio_kelompok_peralatan?.x_name || "-";
                 }
+            },
+
+            {
+                field: "x_studio_type",
+                headerName: "TYPE PERALATAN",
+                filter: "agTextColumnFilter",
+                width: 150,
+            },
+
+            {
+                field: "x_studio_no_seri",
+                headerName: "NO.SERI PERALATAN",
+                filter: "agTextColumnFilter",
+                width: 150,
+            },
+
+            {
+                field: "x_studio_kode_lokasi",
+                headerName: "LOKASI",
+                filter: "agTextColumnFilter",
+                width: 150,
             },
 
 

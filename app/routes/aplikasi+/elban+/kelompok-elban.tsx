@@ -22,10 +22,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         //=================================
         //FOKUS DISINI
         const params = {
-            _model: "x_el_kategori_peralata",
+            _model: "x_elb_kelompok_peralat",
             _spesification: {
                 x_name: {},
-                x_studio_related_field_811_1i5cijkbj: {
+                x_studio_code: {
                     fields: {
                         x_name: {},
                     }
@@ -118,18 +118,23 @@ export default () => {
             },
 
             {
-                field: "x_studio_related_field_811_1i5cijkbj",
+                field: "x_studio_code",
                 headerName: "KODE KEL.PERALATAN",
                 filter: "agTextColumnFilter",
                 width: 150,
+
+         
             },
 
             {
                 field: "x_name",
-                headerName: "KATEGORI PERALATAN",
+                headerName: "KELOMPOK PERALATAN",
                 filter: "agTextColumnFilter",
                 width: 150,
+
+         
             },
+
 
         ];
     }, []);
