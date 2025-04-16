@@ -22,16 +22,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         //=================================
         //FOKUS DISINI
         const params = {
-            _model: "x_el_kategori_peralata",
+            _model: "x_data_parking_stand",
             _spesification: {
                 x_name: {},
-                x_studio_related_field_811_1i5cijkbj: {
+                x_studio_garbarata: {
                     fields: {
                         x_name: {},
                     }
                 },
-
-                
+            
              
             },
             _domain: [],
@@ -118,18 +117,19 @@ export default () => {
             },
 
             {
-                field: "x_studio_related_field_811_1i5cijkbj",
-                headerName: "KODE KEL.PERALATAN",
+                field: "x_name",
+                headerName: "PARKING STAND",
                 filter: "agTextColumnFilter",
                 width: 150,
             },
 
             {
-                field: "x_name",
-                headerName: "KATEGORI PERALATAN",
+                field: "x_studio_garbarata",
+                headerName: "GARBARATA",
                 filter: "agTextColumnFilter",
                 width: 150,
             },
+           
 
         ];
     }, []);
