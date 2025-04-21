@@ -206,8 +206,6 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const headers_res = new Headers();
   headers_res.set("Content-Type", "application/json");
-
-
   try {
     const result = await db.query.project_groups.findMany({
       with: {

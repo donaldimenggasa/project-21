@@ -1,12 +1,15 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getOtpSession } from "~/server/otp-session-server";
-import { getAuthSession } from "~/server/aplikasi-session.server";
 import { Form, useActionData, useNavigation, useLoaderData, useFetcher } from "@remix-run/react";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import axios from "axios";
 import { z } from "zod";
 import InputOtp from "~/components/form/input-otp";
-import { Fragment, useCallback, useEffect, useState, useRef } from "react";
+import {  useCallback, useEffect, useState, useRef } from "react";
+import { redis } from "~/server/redis-db.server.js";
+import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
+
 
 const countries = [
   { name: "Indonesia", code: "ID", dialCode: "62", flag: "🇮🇩" },
@@ -14,8 +17,9 @@ const countries = [
   { name: "Singapore", code: "SG", dialCode: "65", flag: "🇸🇬" },
   { name: "United States", code: "US", dialCode: "1", flag: "🇺🇸" },
   { name: "United Kingdom", code: "GB", dialCode: "44", flag: "🇬🇧" },
-  { name: "Australia", code: "AU", dialCode: "61", flag: "🇦🇺" }
+  { name: "Australia", code: "AU", dialCode: "61", flag: "🇦🇺" },
 ];
+
 
 function phone(schema: z.ZodString) {
   return schema
@@ -23,9 +27,10 @@ function phone(schema: z.ZodString) {
     .transform((value) => parsePhoneNumber(value).number.toString());
 }
 
-const LoginSchema = z.object({
-  phoneNumber: phone(z.string()),
+const LoginSchema = z.object({ 
+  phoneNumber: phone(z.string()) 
 });
+
 
 type ActionData = {
   showOtp: boolean;
@@ -38,6 +43,8 @@ type ActionData = {
 function generate6DigitCode() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
+
 
 const generateTextToken = (targetUsers: any, code: any) => {
   const message = `
@@ -52,18 +59,27 @@ _deoairport - sideo v.1.5.3_`;
   return message;
 };
 
-export const action = async ({ request, context }: ActionFunctionArgs & {
-  context: { whatsappSocket: { sendMessage: (jid: string, message: { text: string }) => Promise<void>;};};
+
+
+export const action = async ({
+  request,
+  context,
+}: ActionFunctionArgs & {
+  context: {
+    whatsappSocket: {
+      sendMessage: (jid: string, message: { text: string }) => Promise<void>;
+    };
+  };
 }) => {
 
+  const { sessionStorage, getSession, whatsappSocket } = context;
   const headers_res = new Headers();
   headers_res.set("Content-Type", "application/json");
-  const { whatsappSocket } = context;
   const formData = await request.formData();
   const phoneNumber = formData.get("phoneNumber");
   const __action = formData.get("__action");
 
-  if (__action === 'requestOtp') {
+  if (__action === "requestOtp") {
     try {
       const validatedData = LoginSchema.parse({ phoneNumber });
       if (typeof phoneNumber !== "string") {
@@ -114,24 +130,32 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
           )`,
         ],
       };
-      const { data: { result } } = await axios({
+      const {
+        data: { result },
+      } = await axios({
         url: `${process.env.ODOO_PROTOCOL}//${process.env.ODOO_HOST}:${process.env.ODOO_PORT}/internal-action`,
         method: "POST",
         data: postRequest,
       });
 
-
       if (result[0].error) {
         throw new Error(result.error?.message || "Terjadi kesalahan");
       }
-
 
       if (result[0].length === 0 || result[0] === null) {
         throw new Error("Nomor telepon tidak terdaftar");
       }
 
-
+      const hasing = uuidv4();
       const currentUser = result[0].records[0];
+
+      await redis.set(
+        `temp-otp-${hasing}`,
+        JSON.stringify(currentUser),
+        "EX",
+        36000
+      );
+
       const code = generate6DigitCode();
       let nomorTanpaPlus = phoneNumber.replace(/^\+/, "");
       const jid = `${nomorTanpaPlus}@s.whatsapp.net`;
@@ -141,7 +165,7 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
       const otpSession = await getOtpSession(request);
       const token = code;
       let timer = new Date();
-      otpSession.setToken({ token, timer });
+      otpSession.setToken({ token, timer, hasing: `temp-otp-${hasing}` });
       headers_res.append("Set-Cookie", await otpSession.commit());
 
       return new Response(JSON.stringify({ success: true }), {
@@ -150,11 +174,14 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const errors = error.issues.reduce((acc: any, issue) => {
-          const path = issue.path[0] as keyof ActionData["errors"];
-          acc[path] = issue.message;
-          return acc;
-        }, {} as ActionData["errors"]);
+        const errors = error.issues.reduce(
+          (acc: any, issue) => {
+            const path = issue.path[0] as keyof ActionData["errors"];
+            acc[path] = issue.message;
+            return acc;
+          },
+          {} as ActionData["errors"]
+        );
 
         return new Response(JSON.stringify({ errors }), {
           status: 400,
@@ -165,7 +192,10 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
       return new Response(
         JSON.stringify({
           errors: {
-            general: error instanceof Error ? error.message : "Terjadi kesalahan saat login",
+            general:
+              error instanceof Error
+                ? error.message
+                : "Terjadi kesalahan saat login",
           },
         }),
         {
@@ -176,17 +206,17 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
     }
   }
 
-  if (__action === 'verifikasiOtp') {
+  if (__action === "verifikasiOtp") {
     const otpClient = formData.get("otp");
     const otpSession = await getOtpSession(request);
-    const { token, timer } = otpSession.getToken();
+    const { token, timer, hasing } = otpSession.getToken();
 
     if (otpClient !== token) {
       return new Response(
         JSON.stringify({
           errors: {
-            general: "Kode OTP tidak valid"
-          }
+            general: "Kode OTP tidak valid",
+          },
         }),
         {
           status: 400,
@@ -196,14 +226,103 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
     }
 
     const headers_redirect = new Headers();
-    const authSession = await getAuthSession(request);
-    authSession.setUserId('1');
+    const userData = await redis.get(hasing);
+
+    if (!userData) {
+      return new Response(
+        JSON.stringify({
+          errors: {
+            general: "User not found",
+          },
+        }),
+        {
+          status: 400,
+          headers: headers_res,
+        }
+      );
+    }
+
+    if (!process.env.ADMIN_JWT_SECRET) {
+      throw new Error(
+        "ADMIN_JWT_SECRET is not defined in the environment variables"
+      );
+    }
+
+    const user = JSON.parse(userData);
+    const __hasing = uuidv4();
+
+    const { data, headers } = await axios({
+      method: "POST",
+      url: `${process.env.LOWCODER_PROTOCOL}//${process.env.LOWCODER_HOST}:${process.env.LOWCODER_PORT}/api/auth/form/login`,
+      data: {
+        loginId: "zlock88@gmail.com",
+        password: "WOLV@wolv**011988",
+        register: false,
+        source: "EMAIL",
+        authId: "EMAIL",
+      },
+    });
+
+    // console.log(headers)
+
+    const cookieString = headers["set-cookie"]?.[0];
+    const match = cookieString.match(/LOWCODER_CE_SELFHOST_TOKEN=([^;]+)/);
+    if (!match) {
+      return new Response(
+        JSON.stringify({
+          code: "ERR-000EB1",
+          message: "GAGAL MELAKUKAN AUTENTIKASI USER",
+        }),
+        {
+          headers: headers_res,
+          status: 401,
+        }
+      );
+    }
+
+    const session = await getSession(request);
+    session.set("user_login", `internal-user-${__hasing}`);
+    headers_redirect.append("Content-Type", "application/json");
+    headers_redirect.append(
+      "Set-Cookie",
+      await sessionStorage.commitSession(session, {
+        maxAge: true
+          ? 60 * 60 * 24 * 7 // 7 days
+          : undefined,
+      })
+    );
+    headers_redirect.append("Set-Cookie", await otpSession.destroySession());
+
+    const LOWCODER_CE_SELFHOST_TOKEN = match[1];
+    //console.log(LOWCODER_CE_SELFHOST_TOKEN)
+    await redis.set(
+      `internal-user-${__hasing}`,
+      JSON.stringify({
+        ...user,
+        LOWCODER_CE_SELFHOST_TOKEN,
+      }),
+      "EX",
+      36000
+    );
+    //const userId = user.user_id?.login;
+
+    const accessToken = jwt.sign({ token: `internal-user-${__hasing}` }, process.env.ADMIN_JWT_SECRET, { expiresIn: "10h" });
+    return new Response(
+      JSON.stringify({
+        token: accessToken,
+      }),
+      {
+        headers: headers_redirect,
+      }
+    );
+
+    /*authSession.setUserId(user.user_id?.login);
     headers_redirect.append("Set-Cookie", await authSession.commit());
     headers_redirect.append("Set-Cookie", await otpSession.destroySession());
     return redirect("/aplikasi/internal", {
       status: 301,
       headers: headers_redirect,
-    });
+    });*/
   }
 
   return new Response(
@@ -218,8 +337,6 @@ export const action = async ({ request, context }: ActionFunctionArgs & {
     }
   );
 };
-
-
 
 
 
@@ -266,6 +383,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 };
 
+
+
+
+
 export default function LoginInternal() {
   const actionData = useActionData<ActionData>();
   const { showOtp, waktuMulai } = useLoaderData<typeof loader>();
@@ -301,9 +422,6 @@ export default function LoginInternal() {
 
 
 
-
-
-
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (showOtp && timeLeft > 0) {
@@ -321,14 +439,13 @@ export default function LoginInternal() {
 
   const submitVerifikasiOtp = useCallback((otp: string) => {
     const data = new FormData();
-    data.append('otp', otp);
-    data.append('__action', 'verifikasiOtp');
+    data.append("otp", otp);
+    data.append("__action", "verifikasiOtp");
     fetcher.submit(data, {
-      method: 'POST'
+      method: "POST",
     });
-    setOtp(() => '');
+    setOtp(() => "");
   }, []);
-
 
 
 
@@ -338,13 +455,12 @@ export default function LoginInternal() {
     }
   }, [otp, submitVerifikasiOtp]);
 
-
-
-
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -355,10 +471,11 @@ export default function LoginInternal() {
 
 
 
-  const handleCountrySelect = (country: typeof countries[0]) => {
+  const handleCountrySelect = (country: (typeof countries)[0]) => {
     setSelectedCountry(country);
     setShowDropdown(false);
   };
+
 
 
 
@@ -397,8 +514,16 @@ export default function LoginInternal() {
             <div className="mb-4 rounded-md bg-red-50 dark:bg-red-900/50 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <svg
+                    className="h-5 w-5 text-red-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </div>
                 <div className="ml-3">
@@ -441,10 +566,22 @@ export default function LoginInternal() {
                     className="country-selector"
                     onClick={() => setShowDropdown(!showDropdown)}
                   >
-                    <span className="mr-2">{selectedCountry.flag}</span>
-                    +{selectedCountry.dialCode}
-                    <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+                    <span className="mr-2">{selectedCountry.flag}</span>+
+                    {selectedCountry.dialCode}
+                    <svg
+                      className="w-2.5 h-2.5 ms-2.5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 10 6"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 4 4 4-4"
+                      />
                     </svg>
                   </button>
 

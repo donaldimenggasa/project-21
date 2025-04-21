@@ -41,6 +41,8 @@ export const project_pages = pgTable("x_projects_line_75ab2", {
     id: serial("id").primaryKey(),
     x_projects_id : integer("x_projects_id").references(() => projects.id, { onDelete: "set null" }).default(sql`NULL`),
     x_name: jsonb("x_name"),
+    x_studio_pathname : varchar("x_studio_pathname"),
+    x_studio_lowcoder_uuid : varchar("x_studio_lowcoder_uuid"),
     prod_state : jsonb("x_studio_prod_snapshot"),
     state: jsonb("x_studio_state"),
     ...default_field

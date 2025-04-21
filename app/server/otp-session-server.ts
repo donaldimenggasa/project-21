@@ -12,17 +12,21 @@ const themeStorage = createCookieSessionStorage({
   },
 });
 
+
+
 async function getOtpSession(request: Request) {
   const session = await themeStorage.getSession(request.headers.get('Cookie'));
   return {
     getToken: () => {
       const token = session.get('otpToken');
       const timer = session.get('otpTimer');
-      return {token, timer };
+      const hasing = session.get('hasing');
+      return {token, timer, hasing };
     },
-    setToken: ({ token , timer }: any) => {
+    setToken: ({ token , timer, hasing }: any) => {
       session.set('otpToken', token);
-      session.set('otpTimer', timer)
+      session.set('otpTimer', timer);
+      session.set('hasing', hasing);
     },
     commit: () => themeStorage.commitSession(session),
     destroySession : () => themeStorage.destroySession(session)

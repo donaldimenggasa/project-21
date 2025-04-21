@@ -493,7 +493,6 @@ app.use(async (req, res, next) => {
 
 // INTERNAL API -- REQUEST API - MIDDLEWARE
 app.use(async (req, res, next) => {
-  
   const pathRegex = /^\/aplikasi\/internal.*\/api(\/|$)/;
   const excludedPaths = [
     "/aplikasi/internal/api/login",
@@ -501,21 +500,34 @@ app.use(async (req, res, next) => {
     "/aplikasi/internal/api/reset-password"
   ];
 
-
   if (excludedPaths.includes(req.path)) {
     return next();
   }
   
-
   if (pathRegex.test(req.path)) {
     console.log(`Middleware dijalankan untuk path: ${req.path}`);
     try {
       const jwt_token = req.headers['authorization'];
-      const appRetoolId = req.headers['application-id'];
       if (!jwt_token || !jwt_token.startsWith('Bearer ')) {
-        res.clearCookie('aplikasi'); 
-        return res.status(401).json({ error: 'Unauthorized: Token tidak ditemukan' });
+        const session_request = await sessionStorage.getSession(req.headers.cookie);
+        const user_login = await session_request.get('user_login');
+        if(!user_login){
+          res.clearCookie('aplikasi'); 
+          return res.status(401).json({ error: 'Unauthorized: Token tidak ditemukan' });
+        }
+        
+        const raw_session = await redis.get(user_login);
+        if (!raw_session) {
+          res.clearCookie('aplikasi');
+          return res.redirect(`/auth/login/internal`);
+        }
+
+        const currentSession = JSON.parse(raw_session);
+        res.current_user = currentSession;
+        return next();
       }
+
+
 
       const token = jwt_token.replace('Bearer ', '');
       const decode_jwt = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
@@ -523,44 +535,24 @@ app.use(async (req, res, next) => {
 
       if (!raw_session) {
         console.log("Session tidak valid di Redis");
-        res.clearCookie('aplikasi'); 
+        //res.clearCookie('aplikasi'); 
         return res.status(401).json({ error: 'Unauthorized: Session tidak valid' });
       }
       
-      
-      const aplikasi_internal = await redis.get("aplikasi_internal");
-      const aplikasi_internal_array = JSON.parse(aplikasi_internal);
-      const aplikasi_target = aplikasi_internal_array.find((item)=>item.x_studio_retool_uuid === appRetoolId);
-      
-      if(!aplikasi_target){
-        await redis.del(decode_jwt.token);
-        res.clearCookie('aplikasi'); 
-        return res.status(401).json({ error: 'Unauthorized: By pas Session Detection' });
-      }
-
       const curent_employed = JSON.parse(raw_session);
-
       if(curent_employed.scopeApp !== 'internal'){
-        await redis.del(decode_jwt.token);
-        res.clearCookie('aplikasi');
+        //await redis.del(decode_jwt.token);
+        //res.clearCookie('aplikasi');
         return res.status(401).json({ error: 'Unauthorized: only for internal user' });
       }
 
 
-      const is_allow_access_langsung = aplikasi_target.x_studio_akses_langsung_internal.some(item => item.x_studio_personil.id === curent_employed.id);
-      if(!is_allow_access_langsung){
-        if(aplikasi_target.x_studio_departement?.id !== curent_employed.department?.id){
-          await redis.del(decode_jwt.token);
-          res.clearCookie('aplikasi'); 
-          return res.status(401).json({ error: 'Unauthorized: only Authorized unit' });
-        }
-      }
 
       res.current_user = curent_employed;
     } catch (error) {
       res.current_user = null;
       console.error("Error saat memeriksa session:", error);
-      res.clearCookie('aplikasi'); 
+      //res.clearCookie('aplikasi'); 
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'internal service offline'
@@ -706,20 +698,21 @@ app.use(async (req, res, next) => {
   if (pathRegex.test(req.path)) {
     try {
       const session_request = await sessionStorage.getSession(req.headers.cookie);
-      const user_login = await session_request.get('userIdInternal');
+      const user_login = await session_request.get('user_login');
 
       if(!user_login){
         res.clearCookie('aplikasi'); 
         return res.redirect(`/auth/login/internal`);
       }
 
-      //const curent_employed = JSON.parse(raw_session);
-      //if(curent_employed.scopeApp !== 'internal'){
-       //   res.clearCookie('aplikasi'); 
-       //   return res.redirect(`/auth/login/internal`);
-      //}
-     // console.log(curent_employed);
-      res.current_user = user_login;
+      const raw_session = await redis.get(user_login);
+      if (!raw_session) {
+        res.clearCookie('aplikasi');
+        return res.redirect(`/auth/login/internal`);
+      }
+
+      const currentSession = JSON.parse(raw_session);
+      res.current_user = currentSession;
     } catch (error) {
       console.error("Error saat memeriksa session:", error);
       res.clearCookie('aplikasi'); 

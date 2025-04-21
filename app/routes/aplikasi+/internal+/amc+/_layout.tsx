@@ -136,7 +136,7 @@ export default () => {
         <div className=" h-full mx-6 items-center flex justify-between text-center">
           <button
             className="flex items-center space-x-2"
-            onClick={() => navigate("/aplikasi")}
+            onClick={() => navigate("/aplikasi/internal")}
           >
             <ChevronLeft className="w-4 h-4 " />
             <span className=" font-bold text-sm text-red-600">DEO AIRPORT - SOQ</span>
