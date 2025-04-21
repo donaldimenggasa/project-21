@@ -168,7 +168,6 @@
     "p-map": "^4.0.0",
     "papaparse": "^5.5.2",
     "pg": "^8.14.1",
-    "pukiad-sdk": "file:/Users/yorigeovanni/project_aplikasi/client/packages/lowcoder-sdk",
     "puppeteer": "^23.7.1",
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
